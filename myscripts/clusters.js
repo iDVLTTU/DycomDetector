@@ -3,6 +3,11 @@
  */
 function updateSubLayout(nodes,links) {
     var fill = d3.scale.category20();
+    linkScale = d3.scale.linear()
+        .range([0.5, 2])
+        .domain(d3.extent(links, function (d) {
+            return d.count;
+        }))
     var groups = d3.nest()
         .key(function (d) {
             return d.community;
@@ -42,7 +47,7 @@ function updateSubLayout(nodes,links) {
     var groupFill = function (d, i) {
         return fill(+d.key);
     };
-    var width=400,height=300;
+    var width=250,height=250;
     var svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
     var force = d3.layout.force()
         .gravity(0.2)
@@ -55,15 +60,17 @@ function updateSubLayout(nodes,links) {
     var link = svg.selectAll(".link5")
         .data(links)
         .enter().append("line")
-        .attr("class", "link2")
+        .attr("class", "link5")
         .style("stroke","#777")
-        .style("stroke-width", 1);
+        .style("stroke-width", function (d) {
+            return linkScale(d.count);
+        });
 
     var node = svg.selectAll(".node5")
         .data(nodes)
         .enter().append("circle")
-        .attr("r",4.5)
-        .style("file",function (d) {
+        .attr("r",4)
+        .style("fill",function (d) {
             return fill(d.community);
         });
 

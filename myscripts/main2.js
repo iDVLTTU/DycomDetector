@@ -78,7 +78,6 @@ function computeMonthlyGraphs(){
                     nodes5[j].isConnected =  true;
                     l.count = relationship[term1 + "__" + term2][m];
                     l.m = m;
-                    l.weight=1;
                     links5.push(l);
                     if (relationship[term1 + "__" + term2][m] > relationshipMax5)
                         relationshipMax5 = relationship[term1 + "__" + term2][m];
@@ -93,18 +92,27 @@ function computeMonthlyGraphs(){
         });
         graphByMonths[m].links = links5;
 
-        console.log("m="+m+" nodes="+graphByMonths[m].nodes.length+" links5="+graphByMonths[m].links.length+" relationshipMax5="+relationshipMax5);
+        // console.log("m="+m+" nodes="+graphByMonths[m].nodes.length+" links5="+graphByMonths[m].links.length+" relationshipMax5="+relationshipMax5);
 
-        var node_ids = [];
+        var node_ids = [], link_ids=[];
         graphByMonths[m].nodes.forEach(function (d) {
             node_ids.push(d.id);
+        });
+        graphByMonths[m].links.forEach(function (d) {
+            link_ids.push({"source":d.source.id,"target":d.target.id,"weight":1})
         })
+<<<<<<< Updated upstream
 
         var community  = jLouvain().nodes(node_ids).edges(links5)();
+=======
+        var community  = jLouvain().nodes(node_ids).edges(link_ids)();
+        console.log(links5)
+        //console.log(links5)
+>>>>>>> Stashed changes
         graphByMonths[m].nodes.forEach(function (d) {
             d.community = community[d.id];
         });
-      //  updateSubLayout(graphByMonths[m].nodes,graphByMonths[m].links)
+       updateSubLayout(graphByMonths[m].nodes,graphByMonths[m].links)
 
         //debugger;
     }

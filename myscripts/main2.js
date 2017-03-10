@@ -41,7 +41,7 @@ function computeMonthlyGraphs(){
             return 0;
         });
         var arr2 =arr.filter(function(d,i){
-            return i<500;
+            return i<300;
         });
 
 
@@ -101,8 +101,6 @@ function computeMonthlyGraphs(){
         })
 
         var community  = jLouvain().nodes(node_ids).edges(links5)();
-        console.log(node_ids)
-        console.log(links5)
         graphByMonths[m].nodes.forEach(function (d) {
             d.community = community[d.id];
         });

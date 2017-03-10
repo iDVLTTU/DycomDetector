@@ -24,6 +24,7 @@ function computeMonthlyGraphs(){
                 var net = (terms[att][m] + 1) / (previous + 1);
                 obj.term = att;
                 obj.net = net;
+                obj.count = terms[att][m];
                 obj.category = termArray[i].category;
                 obj.m = m;
                 arr.push(obj);
@@ -31,16 +32,16 @@ function computeMonthlyGraphs(){
         }
 
         arr.sort(function (a, b) {
-            if (a.net < b.net) {
+            if (a.count < b.count) {
                 return 1;
             }
-            if (a.net > b.net) {
+            if (a.count > b.count) {
                 return -1;
             }
             return 0;
         });
         var arr2 =arr.filter(function(d,i){
-            return i<200;
+            return i<500;
         });
 
 
@@ -51,6 +52,7 @@ function computeMonthlyGraphs(){
             nod.m = m;
             nod.category = arr2[i].category;
             nod.name = arr2[i].term;
+            nod.net = arr2[i].net;
             nod.x=xStep+xScale(nod.m);   // 2016 initialize x position
             nod.y=height/2;
 

@@ -149,7 +149,6 @@ function drawTimeLegend() {
 }
 
 function updateTimeLegend() {
-  console.log("updateTimeLegend");
   var listX=[];
   for (var i=minYear; i<maxYear;i++){
     for (var j=0; j<12;j++){
@@ -438,32 +437,3 @@ function tick(event) {
 function click(d) {
 
 }
-
-/*
-function collide(alpha) {
-  var quadtree = d3.geom.quadtree(tree_nodes);
-  return function(d) {
-    quadtree.visit(function(quad, x1, y1, x2, y2) {
-    if (quad.point && (quad.point !== d) && (quad.point !== d.parent) && (quad.point.parent !== d)) {
-         var rb = getRadius(d) + getRadius(quad.point),
-        nx1 = d.x - rb,
-        nx2 = d.x + rb,
-        ny1 = d.y - rb,
-        ny2 = d.y + rb;
-
-        var x = d.x - quad.point.x,
-            y = d.y - quad.point.y,
-            l = Math.sqrt(x * x + y * y);
-          if (l < rb) {
-          l = (l - rb) / l * alpha;
-          d.x -= x *= l;
-          d.y -= y *= l;
-          quad.point.x += x;
-          quad.point.y += y;
-        }
-      }
-      return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
-    });
-  };
-}
-*/

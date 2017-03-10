@@ -1,7 +1,7 @@
 //Constants for the SVG
 var margin = {top: 0, right: 0, bottom: 5, left: 5};
 var width = document.body.clientWidth - margin.left - margin.right;
-var height = 780 - margin.top - margin.bottom;
+var height = 800 - margin.top - margin.bottom;
 
 //---End Insert------
 
@@ -80,12 +80,10 @@ var link;
 var links;
 var linkArcs;
 var termArray, termArray2, termArray3;
-var processedTerm=[];
 var relationship;
 var termMaxMax, termMaxMax2;
 var terms;
-var NodeG; 
-var xStep =100;
+var xStep =200;
 //var xScale = d3.time.scale().range([0, (width-xStep-100)/numMonth]);
 var yScale;
 var linkScale;
@@ -261,22 +259,24 @@ d3.tsv("data/wikinews.tsv", function(error, data_) {
                         terms[term].maxMonth = m;
                         if (terms[term].max>termMaxMax)
                             termMaxMax = terms[term].max;
-                        
                     }    
                 }    
             }
         }
-        
     });
 
     console.log("DONE reading the input file = "+data.length); 
 
     setupSliderScale(svg);
-    
-    readTermsAndRelationships();  
-    
+    readTermsAndRelationships();
+    console.log("DONE computing realtionships relationshipMaxMax="+relationshipMaxMax);
+
+    // 2017. this function is main2.js
+    computeMonthlyGraphs();
+
     drawColorLegend();
     drawTimeLegend();
+
     drawTimeBox(); // This box is for brushing
     drawLensingButton();
 
@@ -320,12 +320,7 @@ d3.tsv("data/wikinews.tsv", function(error, data_) {
             detactTimeSeries();
         });
 
-        
-
-
-
-
-        /// The second force directed layout ***********
+    /// The second force directed layout ***********
     for (var i=0;i<nodes.length;i++){
         var nod = nodes[i];
         if (!nodes2List[nod.name] && nodes2List[nod.name]!=0){
@@ -365,14 +360,11 @@ d3.tsv("data/wikinews.tsv", function(error, data_) {
             }
          }   
         links2[i].count = ccc;
-    }     
-    
-    
+    }
 
     force2.nodes(nodes2)
         .links(links2)
         .start();    
-
 
     var link2 = svg2.selectAll(".link2")
       .data(links2)
@@ -419,37 +411,37 @@ d3.tsv("data/wikinews.tsv", function(error, data_) {
     });
 });
 
-    function recompute() {
-        var bar = document.getElementById('progBar'),
-            fallback = document.getElementById('downloadProgress'),
-            loaded = 0;
+function recompute() {
+    var bar = document.getElementById('progBar'),
+        fallback = document.getElementById('downloadProgress'),
+        loaded = 0;
 
-        var load = function() {
-            loaded += 1;
-            bar.value = loaded;
+    var load = function() {
+        loaded += 1;
+        bar.value = loaded;
 
-            /* The below will be visible if the progress tag is not supported */
-            $(fallback).empty().append("HTML5 progress tag not supported: ");
-            $('#progUpdate').empty().append(loaded + "% loaded");
+        /* The below will be visible if the progress tag is not supported */
+        $(fallback).empty().append("HTML5 progress tag not supported: ");
+        $('#progUpdate').empty().append(loaded + "% loaded");
 
-            if (loaded == 100) {
-                clearInterval(beginLoad);
-                $('#progUpdate').empty().append("Complete");
-            }
-        };
-
-        var beginLoad = setInterval(function() {load();}, 10);
-        setTimeout(alertFunc, 333);
-        
-        function alertFunc() {
-            readTermsAndRelationships();
-            computeNodes();
-            computeLinks()
-            force.nodes(nodes)
-                .links(links)
-                .start();
+        if (loaded == 100) {
+            clearInterval(beginLoad);
+            $('#progUpdate').empty().append("Complete");
         }
-    } 
+    };
+
+    var beginLoad = setInterval(function() {load();}, 10);
+    setTimeout(alertFunc, 333);
+
+    function alertFunc() {
+        readTermsAndRelationships();
+        computeNodes();
+        computeLinks()
+        force.nodes(nodes)
+            .links(links)
+            .start();
+    }
+}
 
     function readTermsAndRelationships() {
         data2 = data.filter(function (d, i) {
@@ -477,18 +469,10 @@ d3.tsv("data/wikinews.tsv", function(error, data_) {
         }
 
         var removeList = {};   // remove list **************
-       // removeList["russia"] =1;
-       // removeList["china"] =1;
-        
         removeList["barack obama"] =1;
         removeList["john mccain"] =1;
         removeList["mitt romney"] =1;
-      //  removeList["hillary clinton"] =1; 
-      //  removeList["paul ryan"] =1;
-        removeList["sarah palin"] =1;
-        removeList["israel"] =1;
-        
-        
+
         removeList["source"] =1;
         removeList["person"] =1;
         removeList["location"] =1;
@@ -556,46 +540,12 @@ d3.tsv("data/wikinews.tsv", function(error, data_) {
           return 0;
         });
 
-        // TermArray contains a smaller list of terms with NET > 2
-        for (var m=1; m<numMonth;m++){
-            var arr = [];
-            for (var i=0; i<termArray.length;i++){
-                var att = termArray[i].term;
-                if (terms[att][m]) {
-                    var obj = new Object();
-                    var previous = 0;
-                    if (terms[att][m - 1])
-                        previous = terms[att][m - 1];
-                    var net = (terms[att][m] + 1) / (previous + 1);
-                    obj.term = att;
-                    obj.net = net;
-                    obj.m = m;
-                    arr.push(obj);
-                }
-            }
+        console.log("termArray.length="+termArray.length);
 
-            arr.sort(function (a, b) {
-                if (a.net < b.net) {
-                    return 1;
-                }
-                if (a.net > b.net) {
-                    return -1;
-                }
-                return 0;
-            });
-            processedTerm.push(arr);
-            // console.log(m + " " + arr.length);
-
-        }
-        var nestobject = d3.nest().key(function (d) {
-            return d.term;
-        }).entries(processedTerm[0]);
-        console.log(nestobject)
-        //if (searchTerm)
         numberInputTerms = termArray.length;
-       console.log("numberInputTerms="+numberInputTerms) ; 
- 
-    // Compute relationship **********************************************************
+
+
+        // Compute relationship **********************************************************
         numNode = Math.min(100, termArray.length);
         numNode2 = Math.min(numNode*3, termArray.length);
         var selectedTerms = {};
@@ -637,209 +587,188 @@ d3.tsv("data/wikinews.tsv", function(error, data_) {
                 }
             }
         });
-
-
-
-       // debugger;
-
-        console.log("DONE computing realtionships relationshipMaxMax="+relationshipMaxMax);
     }
      
-    function computeConnectivity(a, num) {
-        for (var i=0; i<num;i++){
-            a[i].isConnected=-100;
-            a[i].isConnectedMaxMonth= a[i].maxMonth;
-        }    
-        
-        for (var i=0; i<num;i++){
-            var term1 =  a[i].term;
-            for (var j=i+1; j<num;j++){
-                var term2 =  a[j].term;
-                if (relationship[term1+"__"+term2] && relationship[term1+"__"+term2].max>=valueSlider){
-                    if (relationship[term1+"__"+term2].max> a[i].isConnected){
-                        a[i].isConnected = relationship[term1+"__"+term2].max;
-                        a[i].isConnectedMaxMonth = relationship[term1+"__"+term2].maxMonth;
-                    }    
-                    if (relationship[term1+"__"+term2].max> a[j].isConnected){
-                        a[j].isConnected = relationship[term1+"__"+term2].max;
-                        a[j].isConnectedMaxMonth = relationship[term1+"__"+term2].maxMonth;
-                    }  
+function computeConnectivity(a, num, cut) {
+    for (var i=0; i<num;i++){
+        a[i].isConnected=-100;
+        a[i].isConnectedMaxMonth= a[i].maxMonth;
+    }
+
+    for (var i=0; i<num;i++){
+        var term1 =  a[i].term;
+        for (var j=i+1; j<num;j++){
+            var term2 =  a[j].term;
+            if (relationship[term1+"__"+term2] && relationship[term1+"__"+term2].max>=cut){
+                if (relationship[term1+"__"+term2].max> a[i].isConnected){
+                    a[i].isConnected = relationship[term1+"__"+term2].max;
+                    a[i].isConnectedMaxMonth = relationship[term1+"__"+term2].maxMonth;
                 }
-                else if (relationship[term2+"__"+term1] && relationship[term2+"__"+term1].max>=valueSlider){
-                    if (relationship[term2+"__"+term1].max>a[i].isConnected){
-                        a[i].isConnected = relationship[term2+"__"+term1].max;
-                        a[i].isConnectedMaxMonth = relationship[term1+"__"+term2].maxMonth;
-                    }
-                    if (relationship[term2+"__"+term1].max>a[j].isConnected){
-                        a[j].isConnected = relationship[term2+"__"+term1].max;
-                        a[j].isConnectedMaxMonth = relationship[term1+"__"+term2].maxMonth;
-                    }    ø
+                if (relationship[term1+"__"+term2].max> a[j].isConnected){
+                    a[j].isConnected = relationship[term1+"__"+term2].max;
+                    a[j].isConnectedMaxMonth = relationship[term1+"__"+term2].maxMonth;
                 }
-                 //if (term2=="beijing")
-                 //   console.log(term2+" "+a[j].isConnectedMaxMonth);
             }
-           
-        }
-       
-    }    
-
-    function computeNodes() {
-       
-        // check substrings of 100 first terms
-       // console.log("termArray.length = "+termArray.length);
-        
-        for (var i=0; i<numNode2;i++){
-          for (var j=0; j<numNode2;j++){
-                if (i==j) continue;
-                if (termArray[j].term.indexOf(termArray[i].term)>-1)
-                    termArray[i].isSubtring = 1;
-            } 
-        }
-        
-        termArray2 = [];
-        for (var i=0; i<numNode2;i++){
-            if (termArray.length<numberInputTerms/3 || !termArray[i].isSubtring)  // only remove substring when there are too many of them
-                termArray2.push(termArray[i])
-        }
-     //   console.log("termArray2.length = "+termArray2.length);
-        
-
-        computeConnectivity(termArray2, termArray2.length);
-
-        
-        termArray3 = [];
-        for (var i=0; i<termArray2.length;i++){
-            if (termArray2[i].isSearchTerm || termArray2[i].isConnected>0)
-                termArray3.push(termArray2[i]);
-        }
-      //  console.log("termArray3.length = "+termArray3.length);
-        
-
-        termArray3.sort(function (a, b) {
-         if (a.isConnected < b.isConnected) {
-            return 1;
-          }
-          else if (a.isConnected > b.isConnected) {
-            return -1;
-          }
-          else{
-                if (a.max < b.max) {
-                    return 1;
+            else if (relationship[term2+"__"+term1] && relationship[term2+"__"+term1].max>=cut){
+                if (relationship[term2+"__"+term1].max>a[i].isConnected){
+                    a[i].isConnected = relationship[term2+"__"+term1].max;
+                    a[i].isConnectedMaxMonth = relationship[term1+"__"+term2].maxMonth;
                 }
-                if (a.max > b.max) {
-                    return -1;
-                }
-                return 0;
+                if (relationship[term2+"__"+term1].max>a[j].isConnected){
+                    a[j].isConnected = relationship[term2+"__"+term1].max;
+                    a[j].isConnectedMaxMonth = relationship[term1+"__"+term2].maxMonth;
+                }    ø
             }
-        });    
+         }
+    }
+}
 
-
-        computeConnectivity(termArray3, termArray3.length);
-
-        nodes = [];
-        for (var i=0; i<termArray3.length;i++){
-            var nod = new Object();
-            nod.id = i;
-            nod.group = termArray3[i].category;
-            nod.name = termArray3[i].term;
-            nod.max = termArray3[i].max;
-            var maxMonthRelationship = termArray3[i].maxMonth;
-            nod.isConnectedMaxMonth = termArray3[i].isConnectedMaxMonth;
-            nod.maxMonth = termArray3[i].isConnectedMaxMonth;
-            nod.month = termArray3[i].isConnectedMaxMonth;
-            nod.x=xStep+xScale(nod.month);   // 2016 initialize x position
-            nod.y=height/2;
-            if (nodeY_byName[nod.name]!=undefined)
-                nod.y = nodeY_byName[nod.name];
-            
-            if (termArray3[i].isSearchTerm){
-                nod.isSearchTerm =1;
-                if (!nod.month)
-                    nod.month = termArray3[i].maxMonth;
-                if (!nod.isConnectedMaxMonth)
-                    nod.isConnectedMaxMonth = termArray3[i].maxMonth;
-            }    
-            
-            if (!maxCount[nod.group] || nod.max>maxCount[nod.group])
-                maxCount[nod.group] = nod.max;
-            
-            if (termArray3[i].isConnected>0)  // Only allow connected items
-                nodes.push(nod);
-            if (i>numNode)
-                break;
+function computeNodes() {
+    // check substrings of 100 first terms
+    for (var i=0; i<numNode2;i++){
+      for (var j=0; j<numNode2;j++){
+            if (i==j) continue;
+            if (termArray[j].term.indexOf(termArray[i].term)>-1)
+                termArray[i].isSubtring = 1;
         }
-        numNode = nodes.length;
-        
-        console.log("numNode="+numNode);
-        
+    }
 
-        // compute the monthly data      
-        termMaxMax2 = 0;
-        for (var i=0; i<numNode; i++){
-            nodes[i].monthly = [];
-            for (var m=0; m<numMonth; m++){
+    termArray2 = [];
+    for (var i=0; i<numNode2;i++){
+        if (termArray.length<numberInputTerms/3 || !termArray[i].isSubtring)  // only remove substring when there are too many of them
+            termArray2.push(termArray[i])
+    }
+
+
+    var cut = valueSlider;
+    computeConnectivity(termArray2, termArray2.length, cut);
+
+    termArray3 = [];
+    for (var i=0; i<termArray2.length;i++){
+        if (termArray2[i].isSearchTerm || termArray2[i].isConnected>0)
+            termArray3.push(termArray2[i]);
+    }
+
+    termArray3.sort(function (a, b) {
+     if (a.isConnected < b.isConnected) {
+        return 1;
+      }
+      else if (a.isConnected > b.isConnected) {
+        return -1;
+      }
+      else{
+            if (a.max < b.max) {
+                return 1;
+            }
+            if (a.max > b.max) {
+                return -1;
+            }
+            return 0;
+        }
+    });
+
+    computeConnectivity(termArray3, termArray3.length, cut);
+
+    nodes = [];
+    for (var i=0; i<termArray3.length && i<numNode;i++){
+        var nod = new Object();
+        nod.id = i;
+        nod.group = termArray3[i].category;
+        nod.name = termArray3[i].term;
+        nod.max = termArray3[i].max;
+        var maxMonthRelationship = termArray3[i].maxMonth;
+        nod.isConnectedMaxMonth = termArray3[i].isConnectedMaxMonth;
+        nod.maxMonth = termArray3[i].isConnectedMaxMonth;
+        nod.month = termArray3[i].isConnectedMaxMonth;
+        nod.x=xStep+xScale(nod.month);   // 2016 initialize x position
+        nod.y=height/2;
+        if (nodeY_byName[nod.name]!=undefined)
+            nod.y = nodeY_byName[nod.name];
+
+        if (termArray3[i].isSearchTerm){
+            nod.isSearchTerm =1;
+            if (!nod.month)
+                nod.month = termArray3[i].maxMonth;
+            if (!nod.isConnectedMaxMonth)
+                nod.isConnectedMaxMonth = termArray3[i].maxMonth;
+        }
+
+        if (!maxCount[nod.group] || nod.max>maxCount[nod.group])
+            maxCount[nod.group] = nod.max;
+
+        if (termArray3[i].isConnected>0)  // Only allow connected items
+            nodes.push(nod);
+    }
+    numNode = nodes.length;
+
+    console.log("numNode="+numNode +" termArray3.length="+termArray3.length);
+
+
+    // compute the monthly data
+    termMaxMax2 = 0;
+    for (var i=0; i<numNode; i++){
+        nodes[i].monthly = [];
+        for (var m=0; m<numMonth; m++){
+            var mon = new Object();
+            if (terms[nodes[i].name][m]){
+                mon.value = terms[nodes[i].name][m];
+                if (mon.value >termMaxMax2)
+                     termMaxMax2 = mon.value ;
+                mon.monthId = m;
+                mon.yNode = nodes[i].y;
+                nodes[i].monthly.push(mon);
+            }
+        }
+        // Add another item to first
+        if (nodes[i].monthly.length>0){
+           var firstObj = nodes[i].monthly[0];
+           if (firstObj.monthId>0){
                 var mon = new Object();
-                if (terms[nodes[i].name][m]){
-                    mon.value = terms[nodes[i].name][m];
-                    if (mon.value >termMaxMax2)
-                         termMaxMax2 = mon.value ;
-                    mon.monthId = m;
-                    mon.yNode = nodes[i].y;
-                    nodes[i].monthly.push(mon);
-                }
-            }
-            // Add another item to first
-            if (nodes[i].monthly.length>0){
-               var firstObj = nodes[i].monthly[0];
-               if (firstObj.monthId>0){
-                    var mon = new Object();
-                    mon.value = 0;
-                    mon.monthId = firstObj.monthId-1;
-                    mon.yNode = firstObj.yNode;
-                    nodes[i].monthly.unshift(mon);
-               }
+                mon.value = 0;
+                mon.monthId = firstObj.monthId-1;
+                mon.yNode = firstObj.yNode;
+                nodes[i].monthly.unshift(mon);
+           }
 
-                // Add another item
-               var lastObj = nodes[i].monthly[nodes[i].monthly.length-1];
-               if (lastObj.monthId<numMonth-1){
-                    var mon = new Object();
-                    mon.value = 0;
-                    mon.monthId = lastObj.monthId+1;
-                    mon.yNode = lastObj.yNode;
-                    nodes[i].monthly.push(mon);
-               }
-            }
-        } 
-
-
-        // Construct an array of only parent nodes
-        pNodes = new Array(numNode); //nodes;
-        for (var i=0; i<numNode;i++){
-            pNodes[i] = nodes[i];
+            // Add another item
+           var lastObj = nodes[i].monthly[nodes[i].monthly.length-1];
+           if (lastObj.monthId<numMonth-1){
+                var mon = new Object();
+                mon.value = 0;
+                mon.monthId = lastObj.monthId+1;
+                mon.yNode = lastObj.yNode;
+                nodes[i].monthly.push(mon);
+           }
         }
-        
-     //   drawStreamTerm(svg, pNodes, 100, 600) ;
+    }
 
-        svg.selectAll(".layer").remove();
-        svg.selectAll(".layer")
-              .data(pNodes)
-              .enter().append("path")
-              .attr("class", "layer")
-              .style("stroke", function(d) { return d.isSearchTerm ? "#000" : "#000"; })
-              .style("stroke-width",0.05)
-              .style("stroke-opacity",0.5)
-              .style("fill-opacity",1)
-              .style("fill", function(d, i) { 
-                return getColor(d.group, d.max); 
-            });
-        
-          
-    }    
+
+    // Construct an array of only parent nodes
+    pNodes = new Array(numNode); //nodes;
+    for (var i=0; i<numNode;i++){
+        pNodes[i] = nodes[i];
+    }
+
+    //   drawStreamTerm(svg, pNodes, 100, 600) ;
+
+    svg.selectAll(".layer").remove();
+    svg.selectAll(".layer")
+          .data(pNodes)
+          .enter().append("path")
+          .attr("class", "layer")
+          .style("stroke", function(d) { return d.isSearchTerm ? "#000" : "#000"; })
+          .style("stroke-width",0.05)
+          .style("stroke-opacity",0.5)
+          .style("fill-opacity",1)
+          .style("fill", function(d, i) {
+            return getColor(d.group, d.max);
+        });
+}
 
     function computeLinks() {
         links = [];
         relationshipMaxMax2 =1;
-        
+
        for (var i=0; i<numNode;i++){
             var term1 =  nodes[i].name;
             for (var j=i+1; j<numNode;j++){
@@ -849,7 +778,7 @@ d3.tsv("data/wikinews.tsv", function(error, data_) {
                         if (relationship[term1+"__"+term2][m] && relationship[term1+"__"+term2][m]>=valueSlider){
                             var sourceNodeId = i;
                             var targetNodeId = j;
-                            
+
                             if (!nodes[i].connect)
                                 nodes[i].connect = new Array();
                             nodes[i].connect.push(j)
@@ -860,8 +789,8 @@ d3.tsv("data/wikinews.tsv", function(error, data_) {
                             if (m != nodes[i].maxMonth){
                                 if (isContainedChild(nodes[i].childNodes,m)>=0){  // already have the child node for that month
                                     sourceNodeId =  nodes[i].childNodes[isContainedChild(nodes[i].childNodes,m)];
-                                }  
-                                else{  
+                                }
+                                else{
                                     var nod = new Object();
                                     nod.id = nodes.length;
                                     nod.group = nodes[i].group;
@@ -869,12 +798,12 @@ d3.tsv("data/wikinews.tsv", function(error, data_) {
                                     nod.max = nodes[i].max;
                                     nod.maxMonth = nodes[i].maxMonth;
                                     nod.month = m;
-                                    
+
                                     nod.parentNode = i;   // this is the new property to define the parent node
                                     if (!nodes[i].childNodes)
                                          nodes[i].childNodes = new Array();
                                     nodes[i].childNodes.push(nod.id);
-                                    
+
                                     sourceNodeId = nod.id;
                                     nodes.push(nod);
                                 }
@@ -883,7 +812,7 @@ d3.tsv("data/wikinews.tsv", function(error, data_) {
                                 if (isContainedChild(nodes[j].childNodes,m)>=0){
                                     targetNodeId = nodes[j].childNodes[isContainedChild(nodes[j].childNodes,m)];
                                 }
-                                else{    
+                                else{
                                     var nod = new Object();
                                     nod.id = nodes.length;
                                     nod.group = nodes[j].group;
@@ -891,22 +820,22 @@ d3.tsv("data/wikinews.tsv", function(error, data_) {
                                     nod.max = nodes[j].max;
                                     nod.maxMonth = nodes[j].maxMonth;
                                     nod.month = m;
-                                    
+
                                     nod.parentNode = j;   // this is the new property to define the parent node
                                      if (!nodes[j].childNodes)
                                          nodes[j].childNodes = new Array();
                                     nodes[j].childNodes.push(nod.id);
-                                    
+
                                     targetNodeId = nod.id;
                                     nodes.push(nod);
-                                }    
+                                }
                             }
-                            
+
                             var l = new Object();
                             l.source = sourceNodeId;
                             l.target = targetNodeId;
-                            l.m = m; 
-                            //l.value = linkScale(relationship[term1+"__"+term2][m]); 
+                            l.m = m;
+                            //l.value = linkScale(relationship[term1+"__"+term2][m]);
                             links.push(l);
                             if (relationship[term1+"__"+term2][m] > relationshipMaxMax2)
                                 relationshipMaxMax2 = relationship[term1+"__"+term2][m];
@@ -915,23 +844,23 @@ d3.tsv("data/wikinews.tsv", function(error, data_) {
                 }
             }
         }
-        
+
        // var linear = (150+numNode)/200;
         var hhh = Math.min(height/numNode,20);
-        
+
         yScale = d3.scale.linear()
             .range([0, hhh*1.2])
             .domain([0, termMaxMax2]);
         linkScale = d3.scale.linear()
             .range([0.5, 2])
-            .domain([Math.round(valueSlider)-0.4, Math.max(relationshipMaxMax2,10)]);  
+            .domain([Math.round(valueSlider)-0.4, Math.max(relationshipMaxMax2,10)]);
 
-        links.forEach(function(l) { 
+        links.forEach(function(l) {
             var term1 = nodes[l.source].name;
             var term2 = nodes[l.target].name;
             var month = l.m;
-            l.value = linkScale(relationship[term1+"__"+term2][month]); 
-        }  );  
+            l.value = linkScale(relationship[term1+"__"+term2][month]);
+        }  );
 
         console.log("DONE links relationshipMaxMax2="+relationshipMaxMax2);
 
@@ -943,7 +872,7 @@ d3.tsv("data/wikinews.tsv", function(error, data_) {
         .attr("class", "linkArc")
         .style("stroke-width", function (d) {
             return d.value;
-        });   
+        });
 
         svg.selectAll(".nodeG").remove();
         nodeG = svg.selectAll(".nodeG")
@@ -960,33 +889,33 @@ d3.tsv("data/wikinews.tsv", function(error, data_) {
             .on('dblclick', releasenode)
             .call(node_drag); //Added
         */
-     // console.log("  nodes.length="+nodes.length) ; 
-          
+     // console.log("  nodes.length="+nodes.length) ;
+
         svg.selectAll(".nodeText").remove();
         nodeG.append("text")
-            .attr("class", ".nodeText")           
+            .attr("class", ".nodeText")
             .attr("dy", ".35em")
-            .style("fill", "#000000")   
+            .style("fill", "#000000")
             .style("text-anchor","end")
             .style("text-shadow", "1px 1px 0 rgba(255, 255, 255, 0.6")
             .style("font-weight", function(d) { return d.isSearchTerm ? "bold" : ""; })
             .attr("dy", ".21em")
             .attr("font-family", "sans-serif")
             .attr("font-size", function(d) { return d.isSearchTerm ? "12px" : "11px"; })
-            .text(function(d) { return d.name });  
+            .text(function(d) { return d.name });
         nodeG.on('mouseover', mouseovered)
-               .on("mouseout", mouseouted); 
+               .on("mouseout", mouseouted);
 
           // console.log("gggg**************************"+searchTerm);
         listMonth = [];
-        links.forEach(function(l) { 
+        links.forEach(function(l) {
             if (searchTerm!=""){
                 if (nodes[l.source].name == searchTerm || nodes[l.target].name == searchTerm){
                     if (isContainedInteger(listMonth,l.m)<0)
                         listMonth.push(l.m);
                 }
-            }    
-        }); 
+            }
+        });
         listMonth.sort(function (a, b) {
           if (a > b) {
             return 1;
@@ -996,9 +925,9 @@ d3.tsv("data/wikinews.tsv", function(error, data_) {
           }
           else
             return 0;
-        });    
-         
-    }    
+        });
+
+    }
 
 
 $('#btnUpload').click(function() {
@@ -1033,49 +962,49 @@ function mouseovered(d) {
         list[d.name] = new Object();
 
         svg.selectAll(".linkArc")
-            .style("stroke-opacity" , function(l) {  
+            .style("stroke-opacity" , function(l) {
                 if (l.source.name==d.name){
                     if (!list[l.target.name]){
                         list[l.target.name] = new Object();
-                        list[l.target.name].count=1; 
-                        list[l.target.name].year=l.m;  
-                        list[l.target.name].linkcount=l.count;    
-                    }    
+                        list[l.target.name].count=1;
+                        list[l.target.name].year=l.m;
+                        list[l.target.name].linkcount=l.count;
+                    }
                     else{
-                        list[l.target.name].count++; 
+                        list[l.target.name].count++;
                         if (l.count>list[l.target.name].linkcount){
                             list[l.target.name].linkcount = l.count;
-                            list[l.target.name].year=l.m;  
+                            list[l.target.name].year=l.m;
                         }
-                    }    
+                    }
                     return 1;
-                }  
+                }
                 else if (l.target.name==d.name){
                     if (!list[l.source.name]){
                         list[l.source.name] = new Object();
-                        list[l.source.name].count=1; 
-                        list[l.source.name].year=l.m;  
-                        list[l.source.name].linkcount=l.count;  
-                    }    
+                        list[l.source.name].count=1;
+                        list[l.source.name].year=l.m;
+                        list[l.source.name].linkcount=l.count;
+                    }
                     else{
-                        list[l.source.name].count++; 
+                        list[l.source.name].count++;
                         if (l.count>list[l.source.name].linkcount){
                             list[l.source.name].linkcount = l.count;
-                            list[l.source.name].year=l.m;  
-                        } 
-                    }    
+                            list[l.source.name].year=l.m;
+                        }
+                    }
                     return 1;
-                }    
+                }
                 else
-                  return 0.01;  
+                  return 0.01;
         });
-        nodeG.style("fill-opacity" , function(n) {  
+        nodeG.style("fill-opacity" , function(n) {
             if (list[n.name])
                 return 1;
             else
-              return 0.1;  
+              return 0.1;
             })
-            .style("font-weight", function(n) { return d.name==n.name ? "bold" : ""; })  
+            .style("font-weight", function(n) { return d.name==n.name ? "bold" : ""; })
         ;
 
        nodeG.transition().duration(500).attr("transform", function(n) {
@@ -1088,19 +1017,19 @@ function mouseovered(d) {
             }
         })
         svg.selectAll(".layer")
-            .style("fill-opacity" , function(n) {  
+            .style("fill-opacity" , function(n) {
                 if (list[n.name])
                     return 1;
                 else
-                  return 0.1;  
+                  return 0.1;
             })
-            .style("stroke-opacity" , function(n) {  
+            .style("stroke-opacity" , function(n) {
                 if (list[n.name])
                     return 1;
                 else
-                  return 0;  
+                  return 0;
             });
-    }                 
+    }
 }
 function mouseouted(d) {
     if (force.alpha()==0) {
@@ -1109,23 +1038,23 @@ function mouseouted(d) {
             .style("fill-opacity" ,1)
             .style("stroke-opacity" , 0.5);
         svg.selectAll(".linkArc")
-            .style("stroke-opacity" , 1);    
+            .style("stroke-opacity" , 1);
         nodeG.transition().duration(500).attr("transform", function(n) {
             return "translate(" +n.xConnected + "," + n.y + ")"
-        })   
-    }      
+        })
+    }
 }
 
 
 function searchNode() {
     searchTerm = document.getElementById('search').value;
     valueSlider =2;
-    handle.attr("cx", xScaleSlider(valueSlider));   
-    
+    handle.attr("cx", xScaleSlider(valueSlider));
+
     recompute();
 }
 
-   
+
 
 
     // check if a node for a month m already exist.
@@ -1168,11 +1097,11 @@ function searchNode() {
             //else
             //     d.x += (xScale(d.month)-d.x)*0.005;
             d.x += (width/2-d.x)*0.005;
-           
+
             if  (d.parentNode>=0){
                 d.y += (nodes[d.parentNode].y- d.y)*0.5;
               // d.y = nodes[d.parentNode].y;
-            } 
+            }
             else if (d.childNodes){
                 var yy = 0;
                 for (var i=0; i< d.childNodes.length;i++){
@@ -1184,16 +1113,16 @@ function searchNode() {
                     d.y += (yy-d.y)*0.2;
                 }
             }
-        });    
+        });
 
         if (document.getElementById("checkbox1").checked){
              linkArcs.style("stroke-width", 0);
-            
+
              nodeG.transition().duration(500).attr("transform", function(d) {
                 return "translate(" + 200 + "," + d.y + ")"
             })
             svg.selectAll(".nodeText").style("text-anchor","start")
-        
+
         }
         else{
             nodeG.attr("transform", function(d) {
@@ -1202,21 +1131,21 @@ function searchNode() {
             linkArcs.style("stroke-width", function (d) {
                 return d.value;
             });
-         }   
+         }
 
         svg.selectAll(".layer")
-            .attr("d", function(d) { 
+            .attr("d", function(d) {
                 for (var i=0; i<d.monthly.length; i++){
                     d.monthly[i].yNode = d.y;     // Copy node y coordinate
                 }
-               return area(d.monthly); 
+               return area(d.monthly);
             });
         linkArcs.attr("d", linkArc);
        // if (force.alpha()<0.03)
        //     force.stop();
 
-       updateTimeLegend();       
-    } 
+       updateTimeLegend();
+    }
 
     function updateTransition(durationTime){
         nodes.forEach(function(d) {
@@ -1224,27 +1153,27 @@ function searchNode() {
             if (d.parentNode>=0){
                 d.y= nodes[d.parentNode].y;
             }
-            nodeY_byName[d.name]=d.y;      
-        });    
+            nodeY_byName[d.name]=d.y;
+        });
 
 
         nodeG.transition().duration(durationTime).attr("transform", function(d) {
            d.xConnected=xStep+xScale(d.isConnectedMaxMonth);
            return "translate(" + d.xConnected + "," + d.y + ")"
         })
-         
+
         /*
-        nodeG.style("fill" , function(d) {  
+        nodeG.style("fill" , function(d) {
             var color = nodes.forEach(function(node) {
                 if (d.name == node.name && d.month!=node.month ){
                     console.log("d.name="+d.name +" node.name="+node.name);
                     console.log("d.month="+d.month +" node.month="+node.month);
                     return "#f0f";
-                }      
+                }
                 else
                     return "#000";
-            }); 
-            return "#00f";  
+            });
+            return "#00f";
         });*/
 
         /*nodeG.forEach(function(d) {
@@ -1259,20 +1188,20 @@ function searchNode() {
                 if (d.name == node.name && d.month!=node.month && node.x<d.x && d.x<node.x+100){
                     d.step=-5000;
                 }
-            });       
+            });
             return "translate(" + (d.x+d.step) + "," + d.y + ")";
         });*/
 
         svg.selectAll(".layer").transition().duration(durationTime)
-          .attr("d", function(d) { 
+          .attr("d", function(d) {
             for (var i=0; i<d.monthly.length; i++){
                 d.monthly[i].yNode = d.y;     // Copy node y coordinate
             }
            return area(d.monthly); }) ;
-        linkArcs.transition().duration(250).attr("d", linkArc);     
+        linkArcs.transition().duration(250).attr("d", linkArc);
         updateTimeLegend();
         updateTimeBox(durationTime);
-    }    
+    }
 
     function detactTimeSeries(){
        // console.log("DetactTimeSeries ************************************" +data);
@@ -1292,7 +1221,7 @@ function searchNode() {
             return -1;
           }
           return 0;
-        });  
+        });
 
         var step = Math.min((height-25)/(numNode+1),15);
         //var totalH = termArray.length*step;

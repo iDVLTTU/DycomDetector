@@ -78,12 +78,14 @@ function computeMonthlyGraphs(){
                     nodes5[j].isConnected =  true;
                     l.count = relationship[term1 + "__" + term2][m];
                     l.m = m;
+                    l.weight=1;
                     links5.push(l);
                     if (relationship[term1 + "__" + term2][m] > relationshipMax5)
                         relationshipMax5 = relationship[term1 + "__" + term2][m];
                 }
             }
         }
+
 
         graphByMonths[m] = {};
         graphByMonths[m].nodes = nodes5.filter(function(d,i){
@@ -92,6 +94,20 @@ function computeMonthlyGraphs(){
         graphByMonths[m].links = links5;
 
         console.log("m="+m+" nodes="+graphByMonths[m].nodes.length+" links5="+graphByMonths[m].links.length+" relationshipMax5="+relationshipMax5);
+
+        var node_ids = [];
+        graphByMonths[m].nodes.forEach(function (d) {
+            node_ids.push(d.id);
+        })
+
+        var community  = jLouvain().nodes(node_ids).edges(links5)();
+        console.log(node_ids)
+        console.log(links5)
+        graphByMonths[m].nodes.forEach(function (d) {
+            d.community = community[d.id];
+        });
+      //  updateSubLayout(graphByMonths[m].nodes,graphByMonths[m].links)
+
         //debugger;
     }
 }

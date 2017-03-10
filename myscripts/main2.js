@@ -9,7 +9,7 @@
 
 
 // TermArray contains a smaller list of terms with NET > 2
-var termsByMonths=[];
+var graphByMonths=[];
 
 function computeMonthlyGraphs(){
     for (var m=1; m<numMonth;m++) {
@@ -39,18 +39,18 @@ function computeMonthlyGraphs(){
             }
             return 0;
         });
-        termsByMonths[m]=arr.filter(function(d,i){
+        var arr2 =arr.filter(function(d,i){
             return i<200;
         });
 
 
         var nodes5 = [];
-        for (var i=0; i<termsByMonths[m].length;i++){
+        for (var i=0; i<arr2.length;i++){
             var nod = new Object();
             nod.id = i;
             nod.m = m;
-            nod.category = termsByMonths[m][i].category;
-            nod.name = termsByMonths[m][i].term;
+            nod.category = arr2[i].category;
+            nod.name = arr2[i].term;
             nod.x=xStep+xScale(nod.m);   // 2016 initialize x position
             nod.y=height/2;
 
@@ -61,29 +61,35 @@ function computeMonthlyGraphs(){
 
         // *********** LINKS **************
         var links5 = [];
-        var relationshipMaxMax5 = 0;
+        var relationshipMax5 = 0;
 
-        var cut = 0;
+        var cut = 1;
         for (var i=0; i<nodes5.length;i++) {
             var term1 = nodes5[i].name;
             for (var j = i + 1; j < nodes5.length; j++) {
                 var term2 = nodes5[j].name;
                 if (relationship[term1 + "__" + term2] && relationship[term1 + "__" + term2][m] >= cut) {
-                    var sourceNodeId = i;
-                    var targetNodeId = j;
-
                     var l = new Object();
-                    l.source = sourceNodeId;
-                    l.target = targetNodeId;
+                    l.source = nodes5[i];
+                    nodes5[i].isConnected =  true;
+                    l.target = nodes5[j];
+                    nodes5[j].isConnected =  true;
                     l.count = relationship[term1 + "__" + term2][m];
                     l.m = m;
                     links5.push(l);
-                    if (relationship[term1 + "__" + term2][m] > relationshipMaxMax5)
-                        relationshipMaxMax5 = relationship[term1 + "__" + term2][m];
+                    if (relationship[term1 + "__" + term2][m] > relationshipMax5)
+                        relationshipMax5 = relationship[term1 + "__" + term2][m];
                 }
             }
         }
-        console.log("nodes="+nodes5.length+" links5="+links5.length);
+
+        graphByMonths[m] = {};
+        graphByMonths[m].nodes = nodes5.filter(function(d,i){
+            return d.isConnected;
+        });
+        graphByMonths[m].links = links5;
+
+        console.log("m="+m+" nodes="+graphByMonths[m].nodes.length+" links5="+graphByMonths[m].links.length+" relationshipMax5="+relationshipMax5);
         //debugger;
     }
 }

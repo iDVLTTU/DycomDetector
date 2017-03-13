@@ -100,10 +100,19 @@ function computeMonthlyGraphs(){
         });
         graphByMonths[m].links.forEach(function (d) {
             link_ids.push({"source":d.source.id,"target":d.target.id,"weight":1})
+<<<<<<< HEAD
         });
 
         var community  = jLouvain().nodes(node_ids).edges(link_ids)();
 
+=======
+        })
+
+       // var community  = jLouvain().nodes(node_ids).edges(links5)();
+        var community  = jLouvain().nodes(node_ids).edges(link_ids)();
+
+
+>>>>>>> origin/master
         graphByMonths[m].nodes.forEach(function (d) {
             d.community = community[d.id];
         });

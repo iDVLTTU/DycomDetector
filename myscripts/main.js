@@ -1,7 +1,7 @@
 //Constants for the SVG
 var margin = {top: 0, right: 0, bottom: 5, left: 5};
 var width = document.body.clientWidth - margin.left - margin.right;
-var height = 800 - margin.top - margin.bottom;
+var height = 400 - margin.top - margin.bottom;
 
 //---End Insert------
 
@@ -9,9 +9,9 @@ var height = 800 - margin.top - margin.bottom;
 var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
-var svg2 = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height-100);
+// var svg2 = d3.select("body").append("svg")
+//     .attr("width", width)
+//     .attr("height", height-100);
 
 var topTermMode = 0;
 //******************* Forced-directed layout    
@@ -26,12 +26,12 @@ var force = d3.layout.force()
     .alpha(0.05)
     .size([width, height]);
 
- var force2 = d3.layout.force()
-    .charge(-180)
-    .linkDistance(80)
-    .gravity(0.15)
-    .alpha(0.1)
-    .size([width, height]);     
+ // var force2 = d3.layout.force()
+ //    .charge(-180)
+ //    .linkDistance(80)
+ //    .gravity(0.15)
+ //    .alpha(0.1)
+ //    .size([width, height]);
 
 //---Insert-------
 var node_drag = d3.behavior.drag()
@@ -362,41 +362,41 @@ d3.tsv("data/wikinews.tsv", function(error, data_) {
         links2[i].count = ccc;
     }
 
-    force2.nodes(nodes2)
-        .links(links2)
-        .start();    
-
-    var link2 = svg2.selectAll(".link2")
-      .data(links2)
-    .enter().append("line")
-      .attr("class", "link2")
-      .style("stroke","#777")
-      .style("stroke-width", function(d) { return 0.2+linkScale(d.count); });
-
-    var node2 = svg2.selectAll(".nodeText2")
-        .data(nodes2)
-        .enter().append("text")
-      .attr("class", ".nodeText2")  
-            .text(function(d) { return d.name })           
-            .attr("dy", ".35em")
-            .style("fill", function(d) { return getColor(d.group, d.max) ;})
-            .style("text-anchor","middle")
-            .style("text-shadow", "1px 1px 0 rgba(55, 55, 55, 0.6")
-            .style("font-weight", function(d) { return d.isSearchTerm ? "bold" : ""; })
-            .attr("dy", ".21em")
-            .attr("font-family", "sans-serif")
-            .attr("font-size", "12px"); 
-
-    force2.on("tick", function() {
-        link2.attr("x1", function(d) { return d.source.x; })
-            .attr("y1", function(d) { return d.source.y; })
-            .attr("x2", function(d) { return d.target.x; })
-            .attr("y2", function(d) { return d.target.y; });
-
-        
-        node2.attr("x", function(d) { return d.x; })
-            .attr("y", function(d) { return d.y; });
-    });    
+    // force2.nodes(nodes2)
+    //     .links(links2)
+    //     .start();
+    //
+    // var link2 = svg2.selectAll(".link2")
+    //   .data(links2)
+    // .enter().append("line")
+    //   .attr("class", "link2")
+    //   .style("stroke","#777")
+    //   .style("stroke-width", function(d) { return 0.2+linkScale(d.count); });
+    //
+    // var node2 = svg2.selectAll(".nodeText2")
+    //     .data(nodes2)
+    //     .enter().append("text")
+    //   .attr("class", ".nodeText2")
+    //         .text(function(d) { return d.name })
+    //         .attr("dy", ".35em")
+    //         .style("fill", function(d) { return getColor(d.group, d.max) ;})
+    //         .style("text-anchor","middle")
+    //         .style("text-shadow", "1px 1px 0 rgba(55, 55, 55, 0.6")
+    //         .style("font-weight", function(d) { return d.isSearchTerm ? "bold" : ""; })
+    //         .attr("dy", ".21em")
+    //         .attr("font-family", "sans-serif")
+    //         .attr("font-size", "12px");
+    //
+    // force2.on("tick", function() {
+    //     link2.attr("x1", function(d) { return d.source.x; })
+    //         .attr("y1", function(d) { return d.source.y; })
+    //         .attr("x2", function(d) { return d.target.x; })
+    //         .attr("y2", function(d) { return d.target.y; });
+    //
+    //
+    //     node2.attr("x", function(d) { return d.x; })
+    //         .attr("y", function(d) { return d.y; });
+    // });
 
     
 

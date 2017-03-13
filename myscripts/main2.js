@@ -41,7 +41,7 @@ function computeMonthlyGraphs(){
             return 0;
         });
         var arr2 =arr.filter(function(d,i){
-            return i<300;
+            return i<100;
         });
 
 
@@ -100,15 +100,10 @@ function computeMonthlyGraphs(){
         });
         graphByMonths[m].links.forEach(function (d) {
             link_ids.push({"source":d.source.id,"target":d.target.id,"weight":1})
-        })
-<<<<<<< Updated upstream
+        });
 
-        var community  = jLouvain().nodes(node_ids).edges(links5)();
-=======
         var community  = jLouvain().nodes(node_ids).edges(link_ids)();
-        console.log(links5)
-        //console.log(links5)
->>>>>>> Stashed changes
+
         graphByMonths[m].nodes.forEach(function (d) {
             d.community = community[d.id];
         });

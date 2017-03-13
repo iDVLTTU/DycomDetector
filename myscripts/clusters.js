@@ -1,10 +1,23 @@
 /**
  * Created by vinhtngu on 3/10/17.
  */
-function updateSubLayout(nodes,links) {
-    var fill = d3.scale.category20();
+function updateSubLayout(nodes, links) {
+    function getColor(study_type) {
+        if (study_type == "person")
+            return "#0a0";
+        else if (study_type == "location")
+            return "#a00";
+        else if (study_type == "organization")
+            return "00b";
+        else if (study_type == "miscellaneous")
+            return "#aa0";
+        else {
+            return "black";
+        }
+    }
+    var fill = d3.scale.category10();
     linkScale = d3.scale.linear()
-        .range([0.5, 2])
+        .range([0.2, 0.4])
         .domain(d3.extent(links, function (d) {
             return d.count;
         }))
@@ -15,7 +28,24 @@ function updateSubLayout(nodes,links) {
         .entries(nodes);
     groups = groups.filter(function (d) {
         return d.values.length > 1;
-    })
+    });
+    var partition = [];
+    groups.forEach(function (d) {
+        var temp = [];
+        d.values.forEach(function (e) {
+            temp.push(e.id);
+        })
+        partition.push(temp);
+    });
+  var filteredlinks = [];
+  links.forEach(function (d) {
+      partition.forEach(function (e) {
+        if(e.indexOf(d.source.id)>=0&&e.indexOf(d.target.id)>=0){
+            filteredlinks.push(d);
+        }
+      })
+  });
+
     var groupPath = function (d) {
         var fakePoints = [];
         if (d.values.length == 2) {
@@ -45,55 +75,101 @@ function updateSubLayout(nodes,links) {
             + "Z";
     }
     var groupFill = function (d, i) {
-        return fill(+d.key);
+        // return fill(+d.key);
+        return "#000";
     };
-    var width=250,height=250;
-    var svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+    var width = 20, height = 20;
+    var svg = d3.select("body").append("svg").attr("width", width).attr("height", height);
     var force = d3.layout.force()
-        .gravity(0.2)
-        .distance(10)
-        .charge(-100)
+        .gravity(0.4)
+        .distance(1)
+        .charge(-1)
         .size([width, height]);
     force.nodes(nodes)
         .links(links)
         .start();
     var link = svg.selectAll(".link5")
-        .data(links)
+        .data(force.links())
         .enter().append("line")
         .attr("class", "link5")
-        .style("stroke","#777")
+        .style("stroke", "#777")
         .style("stroke-width", function (d) {
             return linkScale(d.count);
         });
 
     var node = svg.selectAll(".node5")
-        .data(nodes)
+        .data(force.nodes())
         .enter().append("circle")
-        .attr("r",4)
-        .style("fill",function (d) {
-            return fill(d.community);
+        .attr("r", 0.5)
+        .style("fill", function (d) {
+            return getColor(d.category);
         });
 
-    force.on("tick", function() {
-        link.attr("x1", function(d) { return d.source.x; })
-            .attr("y1", function(d) { return d.source.y; })
-            .attr("x2", function(d) { return d.target.x; })
-            .attr("y2", function(d) { return d.target.y; });
+    force.on("tick", function () {
+        // link.attr("x1", function (d) {
+        //     return d.source.x;
+        // })
+        //     .attr("y1", function (d) {
+        //         return d.source.y;
+        //     })
+        //     .attr("x2", function (d) {
+        //         return d.target.x;
+        //     })
+        //     .attr("y2", function (d) {
+        //         return d.target.y;
+        //     });
 
 
-        node.attr("cx", function(d) { return d.x; })
-            .attr("cy", function(d) { return d.y; });
+        node.attr("cx", function (d) {
+            return d.x;
+        })
+            .attr("cy", function (d) {
+                return d.y;
+            });
         svg.selectAll("path")
             .data(groups)
             .attr("d", groupPath)
             .enter().append("path", "circle")
             .style("fill", groupFill)
             .style("stroke", groupFill)
-            .style("stroke-width", 40)
+            .style("stroke-width", 1)
             .style("stroke-linejoin", "round")
-            .style("opacity", .2)
+            .style("opacity", .1)
             .attr("d", groupPath);
 
     });
+    force.on("end", function () {
+            link.attr("x1", function (d) {
+                return d.source.x;
+            })
+                .attr("y1", function (d) {
+                    return d.source.y;
+                })
+                .attr("x2", function (d) {
+                    return d.target.x;
+                })
+                .attr("y2", function (d) {
+                    return d.target.y;
+                });
 
+
+            node.attr("cx", function (d) {
+                return d.x;
+            })
+                .attr("cy", function (d) {
+                    return d.y;
+                });
+            svg.selectAll("path")
+                .data(groups)
+                .attr("d", groupPath)
+                .enter().append("path", "circle")
+                .style("fill", groupFill)
+                .style("stroke", groupFill)
+                .style("stroke-width", 1)
+                .style("stroke-linejoin", "round")
+                .style("opacity", .2)
+                .attr("d", groupPath);
+
+        }
+    );
 }

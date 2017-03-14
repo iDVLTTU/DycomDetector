@@ -1,7 +1,7 @@
 //Constants for the SVG
 var margin = {top: 0, right: 0, bottom: 5, left: 5};
 var width = document.body.clientWidth - margin.left - margin.right;
-var height = 400 - margin.top - margin.bottom;
+var height = 800 - margin.top - margin.bottom;
 
 //---End Insert------
 
@@ -83,7 +83,7 @@ var termArray, termArray2, termArray3;
 var relationship;
 var termMaxMax, termMaxMax2;
 var terms;
-var xStep =200;
+var xStep =179;
 //var xScale = d3.time.scale().range([0, (width-xStep-100)/numMonth]);
 var yScale;
 var linkScale;
@@ -95,7 +95,7 @@ var isLensing = false;
 var lensingMul = 5;
 var lMonth = -lensingMul*2;
 var coordinate = [0,0];
-var XGAP_ = 9; // gap between months on xAxis
+var XGAP_ = 17.6; // gap between months on xAxis
 
 function xScale(m){
     if (isLensing){
@@ -117,7 +117,7 @@ function xScale(m){
         }  
     }
     else{
-       return m*XGAP_; 
+       return m*XGAP_;
     }           
 }
 
@@ -1141,8 +1141,10 @@ function searchNode() {
                return area(d.monthly);
             });
         linkArcs.attr("d", linkArc);
-       // if (force.alpha()<0.03)
-       //     force.stop();
+
+     // Fast stopping the force layout, not a good result for TimeArcs
+         if (force.alpha()<0.05)
+            force.stop();
 
        updateTimeLegend();
     }
@@ -1162,35 +1164,6 @@ function searchNode() {
            return "translate(" + d.xConnected + "," + d.y + ")"
         })
 
-        /*
-        nodeG.style("fill" , function(d) {
-            var color = nodes.forEach(function(node) {
-                if (d.name == node.name && d.month!=node.month ){
-                    console.log("d.name="+d.name +" node.name="+node.name);
-                    console.log("d.month="+d.month +" node.month="+node.month);
-                    return "#f0f";
-                }
-                else
-                    return "#000";
-            });
-            return "#00f";
-        });*/
-
-        /*nodeG.forEach(function(d) {
-           d.xConnected=xStep+xScale(d.isConnectedMaxMonth);
-        });*/
-
-        /*
-        nodeG.attr("transform", function(d) {
-            var step = 0;
-            d.step=0;
-            nodes.forEach(function(node) {
-                if (d.name == node.name && d.month!=node.month && node.x<d.x && d.x<node.x+100){
-                    d.step=-5000;
-                }
-            });
-            return "translate(" + (d.x+d.step) + "," + d.y + ")";
-        });*/
 
         svg.selectAll(".layer").transition().duration(durationTime)
           .attr("d", function(d) {

@@ -41,7 +41,7 @@ function computeMonthlyGraphs(){
             return 0;
         });
         var arr2 =arr.filter(function(d,i){
-            return i<100;
+            return i<300;
         });
 
 
@@ -85,14 +85,13 @@ function computeMonthlyGraphs(){
             }
         }
 
-
         graphByMonths[m] = {};
         graphByMonths[m].nodes = nodes5.filter(function(d,i){
             return d.isConnected;
         });
         graphByMonths[m].links = links5;
 
-        // console.log("m="+m+" nodes="+graphByMonths[m].nodes.length+" links5="+graphByMonths[m].links.length+" relationshipMax5="+relationshipMax5);
+        console.log(m+" nodes="+graphByMonths[m].nodes.length +" links="+graphByMonths[m].links.length);
 
         var node_ids = [], link_ids=[];
         graphByMonths[m].nodes.forEach(function (d) {
@@ -100,52 +99,14 @@ function computeMonthlyGraphs(){
         });
         graphByMonths[m].links.forEach(function (d) {
             link_ids.push({"source":d.source.id,"target":d.target.id,"weight":1})
-<<<<<<< HEAD
         });
 
         var community  = jLouvain().nodes(node_ids).edges(link_ids)();
 
-=======
-        })
 
-       // var community  = jLouvain().nodes(node_ids).edges(links5)();
-        var community  = jLouvain().nodes(node_ids).edges(link_ids)();
-
-
->>>>>>> origin/master
         graphByMonths[m].nodes.forEach(function (d) {
             d.community = community[d.id];
         });
        updateSubLayout(graphByMonths[m].nodes,graphByMonths[m].links)
-
-        //debugger;
     }
 }
-
-/*
-
-function computeConnectivity2(a, m, cut) {
-    for (var i=0; i<a.length;i++){
-        a[i].isConnected=-100;
-    }
-
-    for (var i=0; i<a.length;i++){
-        var term1 =  a[i].term;
-        for (var j=i+1; j<a.length;j++){
-            var term2 =  a[j].term;
-            if (relationship[term1+"__"+term2][m] && relationship[term1+"__"+term2][m]>=cut){
-                a[i]
-            }
-            else if (relationship[term2+"__"+term1] && relationship[term2+"__"+term1].max>=cut){
-                if (relationship[term2+"__"+term1].max>a[i].isConnected){
-                    a[i].isConnected = relationship[term2+"__"+term1].max;
-                    a[i].isConnectedMaxMonth = relationship[term1+"__"+term2].maxMonth;
-                }
-                if (relationship[term2+"__"+term1].max>a[j].isConnected){
-                    a[j].isConnected = relationship[term2+"__"+term1].max;
-                    a[j].isConnectedMaxMonth = relationship[term1+"__"+term2].maxMonth;
-                }    ø
-            }
-        }
-    }
-}*/

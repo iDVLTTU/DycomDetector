@@ -4,13 +4,13 @@
 function updateSubLayout(nodes, links) {
     function getColor(study_type) {
         if (study_type == "person")
-            return "#0a0";
+            return "#0d0";
         else if (study_type == "location")
-            return "#a00";
+            return "#d00";
         else if (study_type == "organization")
-            return "00b";
+            return "00e";
         else if (study_type == "miscellaneous")
-            return "#aa0";
+            return "#dd0";
         else {
             return "black";
         }
@@ -78,13 +78,16 @@ function updateSubLayout(nodes, links) {
         // return fill(+d.key);
         return "#000";
     };
-    var width = 20, height = 20;
-    var svg = d3.select("body").append("svg").attr("width", width).attr("height", height);
+    //var width = 20, height = 20;
+    //var svg = d3.select("body").append("svg").attr("width", XGAP_).attr("height", XGAP_);
+
+    var svg = d3.selectAll(".timeBox").append("svg").attr("width", XGAP_).attr("height", XGAP_);
+
     var force = d3.layout.force()
-        .gravity(0.4)
+        .gravity(0.5)
         .distance(1)
         .charge(-1)
-        .size([width, height]);
+        .size([XGAP_, XGAP_]);
     force.nodes(nodes)
         .links(links)
         .start();
@@ -106,19 +109,6 @@ function updateSubLayout(nodes, links) {
         });
 
     force.on("tick", function () {
-        // link.attr("x1", function (d) {
-        //     return d.source.x;
-        // })
-        //     .attr("y1", function (d) {
-        //         return d.source.y;
-        //     })
-        //     .attr("x2", function (d) {
-        //         return d.target.x;
-        //     })
-        //     .attr("y2", function (d) {
-        //         return d.target.y;
-        //     });
-
 
         node.attr("cx", function (d) {
             return d.x;
@@ -134,41 +124,40 @@ function updateSubLayout(nodes, links) {
             .style("stroke", groupFill)
             .style("stroke-width", 1)
             .style("stroke-linejoin", "round")
-            .style("opacity", .1)
+            .style("opacity", .3)
             .attr("d", groupPath);
 
     });
     force.on("end", function () {
-            link.attr("x1", function (d) {
-                return d.source.x;
+        link.attr("x1", function (d) {
+            return d.source.x;
+        })
+            .attr("y1", function (d) {
+                return d.source.y;
             })
-                .attr("y1", function (d) {
-                    return d.source.y;
-                })
-                .attr("x2", function (d) {
-                    return d.target.x;
-                })
-                .attr("y2", function (d) {
-                    return d.target.y;
-                });
-
-
-            node.attr("cx", function (d) {
-                return d.x;
+            .attr("x2", function (d) {
+                return d.target.x;
             })
-                .attr("cy", function (d) {
-                    return d.y;
-                });
-            svg.selectAll("path")
-                .data(groups)
-                .attr("d", groupPath)
-                .enter().append("path", "circle")
-                .style("fill", groupFill)
-                .style("stroke", groupFill)
-                .style("stroke-width", 1)
-                .style("stroke-linejoin", "round")
-                .style("opacity", .2)
-                .attr("d", groupPath);
+            .attr("y2", function (d) {
+                return d.target.y;
+            });
+
+        node.attr("cx", function (d) {
+            return d.x;
+        })
+            .attr("cy", function (d) {
+                return d.y;
+            });
+        svg.selectAll("path")
+            .data(groups)
+            .attr("d", groupPath)
+            .enter().append("path", "circle")
+            .style("fill", groupFill)
+            .style("stroke", groupFill)
+            .style("stroke-width", 1)
+            .style("stroke-linejoin", "round")
+            .style("opacity", .3)
+            .attr("d", groupPath);
 
         }
     );

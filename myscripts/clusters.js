@@ -1,16 +1,19 @@
 /**
  * Created by vinhtngu on 3/10/17.
  */
-function updateSubLayout(nodes, links) {
+
+var forceSize = 100; // Max size of force layouts at the bottom
+
+function updateSubLayout(nodes, links, m) {
     function getColor(study_type) {
         if (study_type == "person")
-            return "#0d0";
+            return "#0f0";
         else if (study_type == "location")
-            return "#d00";
+            return "#f00";
         else if (study_type == "organization")
-            return "00e";
+            return "#00f";
         else if (study_type == "miscellaneous")
-            return "#dd0";
+            return "#ff0";
         else {
             return "black";
         }
@@ -81,17 +84,23 @@ function updateSubLayout(nodes, links) {
     //var width = 20, height = 20;
     //var svg = d3.select("body").append("svg").attr("width", XGAP_).attr("height", XGAP_);
 
-    var svg = d3.selectAll(".timeBox").append("svg").attr("width", XGAP_).attr("height", XGAP_);
+    var svg2 = svg.append("svg")
+        .attr("class", "force"+m)
+        .attr("width", forceSize)
+        .attr("height", forceSize)
+        .attr("x", xStep-forceSize/2+m*XGAP_)
+        .attr("y", height);
+
 
     var force = d3.layout.force()
         .gravity(0.5)
-        .distance(1)
-        .charge(-1)
-        .size([XGAP_, XGAP_]);
+        .distance(2)
+        .charge(-2)
+        .size([forceSize, forceSize]);
     force.nodes(nodes)
         .links(links)
         .start();
-    var link = svg.selectAll(".link5")
+    var link = svg2.selectAll(".link5")
         .data(force.links())
         .enter().append("line")
         .attr("class", "link5")
@@ -100,7 +109,7 @@ function updateSubLayout(nodes, links) {
             return linkScale(d.count);
         });
 
-    var node = svg.selectAll(".node5")
+    var node = svg2.selectAll(".node5")
         .data(force.nodes())
         .enter().append("circle")
         .attr("r", 0.5)
@@ -116,7 +125,7 @@ function updateSubLayout(nodes, links) {
             .attr("cy", function (d) {
                 return d.y;
             });
-        svg.selectAll("path")
+        svg2.selectAll("path")
             .data(groups)
             .attr("d", groupPath)
             .enter().append("path", "circle")
@@ -124,7 +133,7 @@ function updateSubLayout(nodes, links) {
             .style("stroke", groupFill)
             .style("stroke-width", 1)
             .style("stroke-linejoin", "round")
-            .style("opacity", .3)
+            .style("opacity", .25)
             .attr("d", groupPath);
 
     });
@@ -148,17 +157,6 @@ function updateSubLayout(nodes, links) {
             .attr("cy", function (d) {
                 return d.y;
             });
-        svg.selectAll("path")
-            .data(groups)
-            .attr("d", groupPath)
-            .enter().append("path", "circle")
-            .style("fill", groupFill)
-            .style("stroke", groupFill)
-            .style("stroke-width", 1)
-            .style("stroke-linejoin", "round")
-            .style("opacity", .3)
-            .attr("d", groupPath);
-
         }
     );
 }

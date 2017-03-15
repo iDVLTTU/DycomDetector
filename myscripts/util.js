@@ -160,7 +160,7 @@ function updateTimeLegend() {
     }  
   }
 
-  svg.selectAll(".timeLegendLine").data(listX).transition().duration(250)
+  svg.selectAll(".timeLegendLine").data(listX).transition().duration(500)
       .style("stroke-dasharray",  function(d,i){ 
         if (!isLensing)
           return "1, 2";
@@ -178,7 +178,7 @@ function updateTimeLegend() {
       }) 
       .attr("x1", function(d){return d.x; })
       .attr("x2", function(d){ return d.x; });
-  svg.selectAll(".timeLegendText").data(listX).transition().duration(250)
+  svg.selectAll(".timeLegendText").data(listX).transition().duration(500)
       .style("fill-opacity", function(d,i){
         if (i%12==0)
           return 1;
@@ -190,7 +190,21 @@ function updateTimeLegend() {
         }
       }) 
       .attr("x", function(d,i){ 
-        return d.x; });  
+        return d.x; });
+
+  // Update force layouts
+    for (var i=minYear; i<maxYear;i++){
+        for (var j=0; j<12;j++){
+            var m = (i-minYear)*12+j;
+            var view = "0 0 100 100";
+            if (lMonth-numLens<=m && m<=lMonth+numLens)
+                view = "38 38 24 24";
+            svg.selectAll(".force"+m).transition().duration(500)
+                .attr("x", xStep-forceSize/2+xScale(m))
+                .attr("viewBox",view);
+        }
+    }
+
 }
 
 function drawTimeBox(){  
@@ -206,7 +220,7 @@ function drawTimeBox(){
       isLensing = false;
       coordinate = d3.mouse(this);
       lMonth = Math.floor((coordinate[0]-xStep)/XGAP_);
-      updateTransition(250);
+      updateTransition(500);
 
     })
       .on("mouseover", function () {
@@ -216,14 +230,11 @@ function drawTimeBox(){
       isLensing = true;
       coordinate = d3.mouse(this);
       lMonth = Math.floor((coordinate[0]-xStep)/XGAP_);
-      updateTransition(250);
+      updateTransition(500);
 
     });
 }  
 function textCluster(coordinate) {
-
-        var width=400, height = 300;
-        console.log()
 
 }
 function updateTimeBox(durationTime){  
@@ -321,10 +332,10 @@ function turnLensing() {
     .on('mousemove', function(){
       coordinate = d3.mouse(this);
       lMonth = Math.floor((coordinate[0]-xStep)/XGAP_);
-      updateTransition(250);  
+      updateTransition(500);
       updateTimeLegend();
     });
-    updateTransition(250);     
+    updateTransition(500);
     updateTimeLegend(); 
 }  
 
@@ -392,45 +403,9 @@ function childCount1(level, n) {
     return count;
 };
 
-function childCount2(level, n) {
-    var arr = [];
-    if(n.children && n.children.length > 0) {
-      n.children.forEach(function(d) {
-        arr.push(d);
-      });
-    }
-    arr.sort(function(a,b) { return parseFloat(a.childCount1) - parseFloat(b.childCount1) } );
-    var arr2 = [];
-    arr.forEach(function(d, i) {
-        d.order1 = i;
-        arr2.splice(arr2.length/2,0, d);
-    });
-    arr2.forEach(function(d, i) {
-        d.order2 = i;
-        childCount2(level + 1, d);
-        d.idDFS = nodeDFSCount++;   // this set DFS id for nodes
-    });
 
-};
 
 d3.select(self.frameElement).style("height", diameter + "px");
-
-/*
-function tick(event) {
-  link_selection.attr("x1", function(d) { return d.source.x; })
-    .attr("y1", function(d) { return d.source.y; })
-    .attr("x2", function(d) { return d.target.x; })
-    .attr("y2", function(d) { return d.target.y; }); 
-  var force_influence = 0.9;
-  node_selection
-    .each(function(d) {
-      d.x += (d.treeX - d.x) * (force_influence); //*event.alpha;
-      d.y += (d.treeY - d.y) * (force_influence); //*event.alpha;
-    });
- // circles.attr("cx", function(d) { return d.x; })
-  //    .attr("cy", function(d) { return d.y; });  
-  
-}*/
 
 
 // Toggle children on click.

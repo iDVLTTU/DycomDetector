@@ -41,7 +41,7 @@ function computeMonthlyGraphs(){
             return 0;
         });
         var arr2 =arr.filter(function(d,i){
-            return i<300;
+            return i<80;
         });
 
 
@@ -107,6 +107,6 @@ function computeMonthlyGraphs(){
         graphByMonths[m].nodes.forEach(function (d) {
             d.community = community[d.id];
         });
-       updateSubLayout(graphByMonths[m].nodes,graphByMonths[m].links)
+       updateSubLayout(graphByMonths[m].nodes,graphByMonths[m].links,m);
     }
 }

@@ -8,7 +8,7 @@ var height = 800 - margin.top - margin.bottom;
 //Append a SVG to the body of the html page. Assign this SVG as an object to svg
 var svg = d3.select("body").append("svg")
     .attr("width", width)
-    .attr("height", height);
+    .attr("height", height+100);
 // var svg2 = d3.select("body").append("svg")
 //     .attr("width", width)
 //     .attr("height", height-100);
@@ -92,14 +92,14 @@ var searchTerm ="";
 var nodeY_byName = {};
 
 var isLensing = false;
-var lensingMul = 5;
+var lensingMul = 7;
 var lMonth = -lensingMul*2;
 var coordinate = [0,0];
 var XGAP_ = 17.6; // gap between months on xAxis
+var numLens = 3;
 
 function xScale(m){
     if (isLensing){
-        var numLens = 5;
         var maxM = Math.max(0, lMonth-numLens-1);
         var numMonthInLense = (lMonth+numLens-maxM+1);
         

@@ -2,7 +2,7 @@
  * Created by vinhtngu on 3/10/17.
  */
 
-var forceSize = 100; // Max size of force layouts at the bottom
+var forceSize = 150; // Max size of force layouts at the bottom
 
 function updateSubLayout(nodes, links, m) {
     function getColor(study_type) {
@@ -20,7 +20,7 @@ function updateSubLayout(nodes, links, m) {
     }
     var fill = d3.scale.category10();
     linkScale = d3.scale.linear()
-        .range([0.2, 0.4])
+        .range([0.1, 0.4])
         .domain(d3.extent(links, function (d) {
             return d.count;
         }))
@@ -40,14 +40,15 @@ function updateSubLayout(nodes, links, m) {
         })
         partition.push(temp);
     });
-  var filteredlinks = [];
+
+    /*var filteredlinks = [];
   links.forEach(function (d) {
       partition.forEach(function (e) {
         if(e.indexOf(d.source.id)>=0&&e.indexOf(d.target.id)>=0){
             filteredlinks.push(d);
         }
       })
-  });
+  });*/
 
     var groupPath = function (d) {
         var fakePoints = [];
@@ -133,7 +134,7 @@ function updateSubLayout(nodes, links, m) {
             .style("stroke", groupFill)
             .style("stroke-width", 1)
             .style("stroke-linejoin", "round")
-            .style("opacity", .25)
+            .style("opacity", .2)
             .attr("d", groupPath);
 
     });

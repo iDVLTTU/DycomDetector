@@ -7,9 +7,8 @@
  */
 
 
-
-// TermArray contains a smaller list of terms with NET > 2
 var graphByMonths=[];
+var termList = {}; // List of term to feed to TimeArcs in main.js
 
 function computeMonthlyGraphs(){
     for (var m=1; m<numMonth;m++) {
@@ -41,7 +40,7 @@ function computeMonthlyGraphs(){
             return 0;
         });
         var arr2 =arr.filter(function(d,i){
-            return i<80;
+            return i<100;
         });
 
 
@@ -58,6 +57,8 @@ function computeMonthlyGraphs(){
 
             //if (termArray3[i].isConnected>0)  // Only allow connected items
             nodes5.push(nod);
+
+            termList[nod.name] = nod;// List of term to feed to TimeArcs in main.js
         }
 
 

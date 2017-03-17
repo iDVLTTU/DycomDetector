@@ -8,13 +8,12 @@ var height = 800 - margin.top - margin.bottom;
 //Append a SVG to the body of the html page. Assign this SVG as an object to svg
 var svg = d3.select("body").append("svg")
     .attr("width", width)
-    .attr("height", height+100);
+    .attr("height", height+200);
 // var svg2 = d3.select("body").append("svg")
 //     .attr("width", width)
 //     .attr("height", height-100);
 
-var topTermMode = 0;
-//******************* Forced-directed layout    
+//******************* Forced-directed layout
 
 //Set up the force layout
 var force = d3.layout.force()
@@ -62,9 +61,6 @@ var node_drag = d3.behavior.drag()
 
 
 var data, data2;
-var firstDate = Date.parse("2005-01-01T00:00:00");
-var numSecondADay = 24*60*60;
-var numSecondAMonth = 30*numSecondADay;
 var minYear = 2005;
 var maxYear = 2015;
 var numMonth = 12*(maxYear-minYear);
@@ -84,7 +80,6 @@ var relationship;
 var termMaxMax, termMaxMax2;
 var terms;
 var xStep =179;
-//var xScale = d3.time.scale().range([0, (width-xStep-100)/numMonth]);
 var yScale;
 var linkScale;
 var searchTerm ="";
@@ -123,8 +118,9 @@ function xScale(m){
 
 
 var area = d3.svg.area()
-        .interpolate("cardinal")
-        .x(function(d) { return xStep+xScale(d.monthId); })
+        .interpolate("basic")
+        .x(function(d) {
+            return xStep+xScale(d.monthId); })
         .y0(function(d) { return d.yNode-yScale(d.value); })
         .y1(function(d) {  return d.yNode +yScale(d.value); });
   
@@ -624,18 +620,9 @@ function computeConnectivity(a, num, cut) {
 }
 
 function computeNodes() {
-    // check substrings of 100 first terms
-    for (var i=0; i<numNode2;i++){
-      for (var j=0; j<numNode2;j++){
-            if (i==j) continue;
-            if (termArray[j].term.indexOf(termArray[i].term)>-1)
-                termArray[i].isSubtring = 1;
-        }
-    }
-
     termArray2 = [];
-    for (var i=0; i<numNode2;i++){
-        if (termArray.length<numberInputTerms/3 || !termArray[i].isSubtring)  // only remove substring when there are too many of them
+    for (var i=0; i<termArray.length;i++){
+        if (termList[termArray[i].term]!=undefined)  // Filter the terms from force layouts in main2.js
             termArray2.push(termArray[i])
     }
 
@@ -666,6 +653,8 @@ function computeNodes() {
             return 0;
         }
     });
+
+
 
     computeConnectivity(termArray3, termArray3.length, cut);
 
@@ -1085,9 +1074,9 @@ function searchNode() {
             dy = d.target.y - d.source.y,
             dr = Math.sqrt(dx * dx + dy * dy)/2;
         if (d.source.y<d.target.y )
-            return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+            return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr*1.2 + " 0 0,1 " + d.target.x + "," + d.target.y;
         else
-            return "M" + d.target.x + "," + d.target.y + "A" + dr + "," + dr + " 0 0,1 " + d.source.x + "," + d.source.y;
+            return "M" + d.target.x + "," + d.target.y + "A" + dr + "," + dr*1.2 + " 0 0,1 " + d.source.x + "," + d.source.y;
     }
 
     function update(){
@@ -1133,13 +1122,16 @@ function searchNode() {
             });
          }
 
-        svg.selectAll(".layer")
+       /* svg.selectAll(".layer")
             .attr("d", function(d) {
                 for (var i=0; i<d.monthly.length; i++){
                     d.monthly[i].yNode = d.y;     // Copy node y coordinate
                 }
-               return area(d.monthly);
-            });
+
+                //    return area(d.monthly);
+                //else
+                    return "";
+            });*/
         linkArcs.attr("d", linkArc);
 
      // Fast stopping the force layout, not a good result for TimeArcs
@@ -1170,7 +1162,8 @@ function searchNode() {
             for (var i=0; i<d.monthly.length; i++){
                 d.monthly[i].yNode = d.y;     // Copy node y coordinate
             }
-           return area(d.monthly); }) ;
+            return area(d.monthly);
+          }) ;
         linkArcs.transition().duration(250).attr("d", linkArc);
         updateTimeLegend();
         updateTimeBox(durationTime);

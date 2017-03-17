@@ -123,7 +123,7 @@ function drawTimeLegend() {
       .attr("x1", function(d){ return d.x; })
       .attr("x2", function(d){ return d.x; })
       .attr("y1", function(d){ return 0; })
-      .attr("y2", function(d){ return height; });
+      .attr("y2", function(d){ return height+200; });
   svg.selectAll(".timeLegendText").data(listX)
     .enter().append("text")
       .attr("class", "timeLegendText")
@@ -170,7 +170,7 @@ function updateTimeLegend() {
         if (i%12==0)
           return 1;
         else {
-          if (isLensing && lMonth-lensingMul<=i && i<=lMonth+lensingMul)
+          if (isLensing && lMonth-numLens<=i && i<=lMonth+numLens)
               return 1;
           else 
             return 0; 
@@ -183,7 +183,7 @@ function updateTimeLegend() {
         if (i%12==0)
           return 1;
         else {
-          if (isLensing && lMonth-lensingMul<=i && i<=lMonth+lensingMul)
+          if (isLensing && lMonth-numLens<=i && i<=lMonth+numLens)
               return 1;
           else 
             return 0; 
@@ -196,9 +196,9 @@ function updateTimeLegend() {
     for (var i=minYear; i<maxYear;i++){
         for (var j=0; j<12;j++){
             var m = (i-minYear)*12+j;
-            var view = "0 0 100 100";
+            var view = "0 0 "+forceSize+" "+forceSize;
             if (lMonth-numLens<=m && m<=lMonth+numLens)
-                view = "38 38 24 24";
+                view = (forceSize*0.4) + " " + (forceSize*0.4)+ " " + (forceSize*0.2) +" "+ (forceSize*0.2);
             svg.selectAll(".force"+m).transition().duration(500)
                 .attr("x", xStep-forceSize/2+xScale(m))
                 .attr("viewBox",view);
@@ -215,7 +215,7 @@ function drawTimeBox(){
     .attr("x", xStep)
     .attr("y", height-25)
     .attr("width", XGAP_*numMonth)
-    .attr("height", 16)
+    .attr("height", 20)
     .on("mouseout", function(){
       isLensing = false;
       coordinate = d3.mouse(this);
@@ -250,7 +250,7 @@ function updateTimeBox(durationTime){
         if (i%12==0)
           return 1;
         else {
-          if (isLensing && lMonth-lensingMul<=i && i<=lMonth+lensingMul)
+          if (isLensing && lMonth-numLens<=i && i<=lMonth+numLens)
               return 1;
           else 
             return 0; 

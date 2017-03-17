@@ -21,9 +21,7 @@ function updateSubLayout(nodes, links, m) {
     var fill = d3.scale.category10();
     linkScale = d3.scale.linear()
         .range([0.1, 0.4])
-        .domain(d3.extent(links, function (d) {
-            return d.count;
-        }))
+        .domain([0,10])
     var groups = d3.nest()
         .key(function (d) {
             return d.community;

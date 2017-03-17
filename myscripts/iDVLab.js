@@ -321,3 +321,29 @@ function modularity(partition, adjmatrix) {
     });
     return Q_modularity;
 }
+/**Function to create adjacency matrix
+ * 
+ * @param graph with nodes and links
+ * @return adjacencymatrix
+ */
+
+function create_adjmatrix(graph) {
+    var adjmatrix=[];
+    var n = graph.nodes.length;
+   
+    for(var i=0;i<n;i++){ //Initialize empty matrix
+        var arr=[];
+        for(var j=0;j<n;j++){
+            arr.push(0);
+        }
+        adjmatrix.push(arr)
+    }//End of initialization
+    
+    graph.links.forEach(function (l) {
+       var sindex = graph.nodes.findIndex(x => x.id==l.source.id);
+       var tindex = graph.nodes.findIndex(x => x.id==l.target.id);
+        adjmatrix[sindex][tindex]=1;
+        adjmatrix[tindex][sindex]=1;
+    })
+    return adjmatrix;
+}

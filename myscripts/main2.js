@@ -65,8 +65,8 @@ function computeMonthlyGraphs(){
         // *********** LINKS **************
         var links5 = [];
         var relationshipMax5 = 0;
-
-        var cut = 1;
+        var currQ=0;
+       for(var cut=1; cut<30;cut++){
         for (var i=0; i<nodes5.length;i++) {
             var term1 = nodes5[i].name;
             for (var j = i + 1; j < nodes5.length; j++) {
@@ -105,9 +105,33 @@ function computeMonthlyGraphs(){
         var community  = jLouvain().nodes(node_ids).edges(link_ids)();
 
 
+        var adjmatrix = create_adjmatrix(graphByMonths[m]);
         graphByMonths[m].nodes.forEach(function (d) {
             d.community = community[d.id];
         });
+        var groups = d3.nest()
+            .key(function (d) {
+                return d.community;
+            })
+            .entries(graphByMonths[m].nodes);
+
+        var partition =[];
+        groups.forEach(function (d) {
+            var par=[];
+            d.values.forEach(function (a) {
+                par.push(graphByMonths[m].nodes.findIndex(x => x.id==a.id));
+            })
+            partition.push(par);
+        })
+        var Q_modularity = modularity(partition,adjmatrix);
+        if(Q_modularity<currQ){
+            break;
+        }
+        currQ =Q_modularity;
+
+       }
+    console.log("The best Q is: "+ currQ);
+
        updateSubLayout(graphByMonths[m].nodes,graphByMonths[m].links,m);
     }
 }

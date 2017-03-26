@@ -6,7 +6,6 @@
  * OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
  */
 
-
 function recompute3() {
     var bar = document.getElementById('progBar'),
         fallback = document.getElementById('downloadProgress'),

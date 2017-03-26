@@ -1,14 +1,14 @@
 //Constants for the SVG
 var margin = {top: 0, right: 0, bottom: 5, left: 5};
 var width = document.body.clientWidth - margin.left - margin.right;
-var height = 800 - margin.top - margin.bottom;
+var height = 600 - margin.top - margin.bottom;
 
 //---End Insert------
 
 //Append a SVG to the body of the html page. Assign this SVG as an object to svg
 var svg = d3.select("body").append("svg")
     .attr("width", width)
-    .attr("height", height*2);
+    .attr("height", 1500);
 // var svg2 = d3.select("body").append("svg")
 //     .attr("width", width)
 //     .attr("height", height-100);
@@ -89,6 +89,8 @@ var nodeY_byName = {};
 var isLensing = false;
 var lensingMul = 7;
 var lMonth = -lensingMul*2;
+var oldLmonth = -1000; // use this variable to compare if we are lensing over a different month
+
 var coordinate = [0,0];
 var XGAP_ = 17.6; // gap between months on xAxis
 var numLens = 3;
@@ -279,7 +281,6 @@ d3.tsv("data/wikinews.tsv", function(error, data_) {
     computeNodes();
     computeLinks();
 
-    //drawgraph2();
 
     force.linkStrength(function(l) {
         if (l.value)
@@ -1136,7 +1137,7 @@ function searchNode() {
         linkArcs.attr("d", linkArc);
 
      // Fast stopping the force layout, not a good result for TimeArcs
-         if (force.alpha()<0.05)
+         if (force.alpha()<0.09)
             force.stop();
 
        updateTimeLegend();

@@ -229,7 +229,6 @@ function drawTimeBox(){
       isLensing = true;
       coordinate = d3.mouse(this);
       lMonth = Math.floor((coordinate[0]-xStep)/XGAP_);
-      drawgraph2(lMonth);
       updateTransition(500);
 
     });
@@ -263,8 +262,15 @@ function updateTimeBox(durationTime){
     .attr("x", function(d,i){ 
       return d.x; });
 
-  console.log("lMonth="+lMonth);
-  //  recompute3();
+    // Recompute the timeArcs
+    if (oldLmonth!=lMonth) {
+        console.log("in util.js lMonth=" + lMonth);
+
+        if (oldLmonth>=0)
+            drawgraph2(lMonth);
+        oldLmonth = lMonth;
+        //recompute3();   // This function is in main3.js
+    }
 }
 
 var buttonLensingWidth =80;

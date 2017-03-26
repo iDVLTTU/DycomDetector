@@ -41,7 +41,7 @@ function computeMonthlyGraphs() {
             return 0;
         });
         var arr2 = arr.filter(function (d, i) {
-            return i < 100;
+            return i < 50;
         });
 
         var cut = 1;
@@ -160,36 +160,30 @@ function drawgraph2(m){
         if (breakCheck) {break;}
     }
      // Construct an array of only parent nodes
-     var tNodes = new Array(100); //nodes;
-    first100nodes.forEach(function (d,i) {
-       nodes.forEach(function (a) {
-           if(d.id===a.id){
-               tNodes[i] = a;
-           }
+     var tNodes = new Array(first100nodes.length); //nodes;
 
-       });
-    });
-     // for (var i=0; i<100;i++){
-     // tNodes[i] = nodes[i];
-     // }
+     for (var i=0; i<first100nodes.length;i++){
+          var index = first100nodes[i];
+         tNodes[i] = nodes[index];
+      }
+    //debugger;
 
      svg.selectAll(".layer2").remove();
      svg.selectAll(".layer2")
      .data(tNodes)
      .enter().append("path")
      .attr("class", "layer2")
-     .style("stroke", function(d) { return d.isSearchTerm ? "#000" : "#000"; })
+     .style("stroke", function(d) { return  "#000"; })
      .style("stroke-width",0.05)
      .style("stroke-opacity",0.5)
      .style("fill-opacity",1)
      .style("fill", function(d, i) {
-     return getColor(d.group, d.max);
+          return getColor(d.group, d.max);
      })
      .attr("d", function(d, index) {
      for (var i=0; i<d.monthly.length; i++){
-        d.monthly[i].yNode = height+200+index*20;     // Copy node y coordinate
+        d.monthly[i].yNode = height+200+index*12;     // Copy node y coordinate
      }
      return area(d.monthly);
      }) ;
-    // debugger;
 }

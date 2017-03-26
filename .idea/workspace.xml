@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="29106b09-ade8-4b77-aa72-321fe51ecf60" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myscripts/clusters.js" afterPath="$PROJECT_DIR$/myscripts/clusters.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myscripts/main.js" afterPath="$PROJECT_DIR$/myscripts/main.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myscripts/main2.js" afterPath="$PROJECT_DIR$/myscripts/main2.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myscripts/util.js" afterPath="$PROJECT_DIR$/myscripts/util.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -57,8 +57,30 @@
       <file leaf-file-name="main2.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/myscripts/main2.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1950">
-              <caret line="136" column="12" lean-forward="false" selection-start-line="136" selection-start-column="12" selection-end-line="136" selection-end-column="12" />
+            <state relative-caret-position="55">
+              <caret line="34" column="36" lean-forward="true" selection-start-line="34" selection-start-column="36" selection-end-line="34" selection-end-column="36" />
+              <folding>
+                <element signature="e#1494#4857#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/myscripts/main.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1351">
+              <caret line="281" column="6" lean-forward="false" selection-start-line="281" selection-start-column="6" selection-end-line="281" selection-end-column="6" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="util.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/myscripts/util.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-512">
+              <caret line="231" column="6" lean-forward="false" selection-start-line="231" selection-start-column="6" selection-end-line="231" selection-end-column="6" />
               <folding />
             </state>
           </provider>
@@ -91,6 +113,14 @@
       <find>force2</find>
       <find>save</find>
       <find>00</find>
+      <find>pNodes</find>
+      <find>.layer</find>
+      <find>layer</find>
+      <find>nodes</find>
+      <find>nodes</find>
+      <find>var nodes</find>
+      <find>mouse</find>
+      <find>drawgraph2()</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -99,10 +129,12 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/myscripts/main.js" />
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/myscripts/iDVLab.js" />
+        <option value="/Volumes/vinhtngu/myweb/index.html" />
         <option value="$PROJECT_DIR$/myscripts/clusters.js" />
+        <option value="$PROJECT_DIR$/myscripts/util.js" />
+        <option value="$PROJECT_DIR$/myscripts/main.js" />
         <option value="$PROJECT_DIR$/myscripts/main2.js" />
       </list>
     </option>
@@ -251,12 +283,12 @@
       <workItem from="1489426643977" duration="6475000" />
       <workItem from="1489515814552" duration="6568000" />
       <workItem from="1489732296526" duration="5264000" />
-      <workItem from="1489768099232" duration="6133000" />
+      <workItem from="1489768099232" duration="13853000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="28787000" />
+    <option name="totallyTimeSpent" value="36507000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="2560" height="1337" extended-state="6" />
@@ -363,6 +395,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -418,13 +451,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/myscripts/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="14" lean-forward="false" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
           <folding />
         </state>
       </provider>
@@ -433,6 +459,24 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1470">
           <caret line="98" column="32" lean-forward="false" selection-start-line="98" selection-start-column="32" selection-end-line="98" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/myscripts/jLouvain.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Volumes/vinhtngu/myweb/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1561">
+          <caret line="139" column="6" lean-forward="false" selection-start-line="139" selection-start-column="6" selection-end-line="139" selection-end-column="6" />
           <folding />
         </state>
       </provider>
@@ -447,16 +491,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/myscripts/jLouvain.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/myscripts/clusters.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
@@ -465,11 +499,29 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/myscripts/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1351">
+          <caret line="281" column="6" lean-forward="false" selection-start-line="281" selection-start-column="6" selection-end-line="281" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/myscripts/util.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-512">
+          <caret line="231" column="6" lean-forward="false" selection-start-line="231" selection-start-column="6" selection-end-line="231" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/myscripts/main2.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1950">
-          <caret line="136" column="12" lean-forward="false" selection-start-line="136" selection-start-column="12" selection-end-line="136" selection-end-column="12" />
-          <folding />
+        <state relative-caret-position="55">
+          <caret line="34" column="36" lean-forward="true" selection-start-line="34" selection-start-column="36" selection-end-line="34" selection-end-column="36" />
+          <folding>
+            <element signature="e#1494#4857#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

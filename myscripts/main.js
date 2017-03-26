@@ -8,7 +8,7 @@ var height = 800 - margin.top - margin.bottom;
 //Append a SVG to the body of the html page. Assign this SVG as an object to svg
 var svg = d3.select("body").append("svg")
     .attr("width", width)
-    .attr("height", height+200);
+    .attr("height", height*2);
 // var svg2 = d3.select("body").append("svg")
 //     .attr("width", width)
 //     .attr("height", height-100);
@@ -279,6 +279,7 @@ d3.tsv("data/wikinews.tsv", function(error, data_) {
     computeNodes();
     computeLinks();
 
+    //drawgraph2();
 
     force.linkStrength(function(l) {
         if (l.value)

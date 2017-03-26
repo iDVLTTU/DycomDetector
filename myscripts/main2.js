@@ -44,9 +44,9 @@ function computeMonthlyGraphs() {
             return i < 50;
         });
 
-        var cut = 2;
+        var cut = 3;
         graphByMonths[m] = [];
-        while (cut < 3) {
+        while (cut < 4) {
             // *********** VERTICES **************
             var nodes5 = [];
             for (var i = 0; i < arr2.length; i++) {
@@ -169,29 +169,7 @@ function drawgraph2(m){
             break;
     }
 
-    lLinks = [];
-    for(var m = startMonth;m<endMonth;m++){
-        if (graphByMonths[m]==undefined || graphByMonths[m][0]==undefined) continue;
-        for(var i=0;i< graphByMonths[m][0].nodes.length;i++){
-            if(lNodes.length==100){
-                breakCheck=true;
-                break;
-            }
-            var nod = graphByMonths[m][0].nodes[i];
-            var found = false;
-            for (var j=0; j<lNodes.length;j++){
-                if (lNodes[j].name==nod.name) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found){
-                lNodes.push(nod);
-            }
-        }
-        if (breakCheck)
-            break;
-    }
+
 
 
 
@@ -225,6 +203,30 @@ function drawgraph2(m){
          }
          return area(termList[d.name].monthly);
      }) ;
+
+    // LINKs **********************************
+    lLinks = [];
+    for(var m = startMonth;m<endMonth;m++){
+        if (graphByMonths[m]==undefined || graphByMonths[m][0]==undefined) continue;
+        for(var i=0;i< graphByMonths[m][0].links.length;i++){
+            var lin = graphByMonths[m][0].links[i];
+            lLinks.push(lin);
+
+        }
+    }
+
+
+    svg.selectAll(".linkArc3").remove();
+    svg.selectAll(".linkArc3")
+        .data(lLinks)
+        .enter().append("path")
+        .attr("class", "linkArc3")
+        .style("stroke-width", function (d) {
+            return linkScale3(d.count);
+        })
+        .attr("d", linkArc3);
+
+
 
     svg.selectAll(".nodeText3").remove();
     var updateText =  svg.selectAll(".nodeText3")
@@ -276,4 +278,22 @@ function computeMonthlyData(term){
         }
     }
     return monthly;
+}
+
+function linkArc3(d) {
+    var term1 = d.source.name;
+    var term2 = d.target.name;
+    var x1 = xStep+xScale(d.m);
+    var x2 = x1;
+    var y1 = termList[term1].monthly[0].yNode;
+    var y2 = termList[term2].monthly[0].yNode;
+    console.log(y1+" "+y2);
+
+    var dx = x2 - x1,
+        dy = y2 - y1,
+        dr = Math.sqrt(dx * dx + dy * dy)/2;
+    if (y1<y2)
+        return "M" + x1 + "," + y1 + "A" + dr + "," + dr + " 0 0,1 " +x2 + "," +y2;
+    else
+        return "M" + x2 + "," + y2 + "A" + dr + "," + dr + " 0 0,1 " + x1 + "," + y1;
 }

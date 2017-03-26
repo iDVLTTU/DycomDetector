@@ -8,7 +8,7 @@ var height = 500 - margin.top - margin.bottom;
 //Append a SVG to the body of the html page. Assign this SVG as an object to svg
 var svg = d3.select("body").append("svg")
     .attr("width", width)
-    .attr("height", 1500);
+    .attr("height", 1400);
 // var svg2 = d3.select("body").append("svg")
 //     .attr("width", width)
 //     .attr("height", height-100);
@@ -858,7 +858,7 @@ function computeNodes() {
 
         //Create all the line svgs but without locations yet
         svg.selectAll(".linkArc").remove();
-        linkArcs = svg.append("g").selectAll("path")
+        linkArcs = svg.append("g").selectAll(".linkArc")
         .data(links)
         .enter().append("path")
         .attr("class", "linkArc")

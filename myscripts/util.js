@@ -263,7 +263,10 @@ function updateTimeBox(durationTime){
         return maxY+21;   
     })
     .attr("x", function(d,i){ 
-      return d.x; });   
+      return d.x; });
+
+  console.log("lMonth="+lMonth);
+  //  recompute3();
 }
 
 var buttonLensingWidth =80;

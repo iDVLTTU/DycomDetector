@@ -132,9 +132,9 @@ function computeMonthlyGraphs() {
             graphByMonths[m].push(graph);
             cut += 1;
         }
-        console.log(graphByMonths[m].sort(function (a,b) {
-            return b.Qmodularity - a.Qmodularity
-        }));
+        //console.log(graphByMonths[m].sort(function (a,b) {
+        //    return b.Qmodularity - a.Qmodularity
+        //}));
          updateSubLayout(graphByMonths[m][0].nodes, graphByMonths[m][0].links, m);
     }
 }

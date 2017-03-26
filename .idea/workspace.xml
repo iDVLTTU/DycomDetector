@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="29106b09-ade8-4b77-aa72-321fe51ecf60" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myscripts/iDVLab.js" afterPath="$PROJECT_DIR$/myscripts/iDVLab.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myscripts/main2.js" afterPath="$PROJECT_DIR$/myscripts/main2.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -57,8 +55,8 @@
       <file leaf-file-name="main2.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/myscripts/main2.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="910">
-              <caret line="134" column="12" lean-forward="false" selection-start-line="134" selection-start-column="12" selection-end-line="134" selection-end-column="12" />
+            <state relative-caret-position="670">
+              <caret line="137" column="29" lean-forward="false" selection-start-line="137" selection-start-column="29" selection-end-line="137" selection-end-column="29" />
               <folding />
             </state>
           </provider>
@@ -282,12 +280,12 @@
       <workItem from="1489515814552" duration="6568000" />
       <workItem from="1489732296526" duration="5264000" />
       <workItem from="1489768099232" duration="13853000" />
-      <workItem from="1490565440972" duration="3157000" />
+      <workItem from="1490565440972" duration="3357000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="39664000" />
+    <option name="totallyTimeSpent" value="39864000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="2560" height="1337" extended-state="6" />
@@ -567,8 +565,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/myscripts/main2.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="910">
-          <caret line="134" column="12" lean-forward="false" selection-start-line="134" selection-start-column="12" selection-end-line="134" selection-end-column="12" />
+        <state relative-caret-position="670">
+          <caret line="137" column="29" lean-forward="false" selection-start-line="137" selection-start-column="29" selection-end-line="137" selection-end-column="29" />
           <folding />
         </state>
       </provider>

@@ -129,11 +129,13 @@ function computeMonthlyGraphs() {
             for(var i=0;i<graph.nodes.length;i++){
                 Obetweenness[graph.nodes[i].id]=Abetweenness[i];
             }
-
+            graph.nodes.forEach(function (d) {
+                d.betweenness =Obetweenness[d.id];
+            })
             //End of betweenness centrality
 
-            
 
+            console.log(graph)
 
 
 

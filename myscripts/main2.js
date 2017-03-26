@@ -9,6 +9,7 @@
 
 var graphByMonths = [];
 var termList = {}; // List of term to feed to TimeArcs in main.js
+var lNodes;  // Nodes in the lensing month
 
 function computeMonthlyGraphs() {
 
@@ -153,24 +154,30 @@ function drawgraph2(m){
                 breakCheck=true;
                 break;
             }
-            if(first100nodes.indexOf(graphByMonths[startMonth][0].nodes[i].id)===-1){
-                first100nodes.push(graphByMonths[startMonth][0].nodes[i].id);
+            var nod = graphByMonths[startMonth][0].nodes[i];
+            if(first100nodes.indexOf(nod.id)===-1){
+                first100nodes.push(nod.id);
+
+                if (nodes[nod.id].lensing == undefined)
+                    nodes[nod.id].lensing = {};
+                nodes[nod.id].lensing.startMonth = startMonth;
             }
         }
-        if (breakCheck) {break;}
+        if (breakCheck)
+            break;
     }
      // Construct an array of only parent nodes
-     var tNodes = new Array(first100nodes.length); //nodes;
+    lNodes = new Array(first100nodes.length); //nodes;
 
      for (var i=0; i<first100nodes.length;i++){
           var index = first100nodes[i];
-         tNodes[i] = nodes[index];
+         lNodes[i] = nodes[index];
       }
     //debugger;
 
      svg.selectAll(".layer2").remove();
      svg.selectAll(".layer2")
-     .data(tNodes)
+     .data(lNodes)
      .enter().append("path")
      .attr("class", "layer2")
      .style("stroke", function(d) { return  "#000"; })
@@ -181,9 +188,9 @@ function drawgraph2(m){
           return getColor(d.group, d.max);
      })
      .attr("d", function(d, index) {
-     for (var i=0; i<d.monthly.length; i++){
-        d.monthly[i].yNode = height+200+index*12;     // Copy node y coordinate
-     }
-     return area(d.monthly);
+         for (var i=0; i<d.monthly.length; i++){
+            d.monthly[i].yNode = height+200+index*12;     // Copy node y coordinate
+         }
+         return area(d.monthly);
      }) ;
 }

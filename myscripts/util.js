@@ -117,13 +117,13 @@ function drawTimeLegend() {
     .enter().append("line")
       .attr("class", "timeLegendLine")
       .style("stroke", "000") 
-      .style("stroke-dasharray", "1, 2")
+      //.style("stroke-dasharray", "3, 1")
       .style("stroke-opacity", 1)
-      .style("stroke-width", 0.2)
+      .style("stroke-width", 0.3)
       .attr("x1", function(d){ return d.x; })
       .attr("x2", function(d){ return d.x; })
-      .attr("y1", function(d){ return 0; })
-      .attr("y2", function(d){ return height+200; });
+      .attr("y1", 0)
+      .attr("y2", 1500);
   svg.selectAll(".timeLegendText").data(listX)
     .enter().append("text")
       .attr("class", "timeLegendText")
@@ -165,7 +165,7 @@ function updateTimeLegend() {
         if (!isLensing)
           return "1, 2";
         else  
-          return i%12==0 ? "2, 1" : "1, 3"})
+          return i%12==0 ? "3, 1" : "1, 2"})
       .style("stroke-opacity", function(d,i){
         if (i%12==0)
           return 1;

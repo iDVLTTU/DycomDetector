@@ -1,7 +1,7 @@
 //Constants for the SVG
 var margin = {top: 0, right: 0, bottom: 5, left: 5};
 var width = document.body.clientWidth - margin.left - margin.right;
-var height = 600 - margin.top - margin.bottom;
+var height = 500 - margin.top - margin.bottom;
 
 //---End Insert------
 
@@ -615,7 +615,7 @@ function computeConnectivity(a, num, cut) {
                 if (relationship[term2+"__"+term1].max>a[j].isConnected){
                     a[j].isConnected = relationship[term2+"__"+term1].max;
                     a[j].isConnectedMaxMonth = relationship[term1+"__"+term2].maxMonth;
-                }    ø
+                }
             }
          }
     }
@@ -748,11 +748,12 @@ function computeNodes() {
           .enter().append("path")
           .attr("class", "layer")
           .style("stroke", function(d) { return d.isSearchTerm ? "#000" : "#000"; })
-          .style("stroke-width",0.05)
+          .style("stroke-width",0.5)
           .style("stroke-opacity",0.5)
-          .style("fill-opacity",1)
-          .style("fill", function(d, i) {
-            return getColor(d.group, d.max);
+          .style("fill-opacity",0.3)
+          .style("fill", function(d) {
+           // return getColor(d.group, d.max);
+              return getColor3(d.group);
         });
 }
 
@@ -840,7 +841,7 @@ function computeNodes() {
         var hhh = Math.min(height/numNode,20);
 
         yScale = d3.scale.linear()
-            .range([0, hhh*2])
+            .range([0, 30])
             .domain([0, termMaxMax2]);
         linkScale = d3.scale.linear()
             .range([0.5, 2])
@@ -1137,7 +1138,7 @@ function searchNode() {
         linkArcs.attr("d", linkArc);
 
      // Fast stopping the force layout, not a good result for TimeArcs
-         if (force.alpha()<0.09)
+         if (force.alpha()<0.1)
             force.stop();
 
        updateTimeLegend();

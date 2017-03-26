@@ -4,20 +4,24 @@
 
 var forceSize = 150; // Max size of force layouts at the bottom
 
-function updateSubLayout(nodes, links, m) {
-    function getColor(study_type) {
-        if (study_type == "person")
-            return "#0f0";
-        else if (study_type == "location")
-            return "#f00";
-        else if (study_type == "organization")
-            return "#00f";
-        else if (study_type == "miscellaneous")
-            return "#ff0";
-        else {
-            return "black";
-        }
+/*function getColor3(study_type) {
+    if (study_type == "person")
+        return "#0f0";
+    else if (study_type == "location")
+        return "#f00";
+    else if (study_type == "organization")
+        return "#00f";
+    else if (study_type == "miscellaneous")
+        return "#ff0";
+    else {
+        return "black";
     }
+}*/
+
+var getColor3 = d3.scale.category10();
+
+function updateSubLayout(nodes, links, m) {
+
     var fill = d3.scale.category10();
     linkScale = d3.scale.linear()
         .range([0.1, 0.4])
@@ -113,7 +117,7 @@ function updateSubLayout(nodes, links, m) {
         .enter().append("circle")
         .attr("r", 0.5)
         .style("fill", function (d) {
-            return getColor(d.category);
+            return getColor3(d.category);
         });
 
     force.on("tick", function () {

@@ -9,15 +9,14 @@
 
 var graphByMonths = [];
 var termList = {}; // List of term to feed to TimeArcs in main.js
-var lNodes;  // Nodes in the lensing month
+var lNodes, lLinks;  // Nodes in the lensing month
 
 function computeMonthlyGraphs() {
-
     for (var m = 1; m < numMonth; m++) {
         var arr = [];
         for (var i = 0; i < termArray.length; i++) {
             var att = termArray[i].term;
-            if (terms[att][m]) {
+            if (terms[att][m] && att.length>=2) {  // Term contains at least 2 characters
                 var obj = new Object();
                 var previous = 0;
                 if (terms[att][m - 1])
@@ -45,9 +44,9 @@ function computeMonthlyGraphs() {
             return i < 50;
         });
 
-        var cut = 1;
+        var cut = 2;
         graphByMonths[m] = [];
-        while (cut < 2) {
+        while (cut < 3) {
             // *********** VERTICES **************
             var nodes5 = [];
             for (var i = 0; i < arr2.length; i++) {
@@ -137,60 +136,144 @@ function computeMonthlyGraphs() {
         //console.log(graphByMonths[m].sort(function (a,b) {
         //    return b.Qmodularity - a.Qmodularity
         //}));
-
-         updateSubLayout(graphByMonths[m][0].nodes, graphByMonths[m][0].links, m);
+        if (graphByMonths[m][0]!=undefined)
+             updateSubLayout(graphByMonths[m][0].nodes, graphByMonths[m][0].links, m);
     }
-
 }
 
 function drawgraph2(m){
-    var startMonth= m>2?m-2:m;
-    var endMonoth = startMonth+7;
+    var startMonth= m>numLens ? m-numLens : m;
+    var endMonth = startMonth+numLens*2+1;
     var breakCheck = false;
-    var first100nodes=[];
-    for(startMonth;startMonth<endMonoth;startMonth++){
-        for(var i=0;i< graphByMonths[startMonth][0].nodes.length;i++){
-            if(first100nodes.length==100){
+    lNodes = [];
+    for(var m = startMonth;m<endMonth;m++){
+        if (graphByMonths[m]==undefined || graphByMonths[m][0]==undefined) continue;
+        for(var i=0;i< graphByMonths[m][0].nodes.length;i++){
+            if(lNodes.length==100){
                 breakCheck=true;
                 break;
             }
-            var nod = graphByMonths[startMonth][0].nodes[i];
-            if(first100nodes.indexOf(nod.id)===-1){
-                first100nodes.push(nod.id);
-
-                if (nodes[nod.id].lensing == undefined)
-                    nodes[nod.id].lensing = {};
-                nodes[nod.id].lensing.startMonth = startMonth;
+            var nod = graphByMonths[m][0].nodes[i];
+            var found = false;
+            for (var j=0; j<lNodes.length;j++){
+                if (lNodes[j].name==nod.name) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found){
+                lNodes.push(nod);
             }
         }
         if (breakCheck)
             break;
     }
-     // Construct an array of only parent nodes
-    lNodes = new Array(first100nodes.length); //nodes;
 
-     for (var i=0; i<first100nodes.length;i++){
-          var index = first100nodes[i];
-         lNodes[i] = nodes[index];
-      }
-    //debugger;
+    lLinks = [];
+    for(var m = startMonth;m<endMonth;m++){
+        if (graphByMonths[m]==undefined || graphByMonths[m][0]==undefined) continue;
+        for(var i=0;i< graphByMonths[m][0].nodes.length;i++){
+            if(lNodes.length==100){
+                breakCheck=true;
+                break;
+            }
+            var nod = graphByMonths[m][0].nodes[i];
+            var found = false;
+            for (var j=0; j<lNodes.length;j++){
+                if (lNodes[j].name==nod.name) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found){
+                lNodes.push(nod);
+            }
+        }
+        if (breakCheck)
+            break;
+    }
 
-     svg.selectAll(".layer2").remove();
-     svg.selectAll(".layer2")
-     .data(lNodes)
-     .enter().append("path")
-     .attr("class", "layer2")
+
+
+
+    var yStart = height+150 ; // y starts drawing the stream graphs
+    var yStep = 13
+
+    svg.selectAll(".layer3").remove();
+    var update_ =  svg.selectAll(".layer3")
+     .data(lNodes, function(d) {  return d.name })
+        ;//.style("fill", "black");
+
+    var enter_ = update_.enter();
+
+
+    enter_.append("path")
+     .attr("class", "layer3")
      .style("stroke", function(d) { return  "#000"; })
-     .style("stroke-width",0.05)
+     .style("stroke-width",0.5)
      .style("stroke-opacity",0.5)
-     .style("fill-opacity",1)
-     .style("fill", function(d, i) {
-          return getColor(d.group, d.max);
+     .style("fill-opacity",0.3)
+     .style("fill", function(d) {
+          return getColor3(d.category);
      })
      .attr("d", function(d, index) {
-         for (var i=0; i<d.monthly.length; i++){
-            d.monthly[i].yNode = height+200+index*12;     // Copy node y coordinate
+         if (termList[d.name].monthly==undefined){
+             termList[d.name].monthly = computeMonthlyData(d.name);
          }
-         return area(d.monthly);
+         for (var i=0; i<termList[d.name].monthly.length; i++){
+             termList[d.name].monthly[i].yNode = yStart+index*yStep;     // Copy node y coordinate
+         }
+         return area(termList[d.name].monthly);
      }) ;
+
+    svg.selectAll(".nodeText3").remove();
+    var updateText =  svg.selectAll(".nodeText3")
+        .data(lNodes, function(d) { return d.name })
+        ;//.style("fill", "black")
+        //.text(function(d) { return d.name });
+    var enterText = updateText.enter();
+    enterText.append("text")
+        .attr("class", "nodeText3")
+        .style("fill", "#000000")
+        .style("text-anchor","end")
+        .style("text-shadow", "1px 1px 0 rgba(255, 255, 255, 0.6")
+        .attr("x", xStep-2)
+        .attr("y", function(d, i) {
+            return  yStart + i * yStep+4;     // Copy node y coordinate
+        })
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "13px")
+        .text(function(d) { return d.name });
+}
+
+function computeMonthlyData(term){
+    var monthly = [];
+    for (var m=0; m<numMonth; m++){
+        var mon = new Object();
+        if (terms[term][m]){
+            mon.value = terms[term][m];
+            mon.monthId = m;
+            monthly.push(mon);
+        }
+    }
+    // Add another item to first
+    if (monthly.length>0){
+        var firstObj = monthly[0];
+        if (firstObj.monthId>0){
+            var mon = new Object();
+            mon.value = 0;
+            mon.monthId = firstObj.monthId-1;
+            monthly.unshift(mon);
+        }
+
+        // Add another item
+        var lastObj = monthly[monthly.length-1];
+        if (lastObj.monthId<numMonth-1){
+            var mon = new Object();
+            mon.value = 0;
+            mon.monthId = lastObj.monthId+1;
+            monthly.push(mon);
+        }
+    }
+    return monthly;
 }

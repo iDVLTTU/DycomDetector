@@ -139,7 +139,7 @@ function drawTimeLegend() {
       })
       .attr("dy", ".21em")
       .attr("font-family", "sans-serif")
-      .attr("font-size", "12px")
+      .attr("font-size", "13px")
       .text(function(d,i) { 
         if (i%12==0)
           return d.year;
@@ -221,7 +221,7 @@ function drawTimeBox(){
       coordinate = d3.mouse(this);
       lMonth = Math.floor((coordinate[0]-xStep)/XGAP_);
 
-      updateTransition(500);
+ //     updateTransition(500);
 
     })
 
@@ -241,7 +241,7 @@ function updateTimeBox(durationTime){
       maxY = nodes[i].y;
   }
   svg.selectAll(".timeBox").transition().duration(durationTime)
-      .attr("y", maxY+12);
+      .attr("y", maxY+15);
   svg.selectAll(".timeLegendText").transition().duration(durationTime)
     .style("fill-opacity", function(d,i){
         if (i%12==0)
@@ -253,11 +253,8 @@ function updateTimeBox(durationTime){
             return 0; 
         }
       }) 
-    .attr("y", function(d,i) { 
-      if (i%12==0)
-        return maxY+21;
-      else
-        return maxY+21;   
+    .attr("y", function(d,i) {
+        return maxY+28;
     })
     .attr("x", function(d,i){ 
       return d.x; });
@@ -266,7 +263,7 @@ function updateTimeBox(durationTime){
     if (oldLmonth!=lMonth) {
         console.log("in util.js lMonth=" + lMonth);
 
-        if (oldLmonth>=0)
+        //if (oldLmonth>=0)
             drawgraph2(lMonth);
         oldLmonth = lMonth;
         //recompute3();   // This function is in main3.js

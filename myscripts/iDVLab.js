@@ -174,6 +174,7 @@ function _accumulate_edges(betweenness, S, P, sigma, s) {
     }
     return betweenness;
 }
+//@graph is adjancey list
 function betweenness_centrality(G) {
     var betweenness = new Object();
     for (var i = 0; i < G.length; i++) {

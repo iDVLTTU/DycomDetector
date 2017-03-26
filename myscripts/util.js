@@ -220,23 +220,21 @@ function drawTimeBox(){
       isLensing = false;
       coordinate = d3.mouse(this);
       lMonth = Math.floor((coordinate[0]-xStep)/XGAP_);
+
       updateTransition(500);
 
     })
-      .on("mouseover", function () {
-      textCluster(coordinate);
-  })
+
     .on("mousemove", function(){
       isLensing = true;
       coordinate = d3.mouse(this);
       lMonth = Math.floor((coordinate[0]-xStep)/XGAP_);
+      drawgraph2(lMonth);
       updateTransition(500);
 
     });
 }  
-function textCluster(coordinate) {
 
-}
 function updateTimeBox(durationTime){  
   var maxY=0; 
   for (var i=0; i< nodes.length; i++) {
@@ -335,6 +333,7 @@ function turnLensing() {
     .on('mousemove', function(){
       coordinate = d3.mouse(this);
       lMonth = Math.floor((coordinate[0]-xStep)/XGAP_);
+      console.log(lMonth);
       updateTransition(500);
       updateTimeLegend();
     });
@@ -411,7 +410,4 @@ function childCount1(level, n) {
 d3.select(self.frameElement).style("height", diameter + "px");
 
 
-// Toggle children on click.
-function click(d) {
 
-}

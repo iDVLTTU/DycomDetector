@@ -11,6 +11,7 @@ var graphByMonths = [];
 var termList = {}; // List of term to feed to TimeArcs in main.js
 
 function computeMonthlyGraphs() {
+
     for (var m = 1; m < numMonth; m++) {
         var arr = [];
         for (var i = 0; i < termArray.length; i++) {
@@ -45,7 +46,7 @@ function computeMonthlyGraphs() {
 
         var cut = 1;
         graphByMonths[m] = [];
-        while (cut < 30) {
+        while (cut < 2) {
             // *********** VERTICES **************
             var nodes5 = [];
             for (var i = 0; i < arr2.length; i++) {
@@ -132,9 +133,68 @@ function computeMonthlyGraphs() {
             graphByMonths[m].push(graph);
             cut += 1;
         }
+<<<<<<< HEAD
         //console.log(graphByMonths[m].sort(function (a,b) {
         //    return b.Qmodularity - a.Qmodularity
         //}));
+=======
+        graphByMonths[m].sort(function (a,b) {
+            return b.Qmodularity - a.Qmodularity
+        });
+>>>>>>> b58269aeca0c1cd03e4d1d232dfb4b32dea4e22b
          updateSubLayout(graphByMonths[m][0].nodes, graphByMonths[m][0].links, m);
     }
+
+}
+
+function drawgraph2(m){
+    var startMonth= m>2?m-2:m;
+    var endMonoth = startMonth+7;
+    var breakCheck = false;
+    var first100nodes=[];
+    for(startMonth;startMonth<endMonoth;startMonth++){
+        for(var i=0;i< graphByMonths[startMonth][0].nodes.length;i++){
+            if(first100nodes.length==100){
+                breakCheck=true;
+                break;
+            }
+            if(first100nodes.indexOf(graphByMonths[startMonth][0].nodes[i].id)===-1){
+                first100nodes.push(graphByMonths[startMonth][0].nodes[i].id);
+            }
+        }
+        if (breakCheck) {break;}
+    }
+     // Construct an array of only parent nodes
+     var tNodes = new Array(100); //nodes;
+    first100nodes.forEach(function (d,i) {
+       nodes.forEach(function (a) {
+           if(d.id===a.id){
+               tNodes[i] = a;
+           }
+
+       });
+    });
+     // for (var i=0; i<100;i++){
+     // tNodes[i] = nodes[i];
+     // }
+
+     svg.selectAll(".layer2").remove();
+     svg.selectAll(".layer2")
+     .data(tNodes)
+     .enter().append("path")
+     .attr("class", "layer2")
+     .style("stroke", function(d) { return d.isSearchTerm ? "#000" : "#000"; })
+     .style("stroke-width",0.05)
+     .style("stroke-opacity",0.5)
+     .style("fill-opacity",1)
+     .style("fill", function(d, i) {
+     return getColor(d.group, d.max);
+     })
+     .attr("d", function(d, index) {
+     for (var i=0; i<d.monthly.length; i++){
+        d.monthly[i].yNode = height+200+index*20;     // Copy node y coordinate
+     }
+     return area(d.monthly);
+     }) ;
+    // debugger;
 }

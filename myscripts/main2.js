@@ -133,15 +133,10 @@ function computeMonthlyGraphs() {
             graphByMonths[m].push(graph);
             cut += 1;
         }
-<<<<<<< HEAD
         //console.log(graphByMonths[m].sort(function (a,b) {
         //    return b.Qmodularity - a.Qmodularity
         //}));
-=======
-        graphByMonths[m].sort(function (a,b) {
-            return b.Qmodularity - a.Qmodularity
-        });
->>>>>>> b58269aeca0c1cd03e4d1d232dfb4b32dea4e22b
+
          updateSubLayout(graphByMonths[m][0].nodes, graphByMonths[m][0].links, m);
     }
 

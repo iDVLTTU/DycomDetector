@@ -100,6 +100,43 @@ function computeMonthlyGraphs() {
             graph.nodes = tempnodes;
             graph.links = templinks;
 
+
+
+
+            //Betweenness centrality value
+            var adjancylist = new Array(graph.nodes.length);
+            graph.nodes.forEach(function (d,i) {
+                adjancylist[i]=[];
+            })
+            var tempgraph = JSON.parse(JSON.stringify(graph));
+            tempgraph.links.forEach(function (l) {
+                tempgraph.nodes.forEach(function (n,i) {
+                    if(n.id==l.source.id){
+                        l.source =i;
+                    }
+                    if(n.id==l.target.id){
+                        l.target=i;
+                    }
+                })
+            })
+            tempgraph.links.forEach(function (d) {
+                adjancylist[d.source].push(d.target);
+                adjancylist[d.target].push(d.source)
+            })
+
+            var Abetweenness = betweenness_centrality(adjancylist);
+            var Obetweenness = new Object();
+            for(var i=0;i<graph.nodes.length;i++){
+                Obetweenness[graph.nodes[i].id]=Abetweenness[i];
+            }
+
+            //End of betweenness centrality
+
+            
+
+
+
+
             var node_ids = [], link_ids = [];
             tempnodes.forEach(function (d) {
                 node_ids.push(d.id);

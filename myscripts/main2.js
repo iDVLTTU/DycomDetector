@@ -259,7 +259,7 @@ function drawgraph2(m){
         .enter().append("path")
         .attr("class", "linkArc3")
         .style("stroke-width", function (d) {
-            return linkScale3(d.count);
+            return 5*linkScale3(d.count);
         })
         .attr("d", linkArc3);
 

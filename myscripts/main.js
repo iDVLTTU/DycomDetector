@@ -1,7 +1,7 @@
 //Constants for the SVG
 var margin = {top: 0, right: 0, bottom: 5, left: 5};
 var width = document.body.clientWidth - margin.left - margin.right;
-var height = 500 - margin.top - margin.bottom;
+var height = 400 - margin.top - margin.bottom;
 
 //---End Insert------
 
@@ -278,10 +278,15 @@ d3.tsv("data/wikinews.tsv", function(error, data_) {
     drawTimeBox(); // This box is for brushing
     drawLensingButton();
 
+    console.log("main 2");
+
     computeNodes();
+
+    console.log("main 3");
+
     computeLinks();
 
-
+    console.log("main 4");
     force.linkStrength(function(l) {
         if (l.value)
             return (8+l.value*2);
@@ -626,11 +631,12 @@ function computeNodes() {
     for (var i=0; i<termArray.length;i++){
         if (termList[termArray[i].term]!=undefined)  // Filter the terms from force layouts in main2.js
             termArray2.push(termArray[i])
+        if (termArray2.length>=1000) break;        // Skip variables in the main screen since they are not important
     }
-
 
     var cut = valueSlider;
     computeConnectivity(termArray2, termArray2.length, cut);
+
 
     termArray3 = [];
     for (var i=0; i<termArray2.length;i++){
@@ -655,8 +661,6 @@ function computeNodes() {
             return 0;
         }
     });
-
-
 
     computeConnectivity(termArray3, termArray3.length, cut);
 

@@ -3,96 +3,60 @@ var diameter = 1000,
     innerRadius = radius - 120;
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   // Add color legend
+
+var categories = ["person","location", "organization","miscellaneous"];
+
 function drawColorLegend() {
       var xx = 6;
-      var y1 = 20;
-      var y2 = 34;
-      var y3 = 48;
-      var y4 = 62;
+      var yy = 20;
+      var y2 = 99;
       var rr = 6;
 
+
+    svg.selectAll(".legends")
+          .data(categories)
+            .enter()
+          . append("circle")
+            .attr("class", "legends")
+            .attr("cx", xx)
+            .attr("cy", function (d,i) {
+                return yy+i*16;
+            })
+            .attr("r", rr)
+            .style("fill", function (d,i) {
+                return getColor3(d);
+            });
       
-      svg.append("circle")
-        .attr("class", "nodeLegend")
-        .attr("cx", xx)
-        .attr("cy", y1)
-        .attr("r", rr)
-        .style("fill", "#00aa00");
-      
-      svg.append("text")
-        .attr("class", "nodeLegend")
-        .attr("x", xx+10)
-        .attr("y", y1+1)
-        .text("Person")
-        .attr("dy", ".21em")
-        .attr("font-family", "sans-serif")
-        .attr("font-size", "11px")
-        .style("text-anchor", "left")
-        .style("fill", "#00aa00");
+      svg.selectAll(".legendText")
+          .data(categories)
+          .enter()
+          .append("text")
+            .attr("class", "legendText")
+            .attr("x", xx+10)
+            .attr("y", function (d,i) {
+                  return yy+i*16;
+             })
+            .text(function (d) {
+                return d;
+            })
+            .attr("dy", ".21em")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "13px")
+            .style("text-anchor", "left")
+              .style("fill", function (d,i) {
+                  return getColor3(d);
+              });
    
-      svg.append("circle")
-        .attr("class", "nodeLegend")
-        .attr("cx", xx)
-        .attr("cy", y2)
-        .attr("r", rr)
-        .style("fill", "#cc0000");  
-
-      svg.append("text")
-        .attr("class", "nodeLegend")
-        .attr("x", xx+10)
-        .attr("y", y2+1)
-        .text("Location")
-        .attr("dy", ".21em")
-        .attr("font-family", "sans-serif")
-        .attr("font-size", "11px")
-        .style("text-anchor", "left")
-        .style("fill", "#cc0000");  
-
-       svg.append("circle")
-        .attr("class", "nodeLegend")
-        .attr("cx", xx)
-        .attr("cy", y3)
-        .attr("r", rr)
-        .style("fill", "#0000cc");  
-
-      svg.append("text")
-        .attr("class", "nodeLegend")
-        .attr("x", xx+10)
-        .attr("y", y3+1)
-        .text("Organization")
-        .attr("dy", ".21em")
-        .attr("font-family", "sans-serif")
-        .attr("font-size", "11px")
-        .style("text-anchor", "left")
-        .style("fill", "#0000cc");  
-        
-       svg.append("circle")
-        .attr("class", "nodeLegend")
-        .attr("cx", xx)
-        .attr("cy", y4)
-        .attr("r", rr)
-        .style("fill", "#aaaa00");  
-
-      svg.append("text")
-        .attr("class", "nodeLegend")
-        .attr("x", xx+10)
-        .attr("y", y4+1)
-        .text("Miscellaneous")
-        .attr("dy", ".21em")
-        .attr("font-family", "sans-serif")
-        .attr("font-size", "11px")
-        .style("text-anchor", "left")
-        .style("fill", "#aaaa00");     
 
       // number of input terms  
       svg.append("text")
         .attr("class", "nodeLegend")
         .attr("x", xx-6)
-        .attr("y", y4+20)
+        .attr("y", y2)
         .text(numberInputTerms+" terms of "+ data.length +" blogs" )
         .attr("dy", ".21em")
         .attr("font-family", "sans-serif")
-        .attr("font-size", "11px")
+        .attr("font-size", "12px")
         .style("text-anchor", "left")
         .style("fill", "#000000");       
 }
@@ -198,7 +162,7 @@ function updateTimeLegend() {
             var m = (i-minYear)*12+j;
             var view = "0 0 "+forceSize+" "+forceSize;
             if (lMonth-numLens<=m && m<=lMonth+numLens)
-                view = (forceSize*0.4) + " " + (forceSize*0.4)+ " " + (forceSize*0.2) +" "+ (forceSize*0.2);
+                view = (forceSize*0.41) + " " + (forceSize*0.41)+ " " + (forceSize*0.18) +" "+ (forceSize*0.18);
             svg.selectAll(".force"+m).transition().duration(500)
                 .attr("x", xStep-forceSize/2+xScale(m))
                 .attr("viewBox",view);
@@ -215,7 +179,7 @@ function drawTimeBox(){
     .attr("x", xStep)
     .attr("y", height-25)
     .attr("width", XGAP_*numMonth)
-    .attr("height", 20)
+    .attr("height", 30)
     .on("mouseout", function(){
       isLensing = false;
       coordinate = d3.mouse(this);
@@ -266,7 +230,7 @@ function updateTimeBox(durationTime){
         //if (oldLmonth>=0)
             drawgraph2(lMonth);
         oldLmonth = lMonth;
-        //recompute3();   // This function is in main3.js
+
     }
 }
 
@@ -280,7 +244,7 @@ function drawLensingButton(){
   svg.append('rect')
     .attr("class", "lensingRect")
     .attr("x", 1)
-    .attr("y", 170)
+    .attr("y", 190)
     .attr("rx", roundConner)
     .attr("ry", roundConner)
     .attr("width", buttonLensingWidth)
@@ -302,7 +266,7 @@ function drawLensingButton(){
     .attr("font-family", "sans-serif")
     .attr("font-size", "11px")
     .attr("x", buttonLensingWidth/2)
-    .attr("y", 181)
+    .attr("y", 201)
     .text("Lensing")
     .style("text-anchor", "middle")
     .style("fill", "#000")

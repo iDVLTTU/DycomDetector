@@ -5,8 +5,8 @@ var slider;
 var handle;
 var xScaleSlider;
 var xSlider = 3;
-var ySlider = 125;
-var valueSlider = 4;
+var ySlider = 140;
+var valueSlider = 5;
 var valueMax = 30;
 function setupSliderScale(svg) {
   xScaleSlider = d3.scale.linear()
@@ -23,7 +23,7 @@ function setupSliderScale(svg) {
     .attr("class", "x axis")
     .attr("transform", "translate(0," + ySlider + ")")
     .attr("font-family", "sans-serif")
-    .attr("font-size", "10px")
+    .attr("font-size", "12px")
     .call(d3.svg.axis()
       .scale(xScaleSlider)
       .ticks(5)
@@ -38,10 +38,10 @@ function setupSliderScale(svg) {
   svg.append("text")
     .attr("class", "sliderText")
     .attr("x", xSlider)
-    .attr("y", ySlider-12)
+    .attr("y", ySlider-15)
     .attr("dy", ".21em")
     .attr("font-family", "sans-serif")
-    .attr("font-size", "10px")
+    .attr("font-size", "12px")
     .text("Mentioned together")
     .style("text-anchor","start"); 
 

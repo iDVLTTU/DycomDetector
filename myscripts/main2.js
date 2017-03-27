@@ -106,7 +106,7 @@ function computeMonthlyGraphs() {
 
 
             //Betweenness centrality value
-            var adjancylist = new Array(graph.nodes.length);
+    /*        var adjancylist = new Array(graph.nodes.length);
             graph.nodes.forEach(function (d,i) {
                 adjancylist[i]=[];
             })
@@ -133,11 +133,11 @@ function computeMonthlyGraphs() {
             }
             graph.nodes.forEach(function (d) {
                 d.betweenness =Obetweenness[d.id];
-            })
+            })*/
             //End of betweenness centrality
 
 
-            console.log(graph)
+       
 
 
 

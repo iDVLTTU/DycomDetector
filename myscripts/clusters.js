@@ -19,10 +19,9 @@ var forceSize = 150; // Max size of force layouts at the bottom
 }*/
 
 var getColor3 = d3.scale.category10();
-var linkScale3 = d3.scale.linear()
+var linkScale2 = d3.scale.linear()
     .range([0.1, 0.4])
     .domain([0,10]);
-
 function updateSubLayout(nodes, links, m) {
     var fill = d3.scale.category10();
     var groups = d3.nest()
@@ -108,7 +107,7 @@ function updateSubLayout(nodes, links, m) {
         .attr("class", "link5")
         .style("stroke", "#777")
         .style("stroke-width", function (d) {
-            return linkScale3(d.count);
+            return linkScale2(d.count);
         });
 
     var node = svg2.selectAll(".node5")

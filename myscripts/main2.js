@@ -32,21 +32,23 @@ function computeMonthlyGraphs() {
         }
 
         arr.sort(function (a, b) {
-            if (a.count < b.count) {
+            var var1 = a.net*1000+a.count;
+            var var2 = b.net*1000+b.count;
+            if (var1 < var2) {
                 return 1;
             }
-            if (a.count > b.count) {
+            if (var1 > var2) {
                 return -1;
             }
             return 0;
         });
         var arr2 = arr.filter(function (d, i) {
-            return i < 50;
+            return i < 100;
         });
 
-        var cut = 3;
+        var cut = 2;
         graphByMonths[m] = [];
-        while (cut < 4) {
+        while (cut < 3) {
             // *********** VERTICES **************
             var nodes5 = [];
             for (var i = 0; i < arr2.length; i++) {
@@ -245,6 +247,9 @@ function drawgraph2(m){
 
     // LINKs **********************************
     lLinks = [];
+    var linkScale3 = d3.scale.linear()
+        .range([0, 2])
+        .domain([0,relationshipMaxMax2]);
     for(var m = startMonth;m<endMonth;m++){
         if (graphByMonths[m]==undefined || graphByMonths[m][0]==undefined) continue;
         for(var i=0;i< graphByMonths[m][0].links.length;i++){
@@ -253,8 +258,6 @@ function drawgraph2(m){
 
         }
     }
-
-
     svg.selectAll(".linkArc3").remove();
     svg.selectAll(".linkArc3")
         .data(lLinks)
@@ -263,6 +266,7 @@ function drawgraph2(m){
         .style("stroke-width", function (d) {
             return 5*linkScale3(d.count);
         })
+        .style("stroke-opacity",0.4)
         .attr("d", linkArc3);
 
 

@@ -61,6 +61,7 @@ function setupSliderScale(svg) {
     .attr("transform", "translate(0," + ySlider + ")")
     .attr("r", 5)
     .attr("cx", xScaleSlider(valueSlider));
+
 }
 
 function brushed() {

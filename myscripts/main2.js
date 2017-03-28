@@ -10,6 +10,8 @@
 var graphByMonths = [];
 var termList = {}; // List of term to feed to TimeArcs in main.js
 var lNodes, lLinks;  // Nodes in the lensing month
+var numCut = 5;
+
 
 function computeMonthlyGraphs() {
     console.log("computeMonthlyGraphs");
@@ -50,7 +52,7 @@ function computeMonthlyGraphs() {
 
         var cut = 1;
         graphByMonths[m] = [];
-        while (cut < 4) {
+        while (cut <= numCut) {
             // *********** VERTICES **************
             var nodes5 = [];
             for (var i = 0; i < arr2.length; i++) {
@@ -181,8 +183,12 @@ function computeMonthlyGraphs() {
         //console.log(graphByMonths[m].sort(function (a,b) {
         //    return b.Qmodularity - a.Qmodularity
         //}));
-        if (graphByMonths[m][0]!=undefined)
-             updateSubLayout(graphByMonths[m][0].nodes, graphByMonths[m][0].links, m);
+
+        if (graphByMonths[m][0]!=undefined){
+            updateSubLayout(graphByMonths[m][0].nodes, graphByMonths[m][0].links, m);
+        }
+
+
     }
     console.log("computeMonthlyGraphs 3");
 }
@@ -254,10 +260,42 @@ function drawgraph2(m){
     });
 
 
+    var yStartHistogram = height+200 ; // y starts drawing the stream graphs
+    var hHistogram = 50;
+    var hScale = d3.scale.linear()
+        .range([0, hHistogram])
+        .domain([0,1]);
+    var getColor5 = d3.scale.category10();
+
+
+    for (var cut=0; cut<numCut;cut++){
+        svg.selectAll(".histogram"+cut).remove();
+        var updateHistogram =  svg.selectAll(".histogram"+cut)
+            .data(graphByMonths);
+        var enterHistogram = updateHistogram.enter();
+
+        enterHistogram.append("rect")
+            .attr("class", "histogram"+cut)
+            .style("stroke","#000")
+            .style("stroke-width",0.3)
+            .style("fill", getColor5(cut))
+            .attr("x", function(d,m) {
+                return  xStep+xScale(m)+cut*XGAP_/(numCut+1);    // x position is at the arcs
+            })
+            .attr("y", function(d) {
+                if (d==undefined || d[cut]==undefined)
+                    return yStartHistogram;
+                return yStartHistogram- hScale(d[cut].Qmodularity); })
+            .attr("height", function(d) {
+                if (d==undefined || d[cut]==undefined)
+                    return 0;
+                return hScale(d[cut].Qmodularity); })
+            .attr("width", XGAP_/(numCut+1));
+    }
 
 
 
-    var yStart = height+150 ; // y starts drawing the stream graphs
+    var yStart = height+250 ; // y starts drawing the stream graphs
     var yStep = 13
 
     svg.selectAll(".layer3").remove();
@@ -371,6 +409,7 @@ function linkArc3(d) {
     var term2 = d.target.name;
     var x1 = xStep+xScale(d.m);
     var x2 = x1;
+    if (termList[term1].monthly==undefined || termList[term2].monthly==undefined) return; // no data
     var y1 = termList[term1].monthly[0].yNode;
     var y2 = termList[term2].monthly[0].yNode;
     var dx = x2 - x1,

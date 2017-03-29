@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
+    #sdropdown{
+        position: absolute;
+        top: 300px;
+        left: 18px;
+    }
 .nodeText {
   background: #91877b;
   text-shadow: 0 11px 10 rgba(255, 255, 255, 1);
@@ -86,16 +91,16 @@ h3 {
 <label id="progUpdate">
     <!-- Success Message -->
 </label>
-<div id="dropdownbox">
-    <select id="sdropdown">
-        <option value="1">Cut value: 1</option>
-        <option value="2">Cut value: 2</option>
-        <option value="3">Cut value: 3</option>
-        <option value="4">Cut value: 4</option>
-        <option value="5">Cut value: 5</option>
-        <option value="optimized">Best Q modularity</option>
-    </select>
-</div>
+<!--<div id="dropdownbox">-->
+    <!--<select id="sdropdown">-->
+        <!--<option value="1">1</option>-->
+        <!--<option value="2">2</option>-->
+        <!--<option value="3">3</option>-->
+        <!--<option value="4">4</option>-->
+        <!--<option value="5">5</option>-->
+        <!--<option value="optimized">Best Q modularity</option>-->
+    <!--</select>-->
+<!--</div>-->
 
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="javascripts/d3.v3.min.js"></script>
@@ -119,9 +124,27 @@ h3 {
 <script src="myscripts/searchBox.js"></script>
 <!--Time axis goes from left (2005) to right (2014)<br>-->
 <!--Terms often appeared together in a blog are connected by a thicker link.<br>-->
+<<<<<<< HEAD
+<!--<script>-->
+    <!--$(document).ready(function () {-->
+        <!--$('#sdropdown').on('change', function () {-->
+            <!--var selectedvalue = $('#sdropdown').val();-->
+           <!--if(selectedvalue==="optimized"){-->
+
+           <!--}else{-->
+               <!--var cut = +selectedvalue;-->
+               <!--selectHistogram(cut-1);-->
+
+           <!--}-->
+        <!--})-->
+
+    <!--});-->
+<!--</script>-->
+=======
 <script>
     $(document).ready(function () {
         $('#sdropdown').on('change', setCut);
     });
 </script>
+>>>>>>> origin/master
 </body>

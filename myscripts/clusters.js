@@ -20,7 +20,7 @@ var forceSize = 150; // Max size of force layouts at the bottom
 
 var getColor3 = d3.scale.category10();
 var linkScale2 = d3.scale.linear()
-    .range([0.1, 0.4])
+    .range([0.05, 0.3])
     .domain([0, 10]);
 function updateSubLayout(nodes, links, m) {
     var fill = d3.scale.category10();

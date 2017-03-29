@@ -11,11 +11,13 @@ var selectedCut = 0;
 function setCut(cutvalue){
     var selectedvalue = cutvalue;
     if (selectedvalue === "optimized") {
-
+        selectedCut = -100;
+        selectHistogramOptimized();
     } else {
         selectedCut = +selectedvalue - 1;
+        selectHistogram();
     }
-    selectHistogram();
+
 }
 
 function selectHistogram() {
@@ -38,6 +40,39 @@ function selectHistogram() {
         else {
             svg.selectAll(".histogram" + c).style("fill-opacity", 0.1)
                 .style("stroke-opacity", 0.3);
+        }
+    }
+}
+function selectHistogramOptimized() {
+    for (var c = 0; c < numCut; c++) {
+        for (var m = 1; m < numMonth; m++) {
+            svg.selectAll(".histogram" + c)
+                .style("fill-opacity", function (d) {
+                    if (d!=undefined)
+                        debugger;
+                        console.log(d+" +d.cutoff===="+d.cutoff);
+                   if (d!=undefined && d.cutoff==cutOffvalue[m]){
+                       console.log(d+" "+d.cutoff);
+                       return 1;
+                   }
+                   else{
+                     //  console.log(d+" m="+m);
+                       return 0;
+                   }
+
+            });
+
+            if (c==cutOffvalue[m]){
+                var nodes = [];
+                if (graphByMonths[m][c] != undefined) {
+                    nodes = graphByMonths[m][c].nodes;
+                }
+                var links = [];
+                if (graphByMonths[m][c] != undefined) {
+                    links = graphByMonths[m][c].links;
+                }
+                updateSubLayout(nodes, links, m);
+            }
         }
     }
 }
@@ -159,7 +194,6 @@ function drawTextClouds(yTextClouds) {
                     .range([10, 20])
                     .domain([min, max]);
                 s = sizeScale(d.weight);
-                console.log("s="+s);
                 return s+"px";
             }
             else{

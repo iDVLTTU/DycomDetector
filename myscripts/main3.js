@@ -138,10 +138,13 @@ function drawTextClouds(yTextClouds){
     var enterText = updateText.enter();
     enterText.append("text")
         .attr("class", "textCloud3")
-        .style("fill", "#000000")
-        .style("text-anchor","end")
-        .style("text-shadow", "1px 1px 0 rgba(255, 255, 255, 0.6")
-        //.attr("x", xStep-2)   show text on the left side
+        .style("text-anchor","middle")
+        .style("text-shadow", "1px 1px 0 rgba(0, 0, 0, 0.6")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "13px")
+        .style("fill", function(d) {
+            return getColor3(d.category);
+        })
         .attr("x", function(d,i) {
             console.log(i+" "+d);
             return  xStep+xScale(d.m) -2;    // x position is at the arcs
@@ -149,8 +152,6 @@ function drawTextClouds(yTextClouds){
         .attr("y", function(d) {
             return yTextClouds + d.indexForTextClouds * yStep;     // Copy node y coordinate
         })
-        .attr("font-family", "sans-serif")
-        .attr("font-size", "13px")
         .text(function(d) {  return d.name });
 
 }

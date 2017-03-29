@@ -279,17 +279,18 @@ function drawLensingButton(){
           .style("fill", buttonColor);
     })
     .on('click', turnLensing);
-var data =[1,2,3,4,5,'Best Q modularity'];
+// var data =[1,2,3,4,5,'Best Q modularity'];
+var data =[{"id":1, "value":1},{"id":2, "value":2},{"id":3, "value":3},{"id":4, "value":4},{"id":5, "value":5},{"id":"optimized", "value":"Best Q modularity"}];
 svg.append('rect').attr("class", "Cutoff").attr('x',1).attr('y',220).attr('width',150).attr('height',100).style("stroke","red").attr("stroke-width", 1).style('fill',"none")
     svg.append('text').attr('class','textcutoff').attr('x',30).attr('y', 240).text('Cut Off value')
     var select = d3.select('body').append('select').attr('id','sdropdown').on('change',function () {
-        selectValue = d3.select('#sdropdown').property('value')-1;
-        selectHistogram(selectValue);
+        selectValue = d3.select('#sdropdown').property('value');
+        setCut(selectValue);
     })
     var options = select.selectAll('option').data(data).enter().append('option').attr('value',function (d) {
-        return d;
+        return d.id;
     }).text(function (d) {
-        return d;
+        return d.value;
     })
 
 

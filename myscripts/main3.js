@@ -9,7 +9,6 @@
 var selectedCut = 0;
 
 function setCut(cutvalue){
-    // var selectedvalue = $('#sdropdown').val();
     var selectedvalue = cutvalue;
     if(selectedvalue==="optimized"){
 
@@ -135,11 +134,11 @@ function drawTextClouds(yTextClouds){
     for (var i=0;i<tNodes.length;i++){
         if (tNodes[i].weight>max)
             max = tNodes[i].weight;
+        if (tNodes[i].weight<min)
+            min = tNodes[i].weight;
     }
 
-    var sizeScale = d3.scale.linear()
-        .range([0, 30])
-        .domain([0, termMaxMax2]);
+
 
     svg.selectAll(".textCloud3").remove();
     var yStep =15;
@@ -151,17 +150,41 @@ function drawTextClouds(yTextClouds){
         .style("text-anchor","middle")
         .style("text-shadow", "1px 1px 0 rgba(0, 0, 0, 0.6")
         .attr("font-family", "sans-serif")
-        .attr("font-size", "13px")
+        .attr("font-size", function(d,i) {
+            var s=100;
+            if (lMonth-numLens<=d.m && d.m<=lMonth+numLens){
+                var sizeScale = d3.scale.linear()
+                    .range([10, 20])
+                    .domain([min, max]);
+                s = sizeScale(d.weight);
+                console.log("s="+s);
+                return s+"px";
+            }
+            else{
+                var sizeScale = d3.scale.linear()
+                    .range([2, 12])
+                    .domain([min, max]);
+                s = sizeScale(d.weight);
+                return s+"px";
+            }
+
+        })
         .style("fill", function(d) {
             return getColor3(d.category);
         })
         .attr("x", function(d,i) {
-            console.log(i+" "+d);
             return  xStep+xScale(d.m) -2;    // x position is at the arcs
         })
         .attr("y", function(d) {
             return yTextClouds + d.indexForTextClouds * yStep;     // Copy node y coordinate
         })
-        .text(function(d) {  return d.name });
+        .text(function(d) {
+            if (lMonth-numLens<=d.m && d.m<=lMonth+numLens){
+                return d.name.substring(0,18);
+            }
+            else{
+                return d.name.substring(0,10);
+            }
+        });
 
 }

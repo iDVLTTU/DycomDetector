@@ -1,7 +1,7 @@
 //Constants for the SVG
 var margin = {top: 0, right: 0, bottom: 5, left: 5};
 var width = document.body.clientWidth - margin.left - margin.right;
-var height = 300 - margin.top - margin.bottom;
+var height = 200 - margin.top - margin.bottom;
 
 //---End Insert------
 
@@ -559,7 +559,7 @@ function recompute() {
 
 
         // Compute relationship **********************************************************
-        numNode = Math.min(100, termArray.length);
+        numNode = Math.min(40, termArray.length);
         numNode2 = Math.min(numNode*3, termArray.length);
         var selectedTerms = {};
         for (var i=0; i<numNode2;i++){

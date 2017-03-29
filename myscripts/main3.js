@@ -92,15 +92,17 @@ function drawHistograms(yStartHistogram){
 
 
 // This Texts is independent from the lower text with stream graphs
+var tNodes;
 function drawTextClouds(yTextClouds){
     var numTerms = 5; // numTerms in each month
-    var tNodes = [];
+    tNodes = [];
     for(var m = 0;m<numMonth;m++){
         var nodes=[];
-        if (graphByMonths[m]==undefined || graphByMonths[m][0]==undefined) continue;
-        for(var i=0;i< graphByMonths[m][0].nodes.length;i++){
+        if (graphByMonths[m]==undefined || graphByMonths[m][selectedCut]==undefined) continue;
+        for(var i=0;i< graphByMonths[m][selectedCut].nodes.length;i++){
             var nod = graphByMonths[m][selectedCut].nodes[i];
-            nodes.push(nod);
+            if (nod!=undefined)
+                nodes.push(nod);
         }
         nodes.sort(function (a, b) {
             if (a.weight < b.weight) {   // weight is the degree of nodes
@@ -131,7 +133,7 @@ function drawTextClouds(yTextClouds){
     svg.selectAll(".textCloud3").remove();
     var yStep =15;
     var updateText =  svg.selectAll(".textCloud3")
-            .data(tNodes, function(d) { return d.name });
+            .data(tNodes);
     var enterText = updateText.enter();
     enterText.append("text")
         .attr("class", "textCloud3")
@@ -139,7 +141,8 @@ function drawTextClouds(yTextClouds){
         .style("text-anchor","end")
         .style("text-shadow", "1px 1px 0 rgba(255, 255, 255, 0.6")
         //.attr("x", xStep-2)   show text on the left side
-        .attr("x", function(d) {
+        .attr("x", function(d,i) {
+            console.log(i+" "+d);
             return  xStep+xScale(d.m) -2;    // x position is at the arcs
         })
         .attr("y", function(d, i) {
@@ -147,6 +150,6 @@ function drawTextClouds(yTextClouds){
         })
         .attr("font-family", "sans-serif")
         .attr("font-size", "13px")
-        .text(function(d) { return d.name });
+        .text(function(d) {  return d.name });
 
 }

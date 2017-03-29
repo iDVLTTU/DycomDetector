@@ -11,7 +11,7 @@ var graphByMonths = [];
 var termList = {}; // List of term to feed to TimeArcs in main.js
 var lNodes, lLinks;  // Nodes in the lensing month
 var numCut = 5;
-var cutbestQ=[];
+var cutOffvalue=[];
 
 function computeMonthlyGraphs() {
     console.log("computeMonthlyGraphs");
@@ -143,6 +143,8 @@ function computeMonthlyGraphs() {
             updateSubLayout(graphByMonths[m][selectedCut].nodes, graphByMonths[m][selectedCut].links, m);
         }
     }
+
+    cutOffvalue=get_bestCut(graphByMonths);
     console.log("computeMonthlyGraphs 3");
 }
 

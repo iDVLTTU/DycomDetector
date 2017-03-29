@@ -105,14 +105,6 @@ function computeMonthlyGraphs() {
             var graph = {};
             graph.nodes = tempnodes;
             graph.links = templinks;
-
-            var adjlist = create_adjacencylist(graph);
-            var betweenness =betweenness_centrality(adjlist);
-            for(var i=0;i<graph.nodes.length;i++){
-                graph.nodes[i].betweenness =betweenness[i];
-            }
-            console.log(betweenness);
-            console.log(graph.nodes);
             var node_ids = [], link_ids = [];
             tempnodes.forEach(function (d) {
                 node_ids.push(d.id);
@@ -146,14 +138,7 @@ function computeMonthlyGraphs() {
             graphByMonths[m].push(graph);
             cut += 1;
         }
-        var tempgraph = graphByMonths[m].sort(function (a,b) {
-            return b.Qmodularity-a.Qmodularity;
-        });
-        if(tempgraph.length===0){
-            cutbestQ.push('NaN');
-        }else{
-            cutbestQ.push(tempgraph[0].cutoff);
-        }
+        
         if (graphByMonths[m][selectedCut] != undefined) {
             updateSubLayout(graphByMonths[m][selectedCut].nodes, graphByMonths[m][selectedCut].links, m);
         }

@@ -241,7 +241,7 @@ function updateTimeBox(durationTime) {
         console.log("in util.js lMonth=" + lMonth);
 
         //if (oldLmonth>=0)
-        drawgraph2(lMonth);
+        drawgraph2();
         oldLmonth = lMonth;
 
     }
@@ -356,6 +356,7 @@ function turnLensing() {
         });
     updateTransition(500);
     updateTimeLegend();
+    //drawgraph2();
 }
 
 function getColor(category, count) {

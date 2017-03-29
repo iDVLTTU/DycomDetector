@@ -264,6 +264,7 @@ function drawgraph2(){
         var enterHistogram = updateHistogram.enter();
         enterHistogram.append("rect")
             .attr("class", "histogram"+cut)
+            .attr("id", cut)
             .style("stroke","#000")
             .style("stroke-width",0.3)
             .style("fill", getColor3(cut))
@@ -330,7 +331,6 @@ function drawgraph2(){
 
 
     }
-
 
 
     var yStart = height+250 ; // y starts drawing the stream graphs

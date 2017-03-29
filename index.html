@@ -87,7 +87,7 @@ h3 {
     <!-- Success Message -->
 </label>
 <div id="dropdownbox">
-    <select>
+    <select id="sdropdown">
         <option value="1">Cut value: 1</option>
         <option value="2">Cut value: 2</option>
         <option value="3">Cut value: 3</option>
@@ -119,5 +119,27 @@ h3 {
 <script src="myscripts/searchBox.js"></script>
 <!--Time axis goes from left (2005) to right (2014)<br>-->
 <!--Terms often appeared together in a blog are connected by a thicker link.<br>-->
+<script>
+    $(document).ready(function () {
+        $('#sdropdown').on('change', function () {
+            var selectedvalue = $('#sdropdown').val();
+           if(selectedvalue==="optimized"){
 
+           }else{
+               var select = selectedvalue-1;
+               var histogram = svg.selectAll("rect")
+               debugger;
+               histogram.style("opacity",function (d) {
+                   if(d.id==select){
+                       return 1;
+                   }
+                   else{
+                       return 0.2;
+                   }
+               });
+           }
+        })
+
+    });
+</script>
 </body>

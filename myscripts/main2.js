@@ -276,6 +276,7 @@ function drawgraph2(m){
 
         enterHistogram.append("rect")
             .attr("class", "histogram"+cut)
+            .attr("id", cut)
             .style("stroke","#000")
             .style("stroke-width",0.3)
             .style("fill", getColor5(cut))
@@ -292,7 +293,6 @@ function drawgraph2(m){
                 return hScale(d[cut].Qmodularity); })
             .attr("width", XGAP_/(numCut+1));
     }
-
 
 
     var yStart = height+250 ; // y starts drawing the stream graphs

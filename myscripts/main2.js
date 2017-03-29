@@ -11,7 +11,7 @@ var graphByMonths = [];
 var termList = {}; // List of term to feed to TimeArcs in main.js
 var lNodes, lLinks;  // Nodes in the lensing month
 var numCut = 5;
-
+var cutbestQ=[];
 
 function computeMonthlyGraphs() {
     console.log("computeMonthlyGraphs");
@@ -20,7 +20,7 @@ function computeMonthlyGraphs() {
         var arr = [];
         for (var i = 0; i < termArray.length; i++) {
             var att = termArray[i].term;
-            if (terms[att][m] && att.length>=2) {  // Term contains at least 2 characters
+            if (terms[att][m] && att.length >= 2) {  // Term contains at least 2 characters
                 var obj = new Object();
                 var previous = 0;
                 if (terms[att][m - 1])
@@ -36,8 +36,8 @@ function computeMonthlyGraphs() {
         }
 
         arr.sort(function (a, b) {
-            var var1 = a.net*1000+a.count;
-            var var2 = b.net*1000+b.count;
+            var var1 = a.net * 1000 + a.count;
+            var var2 = b.net * 1000 + b.count;
             if (var1 < var2) {
                 return 1;
             }
@@ -98,7 +98,7 @@ function computeMonthlyGraphs() {
                 return d.isConnected;
             });
             var templinks = links5;
-            if(tempnodes.length==0&&templinks.length==0){
+            if (tempnodes.length == 0 && templinks.length == 0) {
                 break;
             }
 
@@ -106,46 +106,13 @@ function computeMonthlyGraphs() {
             graph.nodes = tempnodes;
             graph.links = templinks;
 
-
-
-
-            //Betweenness centrality value
-    /*        var adjancylist = new Array(graph.nodes.length);
-            graph.nodes.forEach(function (d,i) {
-                adjancylist[i]=[];
-            })
-            var tempgraph = JSON.parse(JSON.stringify(graph));
-            tempgraph.links.forEach(function (l) {
-                tempgraph.nodes.forEach(function (n,i) {
-                    if(n.id==l.source.id){
-                        l.source =i;
-                    }
-                    if(n.id==l.target.id){
-                        l.target=i;
-                    }
-                })
-            })
-            tempgraph.links.forEach(function (d) {
-                adjancylist[d.source].push(d.target);
-                adjancylist[d.target].push(d.source)
-            })
-
-            var Abetweenness = betweenness_centrality(adjancylist);
-            var Obetweenness = new Object();
+            var adjlist = create_adjacencylist(graph);
+            var betweenness =betweenness_centrality(adjlist);
             for(var i=0;i<graph.nodes.length;i++){
-                Obetweenness[graph.nodes[i].id]=Abetweenness[i];
+                graph.nodes[i].betweenness =betweenness[i];
             }
-            graph.nodes.forEach(function (d) {
-                d.betweenness =Obetweenness[d.id];
-            })*/
-            //End of betweenness centrality
-
-
-
-
-
-
-
+            console.log(betweenness);
+            console.log(graph.nodes);
             var node_ids = [], link_ids = [];
             tempnodes.forEach(function (d) {
                 node_ids.push(d.id);
@@ -166,49 +133,57 @@ function computeMonthlyGraphs() {
                 })
                 .entries(graph.nodes);
             var partition = [];
-                groups.forEach(function (d) {
-                    var par = [];
-                    d.values.forEach(function (a) {
-                        par.push(graph.nodes.findIndex(x => x.id == a.id)
-                        )
-                    });
-                    partition.push(par);
-                })
+            groups.forEach(function (d) {
+                var par = [];
+                d.values.forEach(function (a) {
+                    par.push(graph.nodes.findIndex(x => x.id == a.id)
+                    )
+                });
+                partition.push(par);
+            })
             graph.Qmodularity = modularity(partition, adjmatrix);
             graph.cutoff = cut;
             graphByMonths[m].push(graph);
             cut += 1;
         }
-        if (graphByMonths[m][selectedCut]!=undefined){
+        var tempgraph = graphByMonths[m].sort(function (a,b) {
+            return b.Qmodularity-a.Qmodularity;
+        });
+        if(tempgraph.length===0){
+            cutbestQ.push('NaN');
+        }else{
+            cutbestQ.push(tempgraph[0].cutoff);
+        }
+        if (graphByMonths[m][selectedCut] != undefined) {
             updateSubLayout(graphByMonths[m][selectedCut].nodes, graphByMonths[m][selectedCut].links, m);
         }
     }
     console.log("computeMonthlyGraphs 3");
 }
 
-function drawgraph2(){
-    console.log("Draw graph 2 month="+lMonth);
+function drawgraph2() {
+    console.log("Draw graph 2 month=" + lMonth);
 
-    var startMonth= lMonth>numLens ? lMonth-numLens : lMonth;
-    var endMonth = startMonth+numLens*2+1;
+    var startMonth = lMonth > numLens ? lMonth - numLens : lMonth;
+    var endMonth = startMonth + numLens * 2 + 1;
     var breakCheck = false;
     lNodes = [];
-    for(var m = startMonth;m<endMonth;m++){
-        if (graphByMonths[m]==undefined || graphByMonths[m][selectedCut]==undefined) continue;
-        for(var i=0;i< graphByMonths[m][selectedCut].nodes.length;i++){
-            if(lNodes.length==100){
-                breakCheck=true;
+    for (var m = startMonth; m < endMonth; m++) {
+        if (graphByMonths[m] == undefined || graphByMonths[m][selectedCut] == undefined) continue;
+        for (var i = 0; i < graphByMonths[m][selectedCut].nodes.length; i++) {
+            if (lNodes.length == 100) {
+                breakCheck = true;
                 break;
             }
             var nod = graphByMonths[m][selectedCut].nodes[i];
             var found = false;
-            for (var j=0; j<lNodes.length;j++){
-                if (lNodes[j].name==nod.name) {
+            for (var j = 0; j < lNodes.length; j++) {
+                if (lNodes[j].name == nod.name) {
                     found = true;
                     break;
                 }
             }
-            if (!found){
+            if (!found) {
                 lNodes.push(nod);
             }
         }
@@ -222,28 +197,28 @@ function drawgraph2(){
         else if (a.m > b.m) {
             return 1;
         }
-        else{
+        else {
             if (a.community < b.community) { // cluster id, generated by Vinh Nguyen
                 return -1;
             }
             else if (a.community > b.community) {
                 return 1;
             }
-            else{
+            else {
                 if (a.weight < b.weight) {   // weight is the degree of nodes
                     return -1;
                 }
                 else if (a.weight > b.weight) {
                     return 1;
                 }
-                else{
+                else {
                     if (a.net < b.net) {
                         return -1;
                     }
                     else if (a.net > b.net) {
                         return 1;
                     }
-                    else{
+                    else {
                         return -1;      // random if can not compare on the previous measurements
                     }
 
@@ -253,13 +228,16 @@ function drawgraph2(){
     });
 
 
-    var yStartHistogram = height+180 ; // y starts drawing the stream graphs
+    var yStartHistogram = height + 180; // y starts drawing the stream graphs
     drawHistograms(yStartHistogram);   // in main3.js
 
-    var yTextClouds = height+200 ; // y starts drawing the stream graphs
+    var yTextClouds = height + 200; // y starts drawing the stream graphs
     drawTextClouds(yTextClouds);    // in main3.js
 
+
     var yStart = height+280 ; // y starts drawing the stream graphs
+
+    var yStart = height + 270; // y starts drawing the stream graphs
     var yStep = 13
 
 
@@ -268,44 +246,51 @@ function drawgraph2(){
         .domain([0, termMaxMax2]);
     var area3 = d3.svg.area()
         .interpolate("basic")
-        .x(function(d) {
-            return xStep+xScale(d.monthId); })
-        .y0(function(d) { return d.yNode-yScale3(d.value); })
-        .y1(function(d) {  return d.yNode +yScale3(d.value); });
+        .x(function (d) {
+            return xStep + xScale(d.monthId);
+        })
+        .y0(function (d) {
+            return d.yNode - yScale3(d.value);
+        })
+        .y1(function (d) {
+            return d.yNode + yScale3(d.value);
+        });
 
     svg.selectAll(".layer3").remove();
-    var update_ =  svg.selectAll(".layer3")
-     .data(lNodes, function(d) {  return d.name })
+    var update_ = svg.selectAll(".layer3")
+            .data(lNodes, function (d) {
+                return d.name
+            })
         ;//.style("fill", "black");
 
     var enter_ = update_.enter();
     enter_.append("path")
-     .attr("class", "layer3")
-     .style("stroke","#000")
-     .style("stroke-width",0.5)
-     .style("stroke-opacity",0.5)
-     .style("fill-opacity",0.3)
-     .style("fill", function(d) {
-          return getColor3(d.category);
-     })
-     .attr("d", function(d, index) {
-         if (termList[d.name].monthly==undefined){
-             termList[d.name].monthly = computeMonthlyData(d.name);
-         }
-         for (var i=0; i<termList[d.name].monthly.length; i++){
-             termList[d.name].monthly[i].yNode = yStart+index*yStep;     // Copy node y coordinate
-         }
-         return area3(termList[d.name].monthly);
-     }) ;
+        .attr("class", "layer3")
+        .style("stroke", "#000")
+        .style("stroke-width", 0.5)
+        .style("stroke-opacity", 0.5)
+        .style("fill-opacity", 0.3)
+        .style("fill", function (d) {
+            return getColor3(d.category);
+        })
+        .attr("d", function (d, index) {
+            if (termList[d.name].monthly == undefined) {
+                termList[d.name].monthly = computeMonthlyData(d.name);
+            }
+            for (var i = 0; i < termList[d.name].monthly.length; i++) {
+                termList[d.name].monthly[i].yNode = yStart + index * yStep;     // Copy node y coordinate
+            }
+            return area3(termList[d.name].monthly);
+        });
 
     // LINKs **********************************
     lLinks = [];
     var linkScale3 = d3.scale.linear()
         .range([0.1, 2])
-        .domain([0,relationshipMaxMax2]);
-    for(var m = startMonth;m<endMonth;m++){
-        if (graphByMonths[m]==undefined || graphByMonths[m][selectedCut]==undefined) continue;
-        for(var i=0;i< graphByMonths[m][selectedCut].links.length;i++){
+        .domain([0, relationshipMaxMax2]);
+    for (var m = startMonth; m < endMonth; m++) {
+        if (graphByMonths[m] == undefined || graphByMonths[m][selectedCut] == undefined) continue;
+        for (var i = 0; i < graphByMonths[m][selectedCut].links.length; i++) {
             var lin = graphByMonths[m][selectedCut].links[i];
             lLinks.push(lin);
 
@@ -317,60 +302,64 @@ function drawgraph2(){
         .enter().append("path")
         .attr("class", "linkArc3")
         .style("stroke-width", function (d) {
-            return 5*linkScale3(d.count);
+            return 5 * linkScale3(d.count);
         })
-        .style("stroke-opacity",0.4)
+        .style("stroke-opacity", 0.4)
         .attr("d", linkArc3);
 
     svg.selectAll(".nodeText3").remove();
-    var updateText =  svg.selectAll(".nodeText3")
-        .data(lNodes, function(d) { return d.name })
+    var updateText = svg.selectAll(".nodeText3")
+            .data(lNodes, function (d) {
+                return d.name
+            })
         ;//.style("fill", "black")
-        //.text(function(d) { return d.name });
+    //.text(function(d) { return d.name });
     var enterText = updateText.enter();
     enterText.append("text")
         .attr("class", "nodeText3")
         .style("fill", "#000000")
-        .style("text-anchor","end")
+        .style("text-anchor", "end")
         .style("text-shadow", "1px 1px 0 rgba(255, 255, 255, 0.6")
         //.attr("x", xStep-2)   show text on the left side
-        .attr("x", function(d) {
-            return  xStep+xScale(d.m) -2;    // x position is at the arcs
+        .attr("x", function (d) {
+            return xStep + xScale(d.m) - 2;    // x position is at the arcs
         })
-        .attr("y", function(d, i) {
-            return  yStart + i * yStep+4;     // Copy node y coordinate
+        .attr("y", function (d, i) {
+            return yStart + i * yStep + 4;     // Copy node y coordinate
         })
         .attr("font-family", "sans-serif")
         .attr("font-size", "13px")
-        .text(function(d) { return d.name });
+        .text(function (d) {
+            return d.name
+        });
 }
 
-function computeMonthlyData(term){
+function computeMonthlyData(term) {
     var monthly = [];
-    for (var m=0; m<numMonth; m++){
+    for (var m = 0; m < numMonth; m++) {
         var mon = new Object();
-        if (terms[term][m]){
+        if (terms[term][m]) {
             mon.value = terms[term][m];
             mon.monthId = m;
             monthly.push(mon);
         }
     }
     // Add another item to first
-    if (monthly.length>0){
+    if (monthly.length > 0) {
         var firstObj = monthly[0];
-        if (firstObj.monthId>0){
+        if (firstObj.monthId > 0) {
             var mon = new Object();
             mon.value = 0;
-            mon.monthId = firstObj.monthId-1;
+            mon.monthId = firstObj.monthId - 1;
             monthly.unshift(mon);
         }
 
         // Add another item
-        var lastObj = monthly[monthly.length-1];
-        if (lastObj.monthId<numMonth-1){
+        var lastObj = monthly[monthly.length - 1];
+        if (lastObj.monthId < numMonth - 1) {
             var mon = new Object();
             mon.value = 0;
-            mon.monthId = lastObj.monthId+1;
+            mon.monthId = lastObj.monthId + 1;
             monthly.push(mon);
         }
     }
@@ -380,16 +369,16 @@ function computeMonthlyData(term){
 function linkArc3(d) {
     var term1 = d.source.name;
     var term2 = d.target.name;
-    var x1 = xStep+xScale(d.m);
+    var x1 = xStep + xScale(d.m);
     var x2 = x1;
-    if (termList[term1].monthly==undefined || termList[term2].monthly==undefined) return; // no data
+    if (termList[term1].monthly == undefined || termList[term2].monthly == undefined) return; // no data
     var y1 = termList[term1].monthly[0].yNode;
     var y2 = termList[term2].monthly[0].yNode;
     var dx = x2 - x1,
         dy = y2 - y1,
-        dr = Math.sqrt(dx * dx + dy * dy)/2;
-    if (y1<y2)
-        return "M" + x1 + "," + y1 + "A" + dr + "," + dr + " 0 0,1 " +x2 + "," +y2;
+        dr = Math.sqrt(dx * dx + dy * dy) / 2;
+    if (y1 < y2)
+        return "M" + x1 + "," + y1 + "A" + dr + "," + dr + " 0 0,1 " + x2 + "," + y2;
     else
         return "M" + x2 + "," + y2 + "A" + dr + "," + dr + " 0 0,1 " + x1 + "," + y1;
 }

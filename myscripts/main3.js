@@ -11,7 +11,7 @@ var selectedCut = 0;
 function setCut(cutvalue){
     var selectedvalue = cutvalue;
     if (selectedvalue === "optimized") {
-
+        cutOffvalue=get_bestCut(graphByMonths);
     } else {
         selectedCut = +selectedvalue - 1;
     }

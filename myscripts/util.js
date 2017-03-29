@@ -281,21 +281,12 @@ svg.append('rect').attr("class", "Cutoff").attr('x',1).attr('y',yControl).attr('
         selectValue = d3.select('#orderdropdown').property('value');
         if(selectValue==4){
             var cut_value = $('#sdropdown').val();
-            var cutgraph = getGraphbyCutoffvalue(graphByMonths,cut_value)//return graph with selected cutoff value
-            cutgraph.forEach(function (d) {
-                if(d!==null){
-                    if(d.length!==0){
-                        var betweenness = calculate_betweenness_centrality(d[0])//Calculate betweenness centrality
-                        //Apply back to the graph if needed
+          //Check if cutoff is calculated, if yes then skip
+            if(cutoff_Check.indexOf(+cut_value)===-1){
+                graphInsertBetweeness(graphByMonths, +cut_value);
+                cutoff_Check.push(+cut_value);
+            }
 
-                        d[0].nodes.forEach(function (d,i) {
-                            d.betweenness = betweenness[i];
-                        })
-                    }
-                }
-
-            })
-         console.log(cutgraph);
         }
     })
     var Orderoptions = selectOrder.selectAll('option').data(orderdata).enter().append('option').attr('value', function (d) {

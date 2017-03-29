@@ -144,7 +144,7 @@ function computeMonthlyGraphs() {
         }
     }
 
-    cutOffvalue=get_bestCut(graphByMonths);
+
     console.log("computeMonthlyGraphs 3");
 }
 

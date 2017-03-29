@@ -1,7 +1,7 @@
 /**
  * Created by vinhtngu on 3/29/17.
  */
-
+var cutoff_Check=[];
 function get_bestCut(graph) {
  var temp = JSON.parse(JSON.stringify(graph));
  var cutArray =[];
@@ -48,4 +48,19 @@ function getGraphbyCutoffvalue(graph, cutoff) {
         }
     })
     return cutoffgraph;
+}
+
+function graphInsertBetweeness(graph, cutoff) {
+    
+    graph.forEach(function (graphlist) {
+        graphlist.forEach(function (subgraph) {
+            if(subgraph.cutoff==cutoff){
+                var betweenness = calculate_betweenness_centrality(subgraph);
+                subgraph.nodes.forEach(function (n,i) {
+                    n.betweenness = betweenness[i];
+                })
+            }
+        })
+    });
+return graph;
 }

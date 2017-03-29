@@ -281,9 +281,10 @@ function drawLensingButton(){
     .on('click', turnLensing);
 // var data =[1,2,3,4,5,'Best Q modularity'];
 var data =[{"id":1, "value":1},{"id":2, "value":2},{"id":3, "value":3},{"id":4, "value":4},{"id":5, "value":5},{"id":"optimized", "value":"Best Q modularity"}];
-svg.append('rect').attr("class", "Cutoff").attr('x',1).attr('y',220).attr('width',150).attr('height',100).style("stroke","black").attr("stroke-width", 1).style('fill',"gray").attr("rx", roundConner)
+svg.append('rect').attr("class", "Cutoff").attr('x',1).attr('y',350).attr('width',150).attr('height',150).style("stroke","black").attr("stroke-width", 1).style('fill',"#ddd").attr("rx", roundConner)
     .attr("ry", roundConner)
-    svg.append('text').attr('class','textcutoff').attr('x',30).attr('y', 240).text('Cut-off value')
+    svg.append('text').attr('class','textcutoff').attr('x',30).attr('y', 370).text('Cut-off value');
+    svg.append('text').attr('class','textcutoff').attr('x',30).attr('y', 430).text('Order by');
     var select = d3.select('body').append('select').attr('id','sdropdown').on('change',function () {
         selectValue = d3.select('#sdropdown').property('value');
         setCut(selectValue);
@@ -294,6 +295,16 @@ svg.append('rect').attr("class", "Cutoff").attr('x',1).attr('y',220).attr('width
         return d.value;
     })
 
+    var orderdata =[{"id":1, "value":"Frequency"},{"id":2, "value":"Sudden change"},{"id":3, "value":"Betweenness"},{"id":4, "value":"Q modularity"}];
+    var selectOrder = d3.select('body').append('select').attr('id','orderdropdown').on('change',function () {
+        selectValue = d3.select('#orderdropdown').property('value');
+        setCut(selectValue);
+    })
+    var Orderoptions = selectOrder.selectAll('option').data(orderdata).enter().append('option').attr('value',function (d) {
+        return d.id;
+    }).text(function (d) {
+        return d.value;
+    })
 
 }
 function turnLensing() {

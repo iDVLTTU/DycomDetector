@@ -101,8 +101,7 @@ function drawTextClouds(yTextClouds){
         if (graphByMonths[m]==undefined || graphByMonths[m][selectedCut]==undefined) continue;
         for(var i=0;i< graphByMonths[m][selectedCut].nodes.length;i++){
             var nod = graphByMonths[m][selectedCut].nodes[i];
-            if (nod!=undefined)
-                nodes.push(nod);
+            nodes.push(nod);
         }
         nodes.sort(function (a, b) {
             if (a.weight < b.weight) {   // weight is the degree of nodes
@@ -124,11 +123,33 @@ function drawTextClouds(yTextClouds){
 
             }
         });
-        for(var i = 0;i<numTerms;i++){
-            tNodes.push(nodes[i])
+        for(var i = 0;i<numTerms && i<nodes.length;i++){
+            nodes[i].indexForTextClouds=i;  // This is  the index for textcloud for every month
+            tNodes.push(nodes[i]);
         }
     }
 
 
-    
+    svg.selectAll(".textCloud3").remove();
+    var yStep =15;
+    var updateText =  svg.selectAll(".textCloud3")
+            .data(tNodes);
+    var enterText = updateText.enter();
+    enterText.append("text")
+        .attr("class", "textCloud3")
+        .style("fill", "#000000")
+        .style("text-anchor","end")
+        .style("text-shadow", "1px 1px 0 rgba(255, 255, 255, 0.6")
+        //.attr("x", xStep-2)   show text on the left side
+        .attr("x", function(d,i) {
+            console.log(i+" "+d);
+            return  xStep+xScale(d.m) -2;    // x position is at the arcs
+        })
+        .attr("y", function(d) {
+            return yTextClouds + d.indexForTextClouds * yStep;     // Copy node y coordinate
+        })
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "13px")
+        .text(function(d) {  return d.name });
+
 }

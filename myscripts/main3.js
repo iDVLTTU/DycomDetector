@@ -8,8 +8,9 @@
 
 var selectedCut = 0;
 
-function setCut(){
-    var selectedvalue = $('#sdropdown').val();
+function setCut(cutvalue){
+    // var selectedvalue = $('#sdropdown').val();
+    var selectedvalue = cutvalue;
     if(selectedvalue==="optimized"){
 
     }else{

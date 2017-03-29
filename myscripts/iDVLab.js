@@ -360,7 +360,18 @@ function create_adjacencylist(graph) {
     var adjlist =[];
     var n = graph.nodes.length;
     for(var i=0;i<n;i++){
-
+        adjlist[i]=[];
     }
+    graph.links.forEach(function (l) {
+        var sindex = graph.nodes.findIndex(x => x.id == l.source.id
+        )
+        ;
+        var tindex = graph.nodes.findIndex(x => x.id == l.target.id
+        )
+        ;
+        adjlist[sindex].push(tindex);
+        adjlist[tindex].push(sindex);
+    })
 
+    return adjlist;
 }

@@ -265,6 +265,7 @@ svg.append('rect').attr("class", "Cutoff").attr('x',1).attr('y',yControl).attr('
     var select = d3.select('body').append('select').attr('id','sdropdown').on('change',function () {
         selectValue = d3.select('#sdropdown').property('value');
         setCut(selectValue);
+
     })
     var options = select.selectAll('option').data(data).enter().append('option').attr('value', function (d) {
         return d.id;
@@ -278,7 +279,24 @@ svg.append('rect').attr("class", "Cutoff").attr('x',1).attr('y',yControl).attr('
     }];
     var selectOrder = d3.select('body').append('select').attr('id', 'orderdropdown').on('change', function () {
         selectValue = d3.select('#orderdropdown').property('value');
-        //setCut(selectValue);
+        if(selectValue==4){
+            var cut_value = $('#sdropdown').val();
+            var cutgraph = getGraphbyCutoffvalue(graphByMonths,cut_value)//return graph with selected cutoff value
+            cutgraph.forEach(function (d) {
+                if(d!==null){
+                    if(d.length!==0){
+                        var betweenness = calculate_betweenness_centrality(d[0])//Calculate betweenness centrality
+                        //Apply back to the graph if needed
+
+                        d[0].nodes.forEach(function (d,i) {
+                            d.betweenness = betweenness[i];
+                        })
+                    }
+                }
+
+            })
+         console.log(cutgraph);
+        }
     })
     var Orderoptions = selectOrder.selectAll('option').data(orderdata).enter().append('option').attr('value', function (d) {
         return d.id;

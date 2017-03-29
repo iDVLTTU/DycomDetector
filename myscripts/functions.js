@@ -20,9 +20,32 @@ function get_bestCut(graph) {
  })
 return cutArray;
 }
+/*@input : graph with nodes and links
+*@output: betweeness centrality
+*/
 function calculate_betweenness_centrality(graph) {
     var adjlist = create_adjacencylist(graph);
     var betweenness = betweenness_centrality(adjlist);
     return betweenness;
 
+}
+/*@input: graph, @cutoffvalue
+*@output: return graph with cutoff value
+*/
+function getGraphbyCutoffvalue(graph, cutoff) {
+    var cutoffgraph=[];
+    var temp = JSON.parse(JSON.stringify(graph));
+    temp.forEach(function (d,i) {
+        if(d!==null){
+            cutoffgraph[i]=[];
+            if(d.length!=0){
+                d.forEach(function (a) {
+                    if(a.cutoff==cutoff){
+                        cutoffgraph[i].push(a);
+                    }
+                })
+            }
+        }
+    })
+    return cutoffgraph;
 }

@@ -85,6 +85,9 @@ function updateSubLayout(nodes, links, m) {
     //var width = 20, height = 20;
     //var svg = d3.select("body").append("svg").attr("width", XGAP_).attr("height", XGAP_);
 
+
+    svg.selectAll(".force"+m).remove();
+
     var svg2 = svg.append("svg")
         .attr("class", "force"+m)
         .attr("width", forceSize)
@@ -101,6 +104,8 @@ function updateSubLayout(nodes, links, m) {
     force.nodes(nodes)
         .links(links)
         .start();
+    force.resume();
+
     var link = svg2.selectAll(".link5")
         .data(force.links())
         .enter().append("line")

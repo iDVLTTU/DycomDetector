@@ -267,7 +267,13 @@ function drawgraph2(){
             .attr("id", cut)
             .style("stroke","#000")
             .style("stroke-width",0.3)
+            .style("stroke-opacity",function () {
+                return cut==selectedCut ? 1 :0.3;
+            })
             .style("fill", getColor3(cut))
+            .style("fill-opacity",function () {
+                return cut==selectedCut ? 1 :0.1;
+            })
             .attr("x", function(d,i) {
                 var w = XGAP_/(numCut+1);
                 if (lMonth-numLens<=i && i<=lMonth+numLens)

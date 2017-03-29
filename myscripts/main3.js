@@ -12,6 +12,7 @@ function setCut(cutvalue){
     var selectedvalue = cutvalue;
     if (selectedvalue === "optimized") {
         selectedCut = -100;
+        cutOffvalue=get_bestCut(graphByMonths);
         selectHistogramOptimized();
     } else {
         selectedCut = +selectedvalue - 1;

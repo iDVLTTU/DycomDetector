@@ -130,6 +130,16 @@ function drawTextClouds(yTextClouds){
         }
     }
 
+    var max = -1000;
+    var min =  1000;
+    for (var i=0;i<tNodes.length;i++){
+        if (tNodes[i].weight>max)
+            max = tNodes[i].weight;
+    }
+
+    var sizeScale = d3.scale.linear()
+        .range([0, 30])
+        .domain([0, termMaxMax2]);
 
     svg.selectAll(".textCloud3").remove();
     var yStep =15;

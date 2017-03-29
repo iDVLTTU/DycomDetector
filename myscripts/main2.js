@@ -259,7 +259,7 @@ function drawgraph2(){
     var yTextClouds = height+200 ; // y starts drawing the stream graphs
     drawTextClouds(yTextClouds);    // in main3.js
 
-    var yStart = height+270 ; // y starts drawing the stream graphs
+    var yStart = height+280 ; // y starts drawing the stream graphs
     var yStep = 13
 
 

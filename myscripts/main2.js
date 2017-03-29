@@ -279,14 +279,14 @@ function drawgraph2(){
                 if (d==undefined || d[cut]==undefined)
                     return yStartHistogram;
                 var hScale = d3.scale.linear()
-                    .range([1, xGap3(i)/2])
+                    .range([1, 40])
                     .domain([0,1]);
                 return yStartHistogram- hScale(d[cut].Qmodularity); })
             .attr("height", function(d,i) {
                 if (d==undefined || d[cut]==undefined)
                     return 0;
                 var hScale = d3.scale.linear()
-                    .range([1, xGap3(i)/2])
+                    .range([1, 40])
                     .domain([0,1]);
                 return hScale(d[cut].Qmodularity); })
             .attr("width", function(d,i){

@@ -62,7 +62,7 @@
 
 h3 {
     color: #1ABC9C;
-    text-align:center;  
+    text-align:center;
     font-style: italic;
     font-size: 14px;
     font-family: "Helvetica";
@@ -126,17 +126,9 @@ h3 {
            if(selectedvalue==="optimized"){
 
            }else{
-               var select = selectedvalue-1;
-               var histogram = svg.selectAll("rect")
-               debugger;
-               histogram.style("opacity",function (d) {
-                   if(d.id==select){
-                       return 1;
-                   }
-                   else{
-                       return 0.2;
-                   }
-               });
+               var cut = +selectedvalue;
+               selectHistogram(cut-1);
+
            }
         })
 

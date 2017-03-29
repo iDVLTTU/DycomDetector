@@ -5,23 +5,23 @@
 var forceSize = 150; // Max size of force layouts at the bottom
 
 /*function getColor3(study_type) {
-    if (study_type == "person")
-        return "#0f0";
-    else if (study_type == "location")
-        return "#f00";
-    else if (study_type == "organization")
-        return "#00f";
-    else if (study_type == "miscellaneous")
-        return "#ff0";
-    else {
-        return "black";
-    }
-}*/
+ if (study_type == "person")
+ return "#0f0";
+ else if (study_type == "location")
+ return "#f00";
+ else if (study_type == "organization")
+ return "#00f";
+ else if (study_type == "miscellaneous")
+ return "#ff0";
+ else {
+ return "black";
+ }
+ }*/
 
 var getColor3 = d3.scale.category10();
 var linkScale2 = d3.scale.linear()
     .range([0.1, 0.4])
-    .domain([0,10]);
+    .domain([0, 10]);
 function updateSubLayout(nodes, links, m) {
     var fill = d3.scale.category10();
     var groups = d3.nest()
@@ -42,13 +42,13 @@ function updateSubLayout(nodes, links, m) {
     });
 
     /*var filteredlinks = [];
-  links.forEach(function (d) {
-      partition.forEach(function (e) {
-        if(e.indexOf(d.source.id)>=0&&e.indexOf(d.target.id)>=0){
-            filteredlinks.push(d);
-        }
-      })
-  });*/
+     links.forEach(function (d) {
+     partition.forEach(function (e) {
+     if(e.indexOf(d.source.id)>=0&&e.indexOf(d.target.id)>=0){
+     filteredlinks.push(d);
+     }
+     })
+     });*/
 
     var groupPath = function (d) {
         var fakePoints = [];
@@ -86,13 +86,13 @@ function updateSubLayout(nodes, links, m) {
     //var svg = d3.select("body").append("svg").attr("width", XGAP_).attr("height", XGAP_);
 
 
-    svg.selectAll(".force"+m).remove();
+    svg.selectAll(".force" + m).remove();
 
     var svg2 = svg.append("svg")
-        .attr("class", "force"+m)
+        .attr("class", "force" + m)
         .attr("width", forceSize)
         .attr("height", forceSize)
-        .attr("x", xStep-forceSize/2+m*XGAP_)
+        .attr("x", xStep - forceSize / 2 + m * XGAP_)
         .attr("y", height);
 
 
@@ -119,10 +119,10 @@ function updateSubLayout(nodes, links, m) {
         .data(force.nodes())
         .enter().append("circle")
         .attr("r", 0.5)
-        .style("stroke","#000")
-        .style("stroke-width",0.1)
-        .style("stroke-opacity",0.5)
-       // .style("fill-opacity",0.3)
+        .style("stroke", "#000")
+        .style("stroke-width", 0.1)
+        .style("stroke-opacity", 0.5)
+        // .style("fill-opacity",0.3)
         .style("fill", function (d) {
             return getColor3(d.category);
         });
@@ -148,25 +148,25 @@ function updateSubLayout(nodes, links, m) {
 
     });
     force.on("end", function () {
-        link.attr("x1", function (d) {
-            return d.source.x;
-        })
-            .attr("y1", function (d) {
-                return d.source.y;
+            link.attr("x1", function (d) {
+                return d.source.x;
             })
-            .attr("x2", function (d) {
-                return d.target.x;
-            })
-            .attr("y2", function (d) {
-                return d.target.y;
-            });
+                .attr("y1", function (d) {
+                    return d.source.y;
+                })
+                .attr("x2", function (d) {
+                    return d.target.x;
+                })
+                .attr("y2", function (d) {
+                    return d.target.y;
+                });
 
-        node.attr("cx", function (d) {
-            return d.x;
-        })
-            .attr("cy", function (d) {
-                return d.y;
-            });
+            node.attr("cx", function (d) {
+                return d.x;
+            })
+                .attr("cy", function (d) {
+                    return d.y;
+                });
         }
     );
 }

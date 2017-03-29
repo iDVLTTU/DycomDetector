@@ -130,26 +130,5 @@ function drawTextClouds(yTextClouds){
     }
 
 
-    svg.selectAll(".textCloud3").remove();
-    var yStep =15;
-    var updateText =  svg.selectAll(".textCloud3")
-            .data(tNodes);
-    var enterText = updateText.enter();
-    enterText.append("text")
-        .attr("class", "textCloud3")
-        .style("fill", "#000000")
-        .style("text-anchor","end")
-        .style("text-shadow", "1px 1px 0 rgba(255, 255, 255, 0.6")
-        //.attr("x", xStep-2)   show text on the left side
-        .attr("x", function(d,i) {
-            console.log(i+" "+d);
-            return  xStep+xScale(d.m) -2;    // x position is at the arcs
-        })
-        .attr("y", function(d, i) {
-            return yTextClouds + i * yStep+4;     // Copy node y coordinate
-        })
-        .attr("font-family", "sans-serif")
-        .attr("font-size", "13px")
-        .text(function(d) {  return d.name });
-
+    
 }

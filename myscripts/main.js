@@ -1,7 +1,7 @@
 //Constants for the SVG
 var margin = {top: 0, right: 0, bottom: 5, left: 5};
 var width = document.body.clientWidth - margin.left - margin.right;
-var height = 400 - margin.top - margin.bottom;
+var height = 300 - margin.top - margin.bottom;
 
 //---End Insert------
 
@@ -116,6 +116,16 @@ function xScale(m){
     else{
        return m*XGAP_;
     }           
+}
+function xGap3(m){
+    if (m<lMonth-numLens)
+        return XGAP_;
+    else if (m>lMonth+numLens){
+        return XGAP_;
+    }
+    else{
+        return XGAP_*lensingMul;
+    }
 }
 
 
@@ -845,7 +855,7 @@ function computeNodes() {
         var hhh = Math.min(height/numNode,20);
 
         yScale = d3.scale.linear()
-            .range([0, 30])
+            .range([0, 15])
             .domain([0, termMaxMax2]);
         linkScale = d3.scale.linear()
             .range([0.5, 2])
@@ -952,6 +962,7 @@ $('#btnUpload').click(function() {
 
 });
 
+
 function mouseovered(d) {
     if (force.alpha()==0) {
         var list = new Object();
@@ -1049,9 +1060,6 @@ function searchNode() {
 
     recompute();
 }
-
-
-
 
     // check if a node for a month m already exist.
     function isContainedChild(a, m) {
@@ -1199,7 +1207,7 @@ function searchNode() {
         var step = Math.min((height-25)/(numNode+1),15);
         //var totalH = termArray.length*step;
         for (var i=0; i< termArray.length; i++) {
-            nodes[termArray[i].nodeId].y = 12+i*step;
+            nodes[termArray[i].nodeId].y = i*step;
         }
         force.stop();
 

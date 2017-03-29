@@ -179,24 +179,17 @@ function computeMonthlyGraphs() {
             graphByMonths[m].push(graph);
             cut += 1;
         }
-        console.log("computeMonthlyGraphs 2");
-        //console.log(graphByMonths[m].sort(function (a,b) {
-        //    return b.Qmodularity - a.Qmodularity
-        //}));
-
         if (graphByMonths[m][0]!=undefined){
             updateSubLayout(graphByMonths[m][0].nodes, graphByMonths[m][0].links, m);
         }
-
-
     }
     console.log("computeMonthlyGraphs 3");
 }
 
-function drawgraph2(m){
-    console.log("Draw graph 2");
+function drawgraph2(){
+    console.log("Draw graph 2 month="+lMonth);
 
-    var startMonth= m>numLens ? m-numLens : m;
+    var startMonth= m>numLens ? lMonth-numLens : lMonth;
     var endMonth = startMonth+numLens*2+1;
     var breakCheck = false;
     lNodes = [];
@@ -260,11 +253,7 @@ function drawgraph2(m){
     });
 
 
-    var yStartHistogram = height+200 ; // y starts drawing the stream graphs
-    var hHistogram = 50;
-    var hScale = d3.scale.linear()
-        .range([0, hHistogram])
-        .domain([0,1]);
+    var yStartHistogram = height+180 ; // y starts drawing the stream graphs
     var getColor5 = d3.scale.category10();
 
 
@@ -273,24 +262,73 @@ function drawgraph2(m){
         var updateHistogram =  svg.selectAll(".histogram"+cut)
             .data(graphByMonths);
         var enterHistogram = updateHistogram.enter();
-
         enterHistogram.append("rect")
             .attr("class", "histogram"+cut)
             .style("stroke","#000")
             .style("stroke-width",0.3)
-            .style("fill", getColor5(cut))
-            .attr("x", function(d,m) {
-                return  xStep+xScale(m)+cut*XGAP_/(numCut+1);    // x position is at the arcs
+            .style("fill", getColor3(cut))
+            .attr("x", function(d,i) {
+                var w = XGAP_/(numCut+1);
+                if (lMonth-numLens<=i && i<=lMonth+numLens)
+                    w = w*lensingMul/2;
+
+                return  xStep+xScale(i)+cut*w-2*w;    // x position is at the arcs
             })
-            .attr("y", function(d) {
+            .attr("y", function(d,i) {
                 if (d==undefined || d[cut]==undefined)
                     return yStartHistogram;
+                var hScale = d3.scale.linear()
+                    .range([1, xGap3(i)/2])
+                    .domain([0,1]);
                 return yStartHistogram- hScale(d[cut].Qmodularity); })
-            .attr("height", function(d) {
+            .attr("height", function(d,i) {
                 if (d==undefined || d[cut]==undefined)
                     return 0;
+                var hScale = d3.scale.linear()
+                    .range([1, xGap3(i)/2])
+                    .domain([0,1]);
                 return hScale(d[cut].Qmodularity); })
-            .attr("width", XGAP_/(numCut+1));
+            .attr("width", function(d,i){
+                var w = XGAP_/(numCut+1);
+                if (lMonth-numLens<=i && i<=lMonth+numLens)
+                    w = w*lensingMul/2;
+                return w;
+            });
+
+
+
+    /*
+     var pi = Math.PI;
+     var arc = d3.svg.arc()
+            .innerRadius(0)
+            .outerRadius( function(d,m) {
+                if (d && d[cut]){
+                    var hScale = d3.scale.linear()
+                        .range([xGap3(m)/20, xGap3(m)/2])
+                        .domain([0,1]);
+                    return hScale(d[cut].Qmodularity);
+                }
+
+                else
+                    return 0;
+            })
+            .startAngle(cut * (2*pi/numCut)) //converting from degs to radians
+            .endAngle((cut+1) * (2*pi/numCut)) //just radians
+
+        enterHistogram.append("path")
+            .attr("class", "histogram"+cut)
+            .style("fill", getColor3(cut))
+            .attr("d", arc)
+            .attr("transform", function(d,m) {
+               // if (d==undefined || d[cut]==undefined)
+               //     return  "translate(50,50)";
+                var x = xStep+xScale(m);
+                var y =  yStartHistogram;
+                return "translate("+x+","+y+")";
+
+            });*/
+
+
     }
 
 
@@ -298,14 +336,23 @@ function drawgraph2(m){
     var yStart = height+250 ; // y starts drawing the stream graphs
     var yStep = 13
 
+
+    var yScale3 = d3.scale.linear()
+        .range([0, 30])
+        .domain([0, termMaxMax2]);
+    var area3 = d3.svg.area()
+        .interpolate("basic")
+        .x(function(d) {
+            return xStep+xScale(d.monthId); })
+        .y0(function(d) { return d.yNode-yScale3(d.value); })
+        .y1(function(d) {  return d.yNode +yScale3(d.value); });
+
     svg.selectAll(".layer3").remove();
     var update_ =  svg.selectAll(".layer3")
      .data(lNodes, function(d) {  return d.name })
         ;//.style("fill", "black");
 
     var enter_ = update_.enter();
-
-
     enter_.append("path")
      .attr("class", "layer3")
      .style("stroke","#000")
@@ -322,7 +369,7 @@ function drawgraph2(m){
          for (var i=0; i<termList[d.name].monthly.length; i++){
              termList[d.name].monthly[i].yNode = yStart+index*yStep;     // Copy node y coordinate
          }
-         return area(termList[d.name].monthly);
+         return area3(termList[d.name].monthly);
      }) ;
 
     // LINKs **********************************

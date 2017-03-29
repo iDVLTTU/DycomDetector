@@ -242,7 +242,7 @@ function drawgraph2() {
 
 
     var yScale3 = d3.scale.linear()
-        .range([0, 30])
+        .range([0, 14])
         .domain([0, termMaxMax2]);
     var area3 = d3.svg.area()
         .interpolate("basic")

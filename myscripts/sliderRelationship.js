@@ -4,7 +4,7 @@ var slider;
 var handle;
 var xScaleSlider;
 var xSlider = 3;
-var ySlider = 140;
+var ySlider = 60;
 var valueSlider = 5;
 var valueMax = 30;
 function setupSliderScale(svg) {

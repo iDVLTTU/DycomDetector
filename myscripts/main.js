@@ -865,7 +865,7 @@ function computeLinks() {
     var hhh = Math.min(height / numNode, 20);
 
     yScale = d3.scale.linear()
-        .range([0, 15])
+        .range([0, 10])
         .domain([0, termMaxMax2]);
     linkScale = d3.scale.linear()
         .range([0.5, 2])

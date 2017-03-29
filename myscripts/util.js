@@ -8,8 +8,8 @@ var categories = ["person", "location", "organization", "miscellaneous"];
 
 function drawColorLegend() {
     var xx = 6;
-    var yy = 20;
-    var y2 = 99;
+    var yy = 140;
+    var y2 = 19;
     var rr = 6;
 
 
@@ -174,7 +174,7 @@ function updateTimeLegend() {
             var m = (i - minYear) * 12 + j;
             var view = "0 0 " + forceSize + " " + forceSize;
             if (lMonth - numLens <= m && m <= lMonth + numLens)
-                view = (forceSize * 0.41) + " " + (forceSize * 0.41) + " " + (forceSize * 0.18) + " " + (forceSize * 0.18);
+                view = (forceSize * 0.44) + " " + (forceSize * 0.44) + " " + (forceSize * 0.13) + " " + (forceSize * 0.13);
             svg.selectAll(".force" + m).transition().duration(500)
                 .attr("x", xStep - forceSize / 2 + xScale(m))
                 .attr("viewBox", view);

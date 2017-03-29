@@ -121,17 +121,7 @@ h3 {
 <!--Terms often appeared together in a blog are connected by a thicker link.<br>-->
 <script>
     $(document).ready(function () {
-        $('#sdropdown').on('change', function () {
-            var selectedvalue = $('#sdropdown').val();
-           if(selectedvalue==="optimized"){
-
-           }else{
-               var cut = +selectedvalue;
-               selectHistogram(cut-1);
-
-           }
-        })
-
+        $('#sdropdown').on('change', setCut);
     });
 </script>
 </body>

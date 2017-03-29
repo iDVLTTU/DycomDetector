@@ -8,12 +8,7 @@
 
 var selectedCut = 0;
 
-<<<<<<< HEAD
 function setCut(cutvalue){
-=======
-function setCut(cutvalue) {
-    // var selectedvalue = $('#sdropdown').val();
->>>>>>> 45d16b7e0779a9cd94b18300e19beadf0308bead
     var selectedvalue = cutvalue;
     if (selectedvalue === "optimized") {
 
@@ -157,7 +152,6 @@ function drawTextClouds(yTextClouds) {
         .style("text-anchor", "middle")
         .style("text-shadow", "1px 1px 0 rgba(0, 0, 0, 0.6")
         .attr("font-family", "sans-serif")
-<<<<<<< HEAD
         .attr("font-size", function(d,i) {
             var s=100;
             if (lMonth-numLens<=d.m && d.m<=lMonth+numLens){
@@ -181,21 +175,11 @@ function drawTextClouds(yTextClouds) {
             return getColor3(d.category);
         })
         .attr("x", function(d,i) {
-            return  xStep+xScale(d.m) -2;    // x position is at the arcs
-=======
-        .attr("font-size", "13px")
-        .style("fill", function (d) {
-            return getColor3(d.category);
-        })
-        .attr("x", function (d, i) {
-            console.log(i + " " + d);
-            return xStep + xScale(d.m) - 2;    // x position is at the arcs
->>>>>>> 45d16b7e0779a9cd94b18300e19beadf0308bead
+            return xStep + xScale(d.m);    // x position is at the arcs
         })
         .attr("y", function (d) {
             return yTextClouds + d.indexForTextClouds * yStep;     // Copy node y coordinate
         })
-<<<<<<< HEAD
         .text(function(d) {
             if (lMonth-numLens<=d.m && d.m<=lMonth+numLens){
                 return d.name.substring(0,18);
@@ -203,10 +187,6 @@ function drawTextClouds(yTextClouds) {
             else{
                 return d.name.substring(0,10);
             }
-=======
-        .text(function (d) {
-            return d.name
->>>>>>> 45d16b7e0779a9cd94b18300e19beadf0308bead
         });
 
 }

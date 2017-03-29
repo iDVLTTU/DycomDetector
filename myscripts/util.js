@@ -247,19 +247,13 @@ function updateTimeBox(durationTime) {
     }
 }
 
-<<<<<<< HEAD
 var buttonLensingWidth =100;
 var buttonheight =18;
-=======
-var buttonLensingWidth = 80;
-var buttonheight = 15;
->>>>>>> 45d16b7e0779a9cd94b18300e19beadf0308bead
 var roundConner = 4;
 var colorHighlight = "#fc8";
 var buttonColor = "#aaa";
 
-<<<<<<< HEAD
-function drawLensingButton(){  
+function drawLensingButton(){
 
 // Control panel on the left *********************
 var yControl = 222;
@@ -269,75 +263,6 @@ svg.append('rect').attr("class", "Cutoff").attr('x',1).attr('y',yControl).attr('
     svg.append('text').attr('class','textcutoff').attr('x',13).attr('y', yControl+32).text('Cut-off value');
     svg.append('text').attr('class','textcutoff').attr('x',13).attr('y', yControl+86).text('Order nodes by');
     var select = d3.select('body').append('select').attr('id','sdropdown').on('change',function () {
-=======
-function drawLensingButton() {
-    svg.append('rect')
-        .attr("class", "lensingRect")
-        .attr("x", 1)
-        .attr("y", 190)
-        .attr("rx", roundConner)
-        .attr("ry", roundConner)
-        .attr("width", buttonLensingWidth)
-        .attr("height", buttonheight)
-        .style("stroke", "#000")
-        .style("stroke-width", 0.1)
-        .style("fill", buttonColor)
-        .on('mouseover', function (d2) {
-            svg.selectAll(".lensingRect")
-                .style("fill", colorHighlight);
-        })
-        .on('mouseout', function (d2) {
-            svg.selectAll(".lensingRect")
-                .style("fill", buttonColor);
-        })
-        .on('click', turnLensing);
-    svg.append('text')
-        .attr("class", "lensingText")
-        .attr("font-family", "sans-serif")
-        .attr("font-size", "11px")
-        .attr("x", buttonLensingWidth / 2)
-        .attr("y", 201)
-        .text("Lensing")
-        .style("text-anchor", "middle")
-        .style("fill", "#000")
-        .on('mouseover', function (d2) {
-            svg.selectAll(".lensingRect")
-                .style("fill", colorHighlight);
-        })
-        .on('mouseout', function (d2) {
-            svg.selectAll(".lensingRect")
-                .style("fill", buttonColor);
-        })
-        .on('click', turnLensing);
-// var data =[1,2,3,4,5,'Best Q modularity'];
-    var data = [{"id": 1, "value": 1}, {"id": 2, "value": 2}, {"id": 3, "value": 3}, {"id": 4, "value": 4}, {
-        "id": 5,
-        "value": 5
-    }, {"id": "optimized", "value": "Best Q modularity"}];
-    svg.append('rect').attr("class", "Cutoff")
-        .attr('x', 1)
-        .attr('y', 350)
-        .attr('width', 150)
-        .attr('height', 150)
-        .style("stroke", "black")
-        .attr("stroke-width", 1)
-        .style('fill', "#ddd")
-        .attr("rx", roundConner)
-        .attr("ry", roundConner)
-    svg.append('text')
-        .attr('class', 'textcutoff')
-        .attr('x', 30).attr('y', 370)
-        .text('Cut-off value');
-    svg.append('text')
-        .attr('class', 'textcutoff')
-        .attr('x', 30)
-        .attr('y', 430)
-        .text('Order by');
-    var select = d3.select('body')
-        .append('select')
-        .attr('id', 'sdropdown')
-        .on('change', function () {
->>>>>>> 45d16b7e0779a9cd94b18300e19beadf0308bead
         selectValue = d3.select('#sdropdown').property('value');
         setCut(selectValue);
     })

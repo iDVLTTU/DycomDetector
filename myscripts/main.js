@@ -564,7 +564,6 @@ function readTermsAndRelationships() {
     numberInputTerms = termArray.length;
 
 
-<<<<<<< HEAD
         // Compute relationship **********************************************************
         numNode = Math.min(40, termArray.length);
         numNode2 = Math.min(numNode*3, termArray.length);
@@ -601,49 +600,13 @@ function readTermsAndRelationships() {
                                             relationshipMaxMax = relationship[term1+"__"+term2].max;
                                     }  
                                 }    
-=======
-    // Compute relationship **********************************************************
-    numNode = Math.min(100, termArray.length);
-    numNode2 = Math.min(numNode * 3, termArray.length);
-    var selectedTerms = {};
-    for (var i = 0; i < numNode2; i++) {
-        selectedTerms[termArray[i].term] = termArray[i].max;
-    }
 
-
-    relationship = {};
-    relationshipMaxMax = 0;
-    data2.forEach(function (d) {
-        var year = d.date.getFullYear();
-        if (year >= minYear && year <= maxYear) {
-            var m = d.m;
-            for (var term1 in d) {
-                if (selectedTerms[term1]) {   // if the term is in the selected 100 terms
-                    for (var term2 in d) {
-                        if (selectedTerms[term2]) {   // if the term is in the selected 100 terms
-                            if (!relationship[term1 + "__" + term2]) {
-                                relationship[term1 + "__" + term2] = new Object();
-                                relationship[term1 + "__" + term2].max = 1;
-                                relationship[term1 + "__" + term2].maxMonth = m;
-                            }
-                            if (!relationship[term1 + "__" + term2][m])
-                                relationship[term1 + "__" + term2][m] = 1;
-                            else {
-                                relationship[term1 + "__" + term2][m]++;
-                                if (relationship[term1 + "__" + term2][m] > relationship[term1 + "__" + term2].max) {
-                                    relationship[term1 + "__" + term2].max = relationship[term1 + "__" + term2][m];
-                                    relationship[term1 + "__" + term2].maxMonth = m;
-
-                                    if (relationship[term1 + "__" + term2].max > relationshipMaxMax) // max over time
-                                        relationshipMaxMax = relationship[term1 + "__" + term2].max;
-                                }
->>>>>>> 45d16b7e0779a9cd94b18300e19beadf0308bead
                             }
                         }
                     }
                 }
             }
-        }
+
     });
 }
 

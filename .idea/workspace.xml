@@ -2,17 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="29106b09-ade8-4b77-aa72-321fe51ecf60" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myscripts/clusters.js" afterPath="$PROJECT_DIR$/myscripts/clusters.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myscripts/histogram.js" afterPath="$PROJECT_DIR$/myscripts/histogram.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myscripts/iDVLab.js" afterPath="$PROJECT_DIR$/myscripts/iDVLab.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myscripts/jLouvain.js" afterPath="$PROJECT_DIR$/myscripts/jLouvain.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myscripts/main.js" afterPath="$PROJECT_DIR$/myscripts/main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myscripts/main2.js" afterPath="$PROJECT_DIR$/myscripts/main2.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myscripts/main3.js" afterPath="$PROJECT_DIR$/myscripts/main3.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myscripts/saveFriesCards.js" afterPath="$PROJECT_DIR$/myscripts/saveFriesCards.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myscripts/searchBox.js" afterPath="$PROJECT_DIR$/myscripts/searchBox.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myscripts/sliderRelationship.js" afterPath="$PROJECT_DIR$/myscripts/sliderRelationship.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myscripts/util.js" afterPath="$PROJECT_DIR$/myscripts/util.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -75,14 +65,20 @@
       <file leaf-file-name="iDVLab.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/myscripts/iDVLab.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1045">
-              <caret line="347" column="46" lean-forward="false" selection-start-line="347" selection-start-column="46" selection-end-line="347" selection-end-column="46" />
-              <folding />
+            <state relative-caret-position="2695">
+              <caret line="362" column="0" lean-forward="false" selection-start-line="362" selection-start-column="0" selection-end-line="362" selection-end-column="0" />
+              <folding>
+                <element signature="n#!!block;n#_accumulate_edges#0" expanded="false" />
+                <element signature="n#!!block;n#average_shortest_path_length#0" expanded="false" />
+                <element signature="n#!!block;n#edge_betweenness_centrality#0" expanded="false" />
+                <element signature="n#!!block;n#_rescale_e#0" expanded="false" />
+                <element signature="n#!!block;n#modularity#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main2.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main2.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/myscripts/main2.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="105">
@@ -136,11 +132,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="util.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="util.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/myscripts/util.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="838">
-              <caret line="358" column="33" lean-forward="false" selection-start-line="358" selection-start-column="33" selection-end-line="358" selection-end-column="33" />
+            <state relative-caret-position="463">
+              <caret line="333" column="40" lean-forward="false" selection-start-line="333" selection-start-column="40" selection-end-line="333" selection-end-column="40" />
               <folding />
             </state>
           </provider>
@@ -197,9 +193,9 @@
         <option value="$PROJECT_DIR$/myscripts/histogram.js" />
         <option value="$PROJECT_DIR$/myscripts/main3.js" />
         <option value="$PROJECT_DIR$/index.html" />
-        <option value="$PROJECT_DIR$/myscripts/util.js" />
-        <option value="$PROJECT_DIR$/myscripts/iDVLab.js" />
         <option value="$PROJECT_DIR$/myscripts/main2.js" />
+        <option value="$PROJECT_DIR$/myscripts/iDVLab.js" />
+        <option value="$PROJECT_DIR$/myscripts/util.js" />
       </list>
     </option>
   </component>
@@ -368,10 +364,10 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="58719000" />
+    <option name="totallyTimeSpent" value="60090000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="2560" height="1337" extended-state="6" />
+    <frame x="0" y="23" width="2560" height="1337" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24960938" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -903,14 +899,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/myscripts/util.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="838">
-          <caret line="358" column="33" lean-forward="false" selection-start-line="358" selection-start-column="33" selection-end-line="358" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-585">
@@ -926,14 +914,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/myscripts/iDVLab.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1045">
-          <caret line="347" column="46" lean-forward="false" selection-start-line="347" selection-start-column="46" selection-end-line="347" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/myscripts/main.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2191">
@@ -942,10 +922,32 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/myscripts/iDVLab.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2695">
+          <caret line="362" column="0" lean-forward="false" selection-start-line="362" selection-start-column="0" selection-end-line="362" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!block;n#_accumulate_edges#0" expanded="false" />
+            <element signature="n#!!block;n#average_shortest_path_length#0" expanded="false" />
+            <element signature="n#!!block;n#edge_betweenness_centrality#0" expanded="false" />
+            <element signature="n#!!block;n#_rescale_e#0" expanded="false" />
+            <element signature="n#!!block;n#modularity#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/myscripts/main2.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="13" column="12" lean-forward="false" selection-start-line="13" selection-start-column="4" selection-end-line="13" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/myscripts/util.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="463">
+          <caret line="333" column="40" lean-forward="false" selection-start-line="333" selection-start-column="40" selection-end-line="333" selection-end-column="40" />
           <folding />
         </state>
       </provider>

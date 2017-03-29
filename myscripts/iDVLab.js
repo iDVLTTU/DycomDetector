@@ -149,6 +149,8 @@ function _single_source_shortest_path_basic(G, s) {
     }
     return [S, P, sigma];
 }
+
+
 function _accumulate_edges(betweenness, S, P, sigma, s) {
     var delta = new Object();
     for (var i = 0; i < S.length; i++) {
@@ -352,4 +354,13 @@ function create_adjmatrix(graph) {
         adjmatrix[tindex][sindex] = 1;
     })
     return adjmatrix;
+}
+
+function create_adjacencylist(graph) {
+    var adjlist =[];
+    var n = graph.nodes.length;
+    for(var i=0;i<n;i++){
+
+    }
+
 }

@@ -329,10 +329,10 @@ function drawLensingButton() {
         return d.value;
     })
 
-    var orderdata = [{"id": 1, "value": "Frequency"}, {"id": 2, "value": "Sudden change"}, {
-        "id": 3,
-        "value": "Betweenness"
-    }, {"id": 4, "value": "Q modularity"}];
+    var orderdata = [{"id": 1, "value": "Frequency"}, {"id": 2, "value": "Net frequency"}, {"id": 3, "value": "Decrease"},{
+        "id": 4,
+        "value": "Betweenness centrality"
+    }];
     var selectOrder = d3.select('body').append('select').attr('id', 'orderdropdown').on('change', function () {
         selectValue = d3.select('#orderdropdown').property('value');
         //setCut(selectValue);

@@ -156,13 +156,18 @@ function drawgraph2() {
     var breakCheck = false;
     lNodes = [];
     for (var m = startMonth; m < endMonth; m++) {
-        if (graphByMonths[m] == undefined || graphByMonths[m][selectedCut] == undefined) continue;
-        for (var i = 0; i < graphByMonths[m][selectedCut].nodes.length; i++) {
+        var newCut = selectedCut;
+        if (newCut<0){  // Best Q modularity selected
+            newCut = cutOffvalue[m];
+        }
+
+        if (graphByMonths[m] == undefined || graphByMonths[m][newCut] == undefined) continue;
+        for (var i = 0; i < graphByMonths[m][newCut].nodes.length; i++) {
             if (lNodes.length == 100) {
                 breakCheck = true;
                 break;
             }
-            var nod = graphByMonths[m][selectedCut].nodes[i];
+            var nod = graphByMonths[m][newCut].nodes[i];
             var found = false;
             for (var j = 0; j < lNodes.length; j++) {
                 if (lNodes[j].name == nod.name) {
@@ -217,6 +222,10 @@ function drawgraph2() {
 
     var yStartHistogram = height + 180; // y starts drawing the stream graphs
     drawHistograms(yStartHistogram);   // in main3.js
+    if (selectedCut<0){
+        updateHistogramOptimized();   // Update histogram by
+    }
+
 
     var yTextClouds = height + 200; // y starts drawing the stream graphs
     drawTextClouds(yTextClouds);    // in main3.js
@@ -276,9 +285,14 @@ function drawgraph2() {
         .range([0.1, 2])
         .domain([0, relationshipMaxMax2]);
     for (var m = startMonth; m < endMonth; m++) {
-        if (graphByMonths[m] == undefined || graphByMonths[m][selectedCut] == undefined) continue;
-        for (var i = 0; i < graphByMonths[m][selectedCut].links.length; i++) {
-            var lin = graphByMonths[m][selectedCut].links[i];
+        var newCut = selectedCut;
+        if (newCut<0){  // Best Q modularity selected
+            newCut = cutOffvalue[m];
+        }
+
+        if (graphByMonths[m] == undefined || graphByMonths[m][newCut] == undefined) continue;
+        for (var i = 0; i < graphByMonths[m][newCut].links.length; i++) {
+            var lin = graphByMonths[m][newCut].links[i];
             lLinks.push(lin);
 
         }

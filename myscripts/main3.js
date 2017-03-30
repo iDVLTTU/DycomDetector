@@ -13,7 +13,8 @@ function setCut(cutvalue){
     if (selectedvalue === "optimized") {
         selectedCut = -100;
         cutOffvalue=get_bestCut(graphByMonths);
-        selectHistogramOptimized();
+        createForceOptimized();
+        updateHistogramOptimized();
     } else {
         selectedCut = +selectedvalue - 1;
         selectHistogram();
@@ -44,26 +45,34 @@ function selectHistogram() {
         }
     }
 }
-function selectHistogramOptimized() {
+function updateHistogramOptimized() {
+    for (var c = 0; c < numCut; c++) {
+        svg.selectAll(".histogram" + c)
+            .style("fill-opacity", function (d,m) {
+                if (c==cutOffvalue[m]-1){
+                    return 1;
+               }
+               else{
+                   return 0.1;
+               }
+            })
+            .style("stroke-opacity", function (d,m) {
+                if (c==cutOffvalue[m]-1){
+                    return 1;
+                }
+                else{
+                    return 0.3;
+                }
+            });
+    }
+}
+function createForceOptimized() {
+    console.log("createForceOptimized");
     for (var c = 0; c < numCut; c++) {
         for (var m = 1; m < numMonth; m++) {
-            svg.selectAll(".histogram" + c)
-                .style("fill-opacity", function (d) {
-                    if (d!=undefined)
-                        debugger;
-                        console.log(d+" +d.cutoff===="+d.cutoff);
-                   if (d!=undefined && d.cutoff==cutOffvalue[m]){
-                       console.log(d+" "+d.cutoff);
-                       return 1;
-                   }
-                   else{
-                     //  console.log(d+" m="+m);
-                       return 0;
-                   }
-
-            });
-
-            if (c==cutOffvalue[m]){
+            if (c==cutOffvalue[m]-1){
+                if (m==17)
+                    debugger;
                 var nodes = [];
                 if (graphByMonths[m][c] != undefined) {
                     nodes = graphByMonths[m][c].nodes;
@@ -135,10 +144,15 @@ function drawTextClouds(yTextClouds) {
     var numTerms = 5; // numTerms in each month
     tNodes = [];
     for (var m = 0; m < numMonth; m++) {
+        var newCut = selectedCut;
+        if (newCut<0){  // Best Q modularity selected
+            newCut = cutOffvalue[m];
+        }
+
         var nodes = [];
-        if (graphByMonths[m] == undefined || graphByMonths[m][selectedCut] == undefined) continue;
-        for (var i = 0; i < graphByMonths[m][selectedCut].nodes.length; i++) {
-            var nod = graphByMonths[m][selectedCut].nodes[i];
+        if (graphByMonths[m] == undefined || graphByMonths[m][newCut] == undefined) continue;
+        for (var i = 0; i < graphByMonths[m][newCut].nodes.length; i++) {
+            var nod = graphByMonths[m][newCut].nodes[i];
             nodes.push(nod);
         }
         nodes.sort(function (a, b) {
@@ -167,15 +181,14 @@ function drawTextClouds(yTextClouds) {
         }
     }
 
-    var max = -1000;
-    var min =  1000;
+    var max = 1;
+    var min =  1;
     for (var i=0;i<tNodes.length;i++){
         if (tNodes[i].weight>max)
             max = tNodes[i].weight;
         if (tNodes[i].weight<min)
             min = tNodes[i].weight;
     }
-
 
 
     svg.selectAll(".textCloud3").remove();
@@ -188,23 +201,24 @@ function drawTextClouds(yTextClouds) {
         .style("text-anchor", "middle")
         .style("text-shadow", "1px 1px 0 rgba(0, 0, 0, 0.6")
         .attr("font-family", "sans-serif")
-        .attr("font-size", function(d,i) {
+        .attr("font-size", function(d) {
             var s=100;
-            if (lMonth-numLens<=d.m && d.m<=lMonth+numLens){
+            console.log("d.weight="+d.weight);
+            if (d.weight==undefined)
+                s = 10;
+            else if (lMonth-numLens<=d.m && d.m<=lMonth+numLens){
                 var sizeScale = d3.scale.linear()
                     .range([10, 20])
                     .domain([min, max]);
                 s = sizeScale(d.weight);
-                return s+"px";
             }
             else{
                 var sizeScale = d3.scale.linear()
                     .range([2, 12])
                     .domain([min, max]);
                 s = sizeScale(d.weight);
-                return s+"px";
             }
-
+            return s+"px";
         })
         .style("fill", function(d) {
             return getColor3(d.category);

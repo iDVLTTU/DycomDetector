@@ -23,6 +23,9 @@ var linkScale2 = d3.scale.linear()
     .range([0.05, 0.3])
     .domain([0, 10]);
 function updateSubLayout(nodes, links, m) {
+
+    console.log("updateSubLayout:"+m);
+
     var fill = d3.scale.category10();
     var groups = d3.nest()
         .key(function (d) {
@@ -104,7 +107,8 @@ function updateSubLayout(nodes, links, m) {
     force.nodes(nodes)
         .links(links)
         .start();
-    force.resume();
+    //force.resume();
+    console.log("ForceLayouts:"+m);
 
     var link = svg2.selectAll(".link5")
         .data(force.links())

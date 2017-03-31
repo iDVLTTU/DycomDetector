@@ -117,16 +117,7 @@ function xScale(m) {
         return m * XGAP_;
     }
 }
-function xGap3(m) {
-    if (m < lMonth - numLens)
-        return XGAP_;
-    else if (m > lMonth + numLens) {
-        return XGAP_;
-    }
-    else {
-        return XGAP_ * lensingMul;
-    }
-}
+
 
 
 var area = d3.svg.area()

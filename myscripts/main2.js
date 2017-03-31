@@ -38,6 +38,10 @@ function computeMonthlyGraphs() {
         arr.sort(function (a, b) {
             var var1 = a.net * 1000 + a.count;
             var var2 = b.net * 1000 + b.count;
+            if (selectedSetNodeBy==1){
+                var1 = a.net + 1000*a.count;
+                var2 = b.net + 1000*b.count;
+            }
             if (var1 < var2) {
                 return 1;
             }
@@ -210,9 +214,15 @@ function drawgraph2() {
             if (bet==undefined || isNaN(bet)) {
                 bet=0;
             }
+            else if (bet>1) {
+                bet=1;
+                nod.betweenness=1;
+            }
             nod.measurement = nod.fequency+nod.net+nod.weight+100*bet;
+
+            console.log(i+" "+nod.name+" betweenness "+nod.betweenness+" nod.measurement="+nod.measurement);
         }
-        console.log(i+" "+nod.name+" betweenness "+nod.betweenness+" nod.measurement="+nod.measurement);
+
     }
 
 

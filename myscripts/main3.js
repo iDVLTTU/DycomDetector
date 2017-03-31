@@ -21,11 +21,14 @@ function setCut(cutvalue){
         selectHistogram();
     }
    // cleanHistogram();
-    drawgraph2();
+     drawgraph2();
 }
 
 function setNodesBy(){
     selectedSetNodeBy = d3.select('#orderdropdown').property('value');
+
+    // Recompute the sub graphs
+    computeMonthlyGraphs();
     if(selectedSetNodeBy==1){
        console.log(selectedSetNodeBy);
     }
@@ -204,6 +207,10 @@ function drawTextClouds(yTextClouds) {
                 var bet= nod.betweenness;
                 if (bet==undefined || isNaN(bet)) {
                     bet=0;
+                }
+                else if (bet>1) {
+                    bet=1;
+                    nod.betweenness =1;
                 }
                 nod.measurement = nod.fequency+nod.net+nod.weight+100*bet;
             }

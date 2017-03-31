@@ -163,7 +163,7 @@ function drawgraph2() {
 
         if (graphByMonths[m] == undefined || graphByMonths[m][newCut] == undefined) continue;
         for (var i = 0; i < graphByMonths[m][newCut].nodes.length; i++) {
-            if (lNodes.length == 100) {
+            if (lNodes.length == 500) {
                 breakCheck = true;
                 break;
             }
@@ -232,13 +232,13 @@ function drawgraph2() {
             }
             else {
                 if (a.measurement < b.measurement) {
-                    return -1;
+                    return 1;
                 }
                 else if (a.measurement > b.measurement) {
-                    return 1;
+                    return -1;
                 }
                 else
-                    return 1;
+                    return -1;
 
                 /*
                 if (selectedSetNodeBy==2) {

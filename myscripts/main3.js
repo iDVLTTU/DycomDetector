@@ -7,6 +7,7 @@
  */
 
 var selectedCut = 0;
+var selectedSetNodeBy = 1;
 
 function setCut(cutvalue){
     var selectedvalue = cutvalue;
@@ -23,11 +24,28 @@ function setCut(cutvalue){
     drawgraph2();
 }
 
-function selectHistogram() {
-    for (var c = 0; c < numCut; c++) {
-        svg.selectAll(".histogram" + c).remove();
+function setNodesBy(){
+    selectedSetNodeBy = d3.select('#orderdropdown').property('value');
+    if(selectedSetNodeBy==1){
+       console.log(selectedSetNodeBy);
     }
+    else if(selectedSetNodeBy==2){
+        console.log(selectedSetNodeBy);
+    }
+    else if(selectedSetNodeBy==3){
+        console.log(selectedSetNodeBy);
+    }
+    else if(selectedSetNodeBy==4){
+        var cut_value = $('#sdropdown').val();
+        //Check if cutoff is calculated, if yes then skip
+        if(cutoff_Check.indexOf(+cut_value)===-1){
+            graphInsertBetweeness(graphByMonths, +cut_value);
+            cutoff_Check.push(+cut_value);
+        }
+    }
+    drawgraph2();
 }
+
 
 function selectHistogram() {
     for (var c = 0; c < numCut; c++) {
@@ -78,8 +96,6 @@ function createForceOptimized() {
     for (var c = 0; c < numCut; c++) {
         for (var m = 1; m < numMonth; m++) {
             if (c==cutOffvalue[m]-1){
-                if (m==17)
-                    debugger;
                 var nodes = [];
                 if (graphByMonths[m][c] != undefined) {
                     nodes = graphByMonths[m][c].nodes;
@@ -162,11 +178,43 @@ function drawTextClouds(yTextClouds) {
             var nod = graphByMonths[m][newCut].nodes[i];
             nodes.push(nod);
         }
+
+        // compute the frequency of node at month m
+        for (var i=0; i<nodes.length; i++){
+            var nod = nodes[i];
+            nod.fequency = 0;
+            if (terms[nod.name][nod.m])
+                nod.fequency = terms[nod.name][nod.m];
+        }
+
+        // Now compute the node size based on a selected measure
+        for (var i=0; i<nodes.length; i++){
+            var nod = nodes[i];
+            nod.measurement = 0;
+            if (selectedSetNodeBy==1) {
+                nod.measurement = 100*nod.fequency+nod.net+nod.weight;
+            }
+            else if (selectedSetNodeBy==2) {
+                nod.measurement = nod.fequency+100*nod.net+nod.weight;
+            }
+            else if (selectedSetNodeBy==3) {
+                nod.measurement = nod.fequency+nod.net+100*nod.weight;
+            }
+            else if (selectedSetNodeBy==4) {
+                var bet= nod.betweenness;
+                if (bet==undefined || isNaN(bet)) {
+                    bet=0;
+                }
+                nod.measurement = nod.fequency+nod.net+nod.weight+100*bet;
+            }
+        }
+
+
         nodes.sort(function (a, b) {
-            if (a.weight < b.weight) {   // weight is the degree of nodes
+            if (a.measurement < b.measurement) {   // weight is the degree of nodes
                 return 1;
             }
-            else if (a.weight > b.weight) {
+            else if (a.measurement > b.measurement) {
                 return -1;
             }
             else {
@@ -188,13 +236,15 @@ function drawTextClouds(yTextClouds) {
         }
     }
 
+
+
     var max = 1;
-    var min =  1;
+    var min =  100000;
     for (var i=0;i<tNodes.length;i++){
-        if (tNodes[i].weight>max)
-            max = tNodes[i].weight;
-        if (tNodes[i].weight<min)
-            min = tNodes[i].weight;
+        if (tNodes[i].measurement>max)
+            max = tNodes[i].measurement;
+        if (tNodes[i].measurement<min)
+            min = tNodes[i].measurement;
     }
 
 
@@ -209,17 +259,18 @@ function drawTextClouds(yTextClouds) {
         .style("text-shadow", "1px 1px 0 rgba(0, 0, 0, 0.6")
         .attr("font-family", "sans-serif")
         .attr("font-size", function(d) {
+            var s;
            if (lMonth-numLens<=d.m && d.m<=lMonth+numLens){
                 var sizeScale = d3.scale.linear()
                     .range([10, 20])
                     .domain([min, max]);
-                s = sizeScale(d.weight);
+                s = sizeScale(d.measurement);
             }
             else{
                 var sizeScale = d3.scale.linear()
                     .range([2, 12])
                     .domain([min, max]);
-                s = sizeScale(d.weight);
+                s = sizeScale(d.measurement);
             }
             return s+"px";
         })

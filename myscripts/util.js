@@ -270,18 +270,7 @@ function drawLensingButton(){
         "id": 4,
         "value": "Betweenness centrality"
     }];
-    var selectOrder = d3.select('body').append('select').attr('id', 'orderdropdown').on('change', function () {
-        selectValue = d3.select('#orderdropdown').property('value');
-        if(selectValue==4){
-            var cut_value = $('#sdropdown').val();
-          //Check if cutoff is calculated, if yes then skip
-            if(cutoff_Check.indexOf(+cut_value)===-1){
-                graphInsertBetweeness(graphByMonths, +cut_value);
-                cutoff_Check.push(+cut_value);
-            }
-
-        }
-    })
+    var selectOrder = d3.select('body').append('select').attr('id', 'orderdropdown').on('change',setNodesBy);
     var Orderoptions = selectOrder.selectAll('option').data(orderdata).enter().append('option').attr('value', function (d) {
         return d.id;
     }).text(function (d) {

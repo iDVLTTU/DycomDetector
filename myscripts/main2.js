@@ -176,12 +176,46 @@ function drawgraph2() {
                 }
             }
             if (!found) {
-                lNodes.push(nod);
+               lNodes.push(nod);
             }
         }
         if (breakCheck)
             break;
     }
+
+    // compute the frequency of node at month m
+    for (var i=0; i<lNodes.length; i++){
+        var nod = lNodes[i];
+        nod.fequency = 0;
+        if (terms[nod.name][nod.m])
+            nod.fequency = terms[nod.name][nod.m];
+        console.log(i+" nod.fequency="+nod.fequency);
+    }
+
+    // Now compute the node size based on a selected measure
+    for (var i=0; i<lNodes.length; i++){
+        var nod = lNodes[i];
+        nod.measurement = 0;
+        if (selectedSetNodeBy==1) {
+            nod.measurement = 100*nod.fequency+nod.net+nod.weight;
+        }
+        else if (selectedSetNodeBy==2) {
+            nod.measurement = nod.fequency+100*nod.net+nod.weight;
+        }
+        else if (selectedSetNodeBy==3) {
+            nod.measurement = nod.fequency+nod.net+100*nod.weight;
+        }
+        else if (selectedSetNodeBy==4) {
+            var bet= nod.betweenness;
+            if (bet==undefined || isNaN(bet)) {
+                bet=0;
+            }
+            nod.measurement = nod.fequency+nod.net+nod.weight+100*bet;
+        }
+        console.log(i+" "+nod.name+" betweenness "+nod.betweenness+" nod.measurement="+nod.measurement);
+    }
+
+
     lNodes.sort(function (a, b) {
         if (a.m < b.m) { // order by month
             return -1;
@@ -197,24 +231,76 @@ function drawgraph2() {
                 return 1;
             }
             else {
-                if (a.weight < b.weight) {   // weight is the degree of nodes
+                if (a.measurement < b.measurement) {
                     return -1;
                 }
-                else if (a.weight > b.weight) {
+                else if (a.measurement > b.measurement) {
                     return 1;
                 }
-                else {
-                    if (a.net < b.net) {
+                else
+                    return 1;
+
+                /*
+                if (selectedSetNodeBy==2) {
+                    {
+                        if (a.net < b.net) {
+                            return -1;
+                        }
+                        else if (a.net > b.net) {
+                            return 1;
+                        }
+                        else {
+                            if (a.weight < b.weight) {   // weight is the degree of nodes
+                                return -1;
+                            }
+                            else if (a.weight > b.weight) {
+                                return 1;
+                            }
+                            else
+                                return -1;      // random if can not compare on the previous measurements
+                        }
+                    }
+                }
+                else if (selectedSetNodeBy==2) {
+                    {
+                        if (a.net < b.net) {
+                            return -1;
+                        }
+                        else if (a.net > b.net) {
+                            return 1;
+                        }
+                        else {
+                            if (a.weight < b.weight) {   // weight is the degree of nodes
+                                return -1;
+                            }
+                            else if (a.weight > b.weight) {
+                                return 1;
+                            }
+                            else
+                                return -1;      // random if can not compare on the previous measurements
+                        }
+                    }
+                }
+                else if (selectedSetNodeBy==3) {
+                    if (a.weight < b.weight) {   // weight is the degree of nodes
                         return -1;
                     }
-                    else if (a.net > b.net) {
+                    else if (a.weight > b.weight) {
                         return 1;
                     }
                     else {
-                        return -1;      // random if can not compare on the previous measurements
-                    }
+                        if (a.net < b.net) {
+                            return -1;
+                        }
+                        else if (a.net > b.net) {
+                            return 1;
+                        }
+                        else {
+                            return -1;      // random if can not compare on the previous measurements
+                        }
 
-                }
+                    }
+                }*/
             }
         }
     });
@@ -361,6 +447,7 @@ function computeMonthlyData(term) {
     }
     return monthly;
 }
+
 
 function linkArc3(d) {
     var term1 = d.source.name;

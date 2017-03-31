@@ -33,7 +33,7 @@ function drawColorLegend() {
         .attr("class", "legendText")
         .attr("x", xx + 10)
         .attr("y", function (d, i) {
-            return yy + i * 16;
+            return yy + i * 16+2;
         })
         .text(function (d) {
             return d;
@@ -56,7 +56,7 @@ function drawColorLegend() {
         .text(numberInputTerms + " terms of " + data.length + " blogs")
         .attr("dy", ".21em")
         .attr("font-family", "sans-serif")
-        .attr("font-size", "12px")
+        .attr("font-size", "13px")
         .style("text-anchor", "left")
         .style("fill", "#000000");
 }

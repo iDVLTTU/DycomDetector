@@ -1137,7 +1137,7 @@ function update() {
         }
     });
 
-    if (document.getElementById("checkbox1").checked) {
+    /*if (document.getElementById("checkbox1").checked) {
         linkArcs.style("stroke-width", 0);
 
         nodeG.transition().duration(500).attr("transform", function (d) {
@@ -1146,14 +1146,14 @@ function update() {
         svg.selectAll(".nodeText").style("text-anchor", "start")
 
     }
-    else {
+    else {*/
         nodeG.attr("transform", function (d) {
             return "translate(" + d.x + "," + d.y + ")"
         })
         linkArcs.style("stroke-width", function (d) {
             return d.value;
         });
-    }
+  //  }
 
     /* svg.selectAll(".layer")
      .attr("d", function(d) {

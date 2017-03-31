@@ -19,7 +19,14 @@ function setCut(cutvalue){
         selectedCut = +selectedvalue - 1;
         selectHistogram();
     }
+   // cleanHistogram();
+    drawgraph2();
+}
 
+function selectHistogram() {
+    for (var c = 0; c < numCut; c++) {
+        svg.selectAll(".histogram" + c).remove();
+    }
 }
 
 function selectHistogram() {
@@ -146,7 +153,7 @@ function drawTextClouds(yTextClouds) {
     for (var m = 0; m < numMonth; m++) {
         var newCut = selectedCut;
         if (newCut<0){  // Best Q modularity selected
-            newCut = cutOffvalue[m];
+            newCut = cutOffvalue[m]-1;
         }
 
         var nodes = [];
@@ -202,11 +209,7 @@ function drawTextClouds(yTextClouds) {
         .style("text-shadow", "1px 1px 0 rgba(0, 0, 0, 0.6")
         .attr("font-family", "sans-serif")
         .attr("font-size", function(d) {
-            var s=100;
-            console.log("d.weight="+d.weight);
-            if (d.weight==undefined)
-                s = 10;
-            else if (lMonth-numLens<=d.m && d.m<=lMonth+numLens){
+           if (lMonth-numLens<=d.m && d.m<=lMonth+numLens){
                 var sizeScale = d3.scale.linear()
                     .range([10, 20])
                     .domain([min, max]);
@@ -223,7 +226,7 @@ function drawTextClouds(yTextClouds) {
         .style("fill", function(d) {
             return getColor3(d.category);
         })
-        .attr("x", function(d,i) {
+        .attr("x", function(d) {
             return xStep + xScale(d.m);    // x position is at the arcs
         })
         .attr("y", function (d) {

@@ -158,7 +158,7 @@ function drawgraph2() {
     for (var m = startMonth; m < endMonth; m++) {
         var newCut = selectedCut;
         if (newCut<0){  // Best Q modularity selected
-            newCut = cutOffvalue[m];
+            newCut = cutOffvalue[m]-1;
         }
 
         if (graphByMonths[m] == undefined || graphByMonths[m][newCut] == undefined) continue;
@@ -231,9 +231,7 @@ function drawgraph2() {
     drawTextClouds(yTextClouds);    // in main3.js
 
 
-    var yStart = height+280 ; // y starts drawing the stream graphs
-
-    var yStart = height + 270; // y starts drawing the stream graphs
+    var yStart = height + 290; // y starts drawing the stream graphs
     var yStep = 13
 
 
@@ -257,7 +255,7 @@ function drawgraph2() {
             .data(lNodes, function (d) {
                 return d.name
             })
-        ;//.style("fill", "black");
+        ;
 
     var enter_ = update_.enter();
     enter_.append("path")
@@ -282,19 +280,18 @@ function drawgraph2() {
     // LINKs **********************************
     lLinks = [];
     var linkScale3 = d3.scale.linear()
-        .range([0.1, 2])
+        .range([0.5, 6])
         .domain([0, relationshipMaxMax2]);
     for (var m = startMonth; m < endMonth; m++) {
         var newCut = selectedCut;
         if (newCut<0){  // Best Q modularity selected
-            newCut = cutOffvalue[m];
+            newCut = cutOffvalue[m]-1;
         }
 
         if (graphByMonths[m] == undefined || graphByMonths[m][newCut] == undefined) continue;
         for (var i = 0; i < graphByMonths[m][newCut].links.length; i++) {
             var lin = graphByMonths[m][newCut].links[i];
             lLinks.push(lin);
-
         }
     }
     svg.selectAll(".linkArc3").remove();
@@ -303,18 +300,16 @@ function drawgraph2() {
         .enter().append("path")
         .attr("class", "linkArc3")
         .style("stroke-width", function (d) {
-            return 5 * linkScale3(d.count);
+            return linkScale3(d.count);
         })
-        .style("stroke-opacity", 0.4)
+        .style("stroke-opacity", 0.5)
         .attr("d", linkArc3);
 
     svg.selectAll(".nodeText3").remove();
     var updateText = svg.selectAll(".nodeText3")
             .data(lNodes, function (d) {
                 return d.name
-            })
-        ;//.style("fill", "black")
-    //.text(function(d) { return d.name });
+            });
     var enterText = updateText.enter();
     enterText.append("text")
         .attr("class", "nodeText3")

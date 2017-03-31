@@ -1,19 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
-    #sdropdown{
-        position: absolute;
-        top: 290px;
-        left: 18px;
-        width: 125px;
-    }
 
-    #orderdropdown{
-        position: absolute;
-        top: 345px;
-        left: 18px;
-        width: 125px;
-    }
 .nodeText {
   background: #91877b;
   text-shadow: 0 11px 10 rgba(255, 255, 255, 1);
@@ -81,24 +69,55 @@ h3 {
     font-family: "Helvetica";
 }
 
+
+#sdropdown{
+    position: absolute;
+    top: 267px;
+    left: 18px;
+    width: 125px;
+}
+
+#orderdropdown{
+    position: absolute;
+    top: 427px;
+    left: 18px;
+    width: 125px;
+}
+
+#holder1 {
+    position:absolute;
+    border-radius: 5px;
+    z-index: 0;
+    top: 100px;
+    left: 4px;
+    width: 200px;
+    height: 60px;
+    border: 0px solid rgba(0,0,0, 0.5);
+    background-color: rgba(220,220,220, 1);
+}
+
+
 </style>
 <body>
 
-<!--!<button onclick="detactTimeSeries()">Unroll time series </button>!-->
-<input type="checkbox" id="checkbox1" value="value2" class="check" onclick="update()">
-<label for="checkbox1">Area graph only</label>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-<input id="search">
-<button type="button" onclick="searchNode()">Search</button>
 
-<progress value="0" max="100" id="progBar">
-    <span id="downloadProgress">
+<div id="holder1"  class="holder1">
+    <!--   <input type="checkbox" id="checkbox1" value="value2" class="check" onclick="update()">
+      <label for="checkbox1">Area graph only</label>
+      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-->
+    <br>
+    <input id="search">
+    <button type="button" onclick="searchNode()">Search</button>
+    <progress value="0" max="100" id="progBar">
+        &nbsp; &nbsp; &nbsp;<span id="downloadProgress">
         <!-- Your fallback goes here -->
     </span>
-</progress>
-<label id="progUpdate">
-    <!-- Success Message -->
-</label>
+    </progress>
+   <label id="progUpdate">
+        <!-- Success Message -->
+    </label>
+</div>
+
 
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="javascripts/d3.v3.min.js"></script>

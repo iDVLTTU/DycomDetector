@@ -7,9 +7,8 @@ var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oc
 var categories = ["person", "location", "organization", "miscellaneous"];
 
 function drawColorLegend() {
-    var xx = 6;
-    var yy = 140;
-    var y2 = 19;
+    var xx = 10;
+    var yy = 540;
     var rr = 6;
 
 
@@ -48,6 +47,7 @@ function drawColorLegend() {
         });
 
 
+    var y2 = 519;
     // number of input terms
     svg.append("text")
         .attr("class", "nodeLegend")
@@ -81,7 +81,6 @@ function drawTimeLegend() {
         .enter().append("line")
         .attr("class", "timeLegendLine")
         .style("stroke", "000")
-        //.style("stroke-dasharray", "3, 1")
         .style("stroke-opacity", 1)
         .style("stroke-width", 0.3)
         .attr("x1", function (d) {
@@ -102,9 +101,6 @@ function drawTimeLegend() {
             return d.x;
         })
         .attr("y", function (d, i) {
-            if (i % 12 == 0)
-                return height - 7;
-            else
                 return height - 15;
         })
         .attr("dy", ".21em")
@@ -196,11 +192,7 @@ function drawTimeBox() {
             isLensing = false;
             coordinate = d3.mouse(this);
             lMonth = Math.floor((coordinate[0] - xStep) / XGAP_);
-
-            //     updateTransition(500);
-
         })
-
         .on("mousemove", function () {
             isLensing = true;
             coordinate = d3.mouse(this);
@@ -230,7 +222,7 @@ function updateTimeBox(durationTime) {
             }
         })
         .attr("y", function (d, i) {
-            return maxY + 28;
+            return maxY + 30;
         })
         .attr("x", function (d, i) {
             return d.x;
@@ -238,12 +230,8 @@ function updateTimeBox(durationTime) {
 
     // Recompute the timeArcs
     if (oldLmonth != lMonth) {
-        console.log("in util.js lMonth=" + lMonth);
-
-        //if (oldLmonth>=0)
         drawgraph2();
         oldLmonth = lMonth;
-
     }
 }
 
@@ -251,17 +239,22 @@ var buttonLensingWidth =100;
 var buttonheight =18;
 var roundConner = 4;
 var colorHighlight = "#fc8";
-var buttonColor = "#aaa";
+var buttonColor = "#ddd";
 
 function drawLensingButton(){
 
-// Control panel on the left *********************
-var yControl = 222;
-var data =[{"id":1, "value":1},{"id":2, "value":2},{"id":3, "value":3},{"id":4, "value":4},{"id":5, "value":5},{"id":"optimized", "value":"Best Q modularity"}];
-svg.append('rect').attr("class", "Cutoff").attr('x',1).attr('y',yControl).attr('width',150).attr('height',250).style("stroke","black").attr("stroke-width", 1).style('fill',"#ddd").attr("rx", roundConner)
-    .attr("ry", roundConner)
-    svg.append('text').attr('class','textcutoff').attr('x',13).attr('y', yControl+32).text('Cut-off value');
-    svg.append('text').attr('class','textcutoff').attr('x',13).attr('y', yControl+86).text('Order nodes by');
+    // Control panel on the left *********************
+    var yControl = 230;
+    var data =[{"id":1, "value":1},{"id":2, "value":2},{"id":3, "value":3},{"id":4, "value":4},{"id":5, "value":5},{"id":"optimized", "value":"Best Q modularity"}];
+    svg.append('rect').attr("class", "rect1").attr('x',1).attr('y',yControl).attr('width',150).attr('height',60).style("stroke","black").attr("stroke-width", 1).style('fill',"#ddd").attr("rx", roundConner)
+        .attr("ry", roundConner)
+        svg.append('text').attr('class','textcutoff').attr('x',13).attr('y', yControl+22).text('Cut-off value');
+
+    // Control panel on the left *********************
+    svg.append('rect').attr("class", "rect2").attr('x',1).attr('y',yControl+160).attr('width',150).attr('height',60).style("stroke","black").attr("stroke-width", 1).style('fill',"#ddd").attr("rx", roundConner)
+        .attr("ry", roundConner)
+    svg.append('text').attr('class','textcutoff').attr('x',13).attr('y', yControl+182).text('Select nodes by');
+
     var select = d3.select('body').append('select').attr('id','sdropdown').on('change',function () {
         selectValue = d3.select('#sdropdown').property('value');
         setCut(selectValue);
@@ -273,7 +266,7 @@ svg.append('rect').attr("class", "Cutoff").attr('x',1).attr('y',yControl).attr('
         return d.value;
     })
 
-    var orderdata = [{"id": 1, "value": "Frequency"}, {"id": 2, "value": "Net frequency"}, {"id": 3, "value": "Decrease"},{
+    var orderdata = [{"id": 1, "value": "Frequency"}, {"id": 2, "value": "Net frequency"}, {"id": 3, "value": "Degree"},{
         "id": 4,
         "value": "Betweenness centrality"
     }];
@@ -295,11 +288,11 @@ svg.append('rect').attr("class", "Cutoff").attr('x',1).attr('y',yControl).attr('
         return d.value;
     })
 
-
+    var yLensing = 300;
     svg.append('rect')
         .attr("class", "lensingRect")
         .attr("x", 13)
-        .attr("y", yControl+160)
+        .attr("y", yLensing)
         .attr("rx", roundConner)
         .attr("ry", roundConner)
         .attr("width", buttonLensingWidth)
@@ -321,7 +314,7 @@ svg.append('rect').attr("class", "Cutoff").attr('x',1).attr('y',yControl).attr('
         .attr("font-family", "sans-serif")
         .attr("font-size", "13px")
         .attr("x", 8+buttonLensingWidth/2)
-        .attr("y", yControl+173)
+        .attr("y", yLensing+13)
         .text("Lensing")
         .style("text-anchor", "middle")
         .style("fill", "#000")

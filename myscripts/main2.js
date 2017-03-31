@@ -55,7 +55,7 @@ function computeMonthlyGraphs() {
         });
 
         //  if (m==61)
-        console.log("selectedSetNodeBy="+selectedSetNodeBy+" "+m+" arr="+arr.length);
+        //console.log("selectedSetNodeBy="+selectedSetNodeBy+" "+m+" arr="+arr2.length);
 
         var cut = 1;
         graphByMonths[m] = [];
@@ -77,6 +77,7 @@ function computeMonthlyGraphs() {
 
                 termList[nod.name] = nod;// List of term to feed to TimeArcs in main.js
             }
+           // console.log(" m="+m+" nodes5="+nodes5.length);
             // *********** EDGES **************
             var links5 = [];
             var relationshipMax5 = 0;
@@ -106,7 +107,7 @@ function computeMonthlyGraphs() {
             });
             var templinks = links5;
             if (tempnodes.length == 0 && templinks.length == 0) {
-                break;
+               // break;
             }
 
             var graph = {};
@@ -196,7 +197,6 @@ function drawgraph2() {
         nod.fequency = 0;
         if (terms[nod.name][nod.m])
             nod.fequency = terms[nod.name][nod.m];
-        console.log(i+" nod.fequency="+nod.fequency);
     }
 
     // Now compute the node size based on a selected measure

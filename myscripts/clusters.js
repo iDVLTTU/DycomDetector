@@ -22,6 +22,8 @@ var getColor3 = d3.scale.category10();
 var linkScale2 = d3.scale.linear()
     .range([0.05, 0.3])
     .domain([0, 10]);
+
+var allSVG = [];
 function updateSubLayout(nodes, links, m) {
 
     console.log("updateSubLayout:"+m);
@@ -97,7 +99,7 @@ function updateSubLayout(nodes, links, m) {
         .attr("height", forceSize)
         .attr("x", xStep - forceSize / 2 + m * XGAP_)
         .attr("y", height);
-
+    allSVG.push(svg2);
 
     var force = d3.layout.force()
         .gravity(0.5)
@@ -108,7 +110,6 @@ function updateSubLayout(nodes, links, m) {
         .links(links)
         .start();
     //force.resume();
-    console.log("ForceLayouts:"+m);
 
     var link = svg2.selectAll(".link5")
         .data(force.links())
@@ -122,9 +123,10 @@ function updateSubLayout(nodes, links, m) {
     var node = svg2.selectAll(".node5")
         .data(force.nodes())
         .enter().append("circle")
+        .attr("class", "node5")
         .attr("r", 0.5)
         .style("stroke", "#000")
-        .style("stroke-width", 0.1)
+        .style("stroke-width", 0.05)
         .style("stroke-opacity", 0.5)
         // .style("fill-opacity",0.3)
         .style("fill", function (d) {

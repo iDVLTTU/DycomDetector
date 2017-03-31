@@ -29,6 +29,8 @@ function setNodesBy(){
 
     // Recompute the sub graphs
     computeMonthlyGraphs();
+
+
     if(selectedSetNodeBy==1){
        console.log(selectedSetNodeBy);
     }
@@ -267,7 +269,7 @@ function drawTextClouds(yTextClouds) {
         .attr("font-family", "sans-serif")
         .attr("font-size", function(d) {
             var s;
-           if (lMonth-numLens<=d.m && d.m<=lMonth+numLens){
+            if (lMonth-numLens<=d.m && d.m<=lMonth+numLens){
                 var sizeScale = d3.scale.linear()
                     .range([10, 20])
                     .domain([min, max]);

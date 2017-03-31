@@ -163,7 +163,7 @@ function drawgraph2() {
 
         if (graphByMonths[m] == undefined || graphByMonths[m][newCut] == undefined) continue;
         for (var i = 0; i < graphByMonths[m][newCut].nodes.length; i++) {
-            if (lNodes.length == 500) {
+            if (lNodes.length == 200) {
                 breakCheck = true;
                 break;
             }

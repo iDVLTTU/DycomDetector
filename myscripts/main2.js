@@ -54,6 +54,9 @@ function computeMonthlyGraphs() {
             return i < 100;
         });
 
+        //  if (m==61)
+        console.log("selectedSetNodeBy="+selectedSetNodeBy+" "+m+" arr="+arr.length);
+
         var cut = 1;
         graphByMonths[m] = [];
         while (cut <= numCut) {

@@ -330,7 +330,7 @@ d3.tsv("data/wikinews.tsv", function (error, data_) {
     });
 
     /// The second force directed layout ***********
-    for (var i = 0; i < nodes.length; i++) {
+    /*for (var i = 0; i < nodes.length; i++) {
         var nod = nodes[i];
         if (!nodes2List[nod.name] && nodes2List[nod.name] != 0) {
             var newNod = {};
@@ -369,7 +369,7 @@ d3.tsv("data/wikinews.tsv", function (error, data_) {
             }
         }
         links2[i].count = ccc;
-    }
+    }*/
 
     // force2.nodes(nodes2)
     //     .links(links2)
@@ -479,9 +479,9 @@ function readTermsAndRelationships() {
     }
 
     var removeList = {};   // remove list **************
-    removeList["barack obama"] = 1;
-    removeList["john mccain"] = 1;
-    removeList["mitt romney"] = 1;
+    //removeList["barack obama"] = 1;
+    //removeList["john mccain"] = 1;
+    //removeList["mitt romney"] = 1;
 
     removeList["source"] = 1;
     removeList["person"] = 1;

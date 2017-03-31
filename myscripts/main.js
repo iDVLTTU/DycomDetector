@@ -3,6 +3,11 @@ var margin = {top: 0, right: 0, bottom: 5, left: 5};
 var width = document.body.clientWidth - margin.left - margin.right;
 var height = 200 - margin.top - margin.bottom;
 
+var personTerms;
+var locTerms;
+var misTerms;
+var orgTerms;
+
 //---End Insert------
 
 //Append a SVG to the body of the html page. Assign this SVG as an object to svg
@@ -143,16 +148,16 @@ var links2 = [];
 var nodes2List = {};
 var links2List = {};
 
-//     d3.tsv("data/americablog.tsv", function (error, data_) {
-//     d3.tsv("data/crooks_and_liars.tsv", function (error, data_) {
-//     d3.tsv("data/emptywheel.tsv", function (error, data_) {
-//     d3.tsv("data/esquire.tsv", function (error, data_) {
-//     d3.tsv("data/factcheck.tsv", function (error, data_) {
-//     d3.tsv("data/glenngreenwald.tsv", function (error, data_) {
-//     d3.tsv("data/huffington.tsv", function (error, data_) {
-//     d3.tsv("data/propublica.tsv", function (error, data_) {
+    // d3.tsv("data/americablog.tsv", function (error, data_) {
+    // d3.tsv("data/crooks_and_liars.tsv", function (error, data_) {
+    // d3.tsv("data/emptywheel.tsv", function (error, data_) {
+    // d3.tsv("data/esquire.tsv", function (error, data_) {
+    // d3.tsv("data/factcheck.tsv", function (error, data_) {
+    // d3.tsv("data/glenngreenwald.tsv", function (error, data_) {
+    // d3.tsv("data/huffington.tsv", function (error, data_) {
+    d3.tsv("data/propublica.tsv", function (error, data_) {
 
-d3.tsv("data/wikinews.tsv", function (error, data_) {
+// d3.tsv("data/wikinews.tsv", function (error, data_) {
     if (error) throw error;
     data = data_;
 
@@ -530,7 +535,7 @@ function readTermsAndRelationships() {
         e.max = maxNet;
         e.maxMonth = maxMonth;
         e.category = terms[att].category;
-        // Should write code here
+
 
 
         if (e.term == searchTerm) {
@@ -562,6 +567,30 @@ function readTermsAndRelationships() {
     console.log("termArray.length=" + termArray.length);
 
     numberInputTerms = termArray.length;
+    console.log(termArray);
+    personTerms = 0;
+    locTerms = 0;
+    misTerms = 0;
+    orgTerms = 0;
+    for(i = 0;i <numberInputTerms; i++){
+        if(termArray[i].category == "organization"){
+            orgTerms++;
+        }
+        else if(termArray[i].category == "person"){
+            personTerms++;
+        }
+        else if(termArray[i].category == "location"){
+            locTerms++;
+        }
+        else
+            misTerms++;
+
+    }
+
+    console.log(personTerms + " terms of " + "Person");
+    console.log(locTerms + " terms of " + "location");
+    console.log(orgTerms + " terms of " + "organization");
+    console.log(misTerms + " terms of " + "miscellaneous");
 
 
         // Compute relationship **********************************************************

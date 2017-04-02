@@ -1,4 +1,4 @@
-### DycomDetector: Discover topics using automatic communitydetections in dynamic networks
+## DycomDetector: Discover topics using automatic community detections in dynamic networks
 
 Online demo:  https://idvlttu.github.io/DycomDetector/
 

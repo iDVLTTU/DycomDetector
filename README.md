@@ -1,7 +1,7 @@
 ## DycomDetector: Discover topics using automatic community detections in dynamic networks
 Please click to watch the overview video.
 
-<!-- [![ScreenShot](http://www.cs.uic.edu/~tdang/TimeArcs/EuroVis2016/VideoTeaser.png)](.mp4) -->
+[![ScreenShot](https://raw.githubusercontent.com/iDataVisualizationLab/DycomDetector/master/images/play-btn.png)](.mp4)
 Online demo:  https://idvlttu.github.io/DycomDetector/
 
 Due to the rapid expansion and heterogeneity of the data, it is a challenging task to find out the patterns and relationships in the data. We introduce DycomDetector, a novel visualization tools for representing the relationships of temporal datasets. Our algorithm extracts the topics and creates relationships based on the collocation of the terms from the real world datasets such as political blogs. Based on the relationships and frequency of the words, DycomDetector constructs networks of a particular period and show the communities in the networks. The interactive and intuitive interface of our system enables the users to explore the data using various filter and lensing, to construct the networks using various parameters such as sudden change, degree, betweenness centrality, etc. It also allows the users to search a particular topic and visualize the relations of that topic with others terms in different time points. 

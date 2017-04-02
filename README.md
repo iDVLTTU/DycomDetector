@@ -8,7 +8,14 @@ Due to the rapid expansion and heterogeneity of the data, it is a challenging ta
 
 We collected 90,811 political blog posts over a ten-year period from 2005 to 2015 from seven different sources, including Wikinews, Americablog, The Huffington Post, and ProPublica. We then ran text analysis on these blogs and generated 418,641 terms that were classified into four different categories. We demonstrate the application of the DycomDetector on those datasets to analyze and evaluate its capabilities. 
 
+### Exploring Topics and Events using DycomDetector
+The following image shows the visualization of 7290 terms from 11267 political blog posts in last 10 years. We considered around 100,000 blogs of different datasets from which we filter and process the above terms and blog posts using topic modeling to find the important and meaningful terms. Terms are color-coded by categories as depicted on the box A. The terms which are collocated in same political blogs are brought closer and connected by arcs. The arc thickness indicates the frequency of collocated terms. 
+
 <!-- Please try [online demo](http://www2.cs.uic.edu/~tdang/TimeArcs/Text/). -->
+
+The following figure depicts the related topics in the Huffington Post for the input term "tucson". The terms are ordered based on the betweenness centrality which defined the most central topics. For example, "newtown" and "sandy hook" are the two central terms appearing on many political blogs due to the shooting event at the Sandy Hook Elementary School shooting occurred on December 14, 2012, in Newtown, Connecticut. This visualization enable a user to quickly get a brief idea about the event on that specific time. 
+
+![ScreenShot](https://github.com/iDataVisualizationLab/DycomDetector/blob/master/images/Figure1.png)*Caption*
 
 ![ScreenShot](https://github.com/iDataVisualizationLab/DycomDetector/blob/master/images/Figure1.png)
 

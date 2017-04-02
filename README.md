@@ -1,7 +1,7 @@
 ## DycomDetector: Discover topics using automatic community detections in dynamic networks
 Please click to watch the overview video.
 
-[![ScreenShot](https://raw.githubusercontent.com/iDataVisualizationLab/DycomDetector/master/images/play-btn.png)](.mp4)
+[![ScreenShot](https://github.com/iDataVisualizationLab/DycomDetector/blob/master/images/play-btn.png)](.mp4)
 Online demo:  https://idvlttu.github.io/DycomDetector/
 
 Due to the rapid expansion and heterogeneity of the data, it is a challenging task to find out the patterns and relationships in the data. We introduce DycomDetector, a novel visualization tools for representing the relationships of temporal datasets. Our algorithm extracts the topics and creates relationships based on the collocation of the terms from the real world datasets such as political blogs. Based on the relationships and frequency of the words, DycomDetector constructs networks of a particular period and show the communities in the networks. The interactive and intuitive interface of our system enables the users to explore the data using various filter and lensing, to construct the networks using various parameters such as sudden change, degree, betweenness centrality, etc. It also allows the users to search a particular topic and visualize the relations of that topic with others terms in different time points. 
@@ -15,7 +15,8 @@ The following image shows the visualization of 7290 terms from 11267 political b
 
 The following figure depicts the related topics in the Huffington Post for the input term "tucson". The terms are ordered based on the betweenness centrality which defined the most central topics. For example, "newtown" and "sandy hook" are the two central terms appearing on many political blogs due to the shooting event at the Sandy Hook Elementary School shooting occurred on December 14, 2012, in Newtown, Connecticut. This visualization enable a user to quickly get a brief idea about the event on that specific time. 
 
-![ScreenShot](https://github.com/iDataVisualizationLab/DycomDetector/blob/master/images/Figure1.png)*Caption*
+![ScreenShot](https://github.com/iDataVisualizationLab/DycomDetector/blob/master/images/tucson.png)
+
 
 ![ScreenShot](https://github.com/iDataVisualizationLab/DycomDetector/blob/master/images/Figure1.png)
 

@@ -55,7 +55,7 @@ function setNodesBy(){
 function selectHistogram() {
     for (var c = 0; c < numCut; c++) {
         if (c == selectedCut) {
-            svg.selectAll(".histogram" + c).style("fill-opacity", 1)
+            svg.selectAll(".histogram" + c).style("fill-opacity", 0)
                 .style("stroke-opacity", 1);
             for (var m = 1; m < numMonth; m++) {
                 var nodes = [];
@@ -131,7 +131,7 @@ function drawHistograms(yStartHistogram) {
             })
             .style("fill", getColor3(cut))
             .style("fill-opacity", function () {
-                return cut == selectedCut ? 1 : 0.1;
+                return cut == selectedCut ? 1 : 0;
             })
             .attr("x", function (d, i) {
                 var w = XGAP_ / (numCut + 1);

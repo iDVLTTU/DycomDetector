@@ -325,7 +325,7 @@ function turnLensing() {
     isLensing = !isLensing;
     svg.selectAll('.lensingRect')
         .style("stroke-width", function () {
-            return isLensing ? 1 : 0.1;
+            return isLensing ? 1 : 1;
         });
     svg.selectAll('.lensingText')
         .style("font-weight", function () {

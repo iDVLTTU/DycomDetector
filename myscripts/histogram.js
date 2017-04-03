@@ -8,7 +8,7 @@ function drawHistogram(graph, m) {
         .attr("width", hisSize)
         .attr("height", hisSize)
         .attr("x", m * XGAP_)
-        .attr("y", height + 150);
+        .attr("y", height + 150)
     histogram.append("rect").attr("x")
 
 

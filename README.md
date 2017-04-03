@@ -25,12 +25,15 @@ The following image shows the visualization of 7290 terms from 11267 political b
 
 ![ScreenShot](https://github.com/iDataVisualizationLab/DycomDetector/blob/master/images/DycomDetector.png)
 
-The following figure depicts the related topics in the Huffington Post for the input term "tucson". The terms are ordered based on the betweenness centrality which defined the most central topics. For example, "newtown" and "sandy hook" are the two central terms appearing on many political blogs due to the shooting event at the Sandy Hook Elementary School shooting occurred on December 14, 2012, in Newtown, Connecticut. This visualization enable a user to quickly get a brief idea about the event on that specific time. 
+### DycomDetector on the Huffington Post with lensing
+The following figure depicts the related topics in the Huffington Post for the input term "tucson". The terms are ordered based on the betweenness centrality which defined the most central topics. For example, "newtown" and "sandy hook" are the two central terms appearing on many political blogs due to the shooting event at the Sandy Hook Elementary School shooting occurred on December 14, 2012, in Newtown, Connecticut. This visualization enable a user to quickly get a brief idea about the event on that specific time.
 
 ![ScreenShot](https://github.com/iDataVisualizationLab/DycomDetector/blob/master/images/tucson.png)
 
+### DycomDetector on the Esquire blog with lensing into 2012
+The following image shows the top 5 terms under modularity histograms are ordered by betweenness centrality. For example, "willard", "politico", and "boston" globe are the hottest topics in July 2012.
 
-
+![ScreenShot](https://github.com/iDataVisualizationLab/DycomDetector/blob/master/images/Esquire.png)
 
 
 

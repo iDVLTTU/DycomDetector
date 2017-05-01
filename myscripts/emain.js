@@ -68,7 +68,7 @@ function releasenode(d) {
 var data, data2;
 var minYear = 2017;
 var maxYear = 2018;
-var numMonth = 12 * (maxYear - minYear);
+var numMonth = 12 *30 *(maxYear - minYear);
 
 var sourceList = {};
 var numSource = {};
@@ -174,7 +174,8 @@ d3.csv("data/diseaseData.csv", function (error, data_) {
         d.date = new Date(d["timestamp"]);
         var year = d.date.getFullYear();
         var m = 12 * (year - minYear) + d.date.getMonth();
-        console.log(m)
+        m = 12*30*(year - minYear) +d.date.getDay();
+        // console.log(m)
         d.m = m;
 
         if (year >= minYear && year <= maxYear) {

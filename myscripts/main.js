@@ -171,7 +171,7 @@ d3.tsv("data/wikinews.tsv", function (error, data_) {
         var year = d.date.getFullYear();
         var m = 12 * (year - minYear) + d.date.getMonth();
         d.m = m;
-
+console.log(m)
         if (year >= minYear && year <= maxYear) {
             // Add source to sourceList
             if (!sourceList[d.source])

@@ -212,80 +212,80 @@ d3.csv("data/diseaseData.csv", function (error, data_) {
             }
         }
 
-        if (d["location"] != "" && d["location"] != 1) {
-            var list = d["location"].split("|");
-            for (var i = 0; i < list.length; i++) {
-                var term = list[i];
-                d[term] = 1;
-                if (!terms[term]) {
-                    terms[term] = new Object();
-                    terms[term].max = 0;
-                    terms[term].maxMonth = -100;   // initialized negative
-                    terms[term].category = "location";
-                }
-                if (!terms[term][m])
-                    terms[term][m] = 1;
-                else {
-                    terms[term][m]++;
-                    if (terms[term][m] > terms[term].max) {
-                        terms[term].max = terms[term][m];
-                        terms[term].maxMonth = m;
-                        if (terms[term].max > termMaxMax)
-                            termMaxMax = terms[term].max;
+        // if (d["location"] != "" && d["location"] != 1) {
+        //     var list = d["location"].split("|");
+        //     for (var i = 0; i < list.length; i++) {
+        //         var term = list[i];
+        //         d[term] = 1;
+        //         if (!terms[term]) {
+        //             terms[term] = new Object();
+        //             terms[term].max = 0;
+        //             terms[term].maxMonth = -100;   // initialized negative
+        //             terms[term].category = "location";
+        //         }
+        //         if (!terms[term][m])
+        //             terms[term][m] = 1;
+        //         else {
+        //             terms[term][m]++;
+        //             if (terms[term][m] > terms[term].max) {
+        //                 terms[term].max = terms[term][m];
+        //                 terms[term].maxMonth = m;
+        //                 if (terms[term].max > termMaxMax)
+        //                     termMaxMax = terms[term].max;
 
-                    }
-                }
-            }
-        }
-        if (d["organization"] != "" && d["organization"] != 1) {
-            var list = d["organization"].split("|");
-            for (var i = 0; i < list.length; i++) {
-                var term = list[i];
-                d[term] = 1;
-                if (!terms[term]) {
-                    terms[term] = new Object();
-                    terms[term].max = 0;
-                    terms[term].maxMonth = -100;   // initialized negative
-                    terms[term].category = "organization";
-                }
-                if (!terms[term][m])
-                    terms[term][m] = 1;
-                else {
-                    terms[term][m]++;
-                    if (terms[term][m] > terms[term].max) {
-                        terms[term].max = terms[term][m];
-                        terms[term].maxMonth = m;
-                        if (terms[term].max > termMaxMax)
-                            termMaxMax = terms[term].max;
+        //             }
+        //         }
+        //     }
+        // }
+        // if (d["organization"] != "" && d["organization"] != 1) {
+        //     var list = d["organization"].split("|");
+        //     for (var i = 0; i < list.length; i++) {
+        //         var term = list[i];
+        //         d[term] = 1;
+        //         if (!terms[term]) {
+        //             terms[term] = new Object();
+        //             terms[term].max = 0;
+        //             terms[term].maxMonth = -100;   // initialized negative
+        //             terms[term].category = "organization";
+        //         }
+        //         if (!terms[term][m])
+        //             terms[term][m] = 1;
+        //         else {
+        //             terms[term][m]++;
+        //             if (terms[term][m] > terms[term].max) {
+        //                 terms[term].max = terms[term][m];
+        //                 terms[term].maxMonth = m;
+        //                 if (terms[term].max > termMaxMax)
+        //                     termMaxMax = terms[term].max;
 
-                    }
-                }
-            }
-        }
-        if (d["miscellaneous"] != "" && d["miscellaneous"] != 1) {
-            var list = d["miscellaneous"].split("|");
-            for (var i = 0; i < list.length; i++) {
-                var term = list[i];
-                d[term] = 1;
-                if (!terms[term]) {
-                    terms[term] = new Object();
-                    terms[term].max = 0;
-                    terms[term].maxMonth = -100;   // initialized negative
-                    terms[term].category = "miscellaneous";
-                }
-                if (!terms[term][m])
-                    terms[term][m] = 1;
-                else {
-                    terms[term][m]++;
-                    if (terms[term][m] > terms[term].max) {
-                        terms[term].max = terms[term][m];
-                        terms[term].maxMonth = m;
-                        if (terms[term].max > termMaxMax)
-                            termMaxMax = terms[term].max;
-                    }
-                }
-            }
-        }
+        //             }
+        //         }
+        //     }
+        // }
+        // if (d["miscellaneous"] != "" && d["miscellaneous"] != 1) {
+        //     var list = d["miscellaneous"].split("|");
+        //     for (var i = 0; i < list.length; i++) {
+        //         var term = list[i];
+        //         d[term] = 1;
+        //         if (!terms[term]) {
+        //             terms[term] = new Object();
+        //             terms[term].max = 0;
+        //             terms[term].maxMonth = -100;   // initialized negative
+        //             terms[term].category = "miscellaneous";
+        //         }
+        //         if (!terms[term][m])
+        //             terms[term][m] = 1;
+        //         else {
+        //             terms[term][m]++;
+        //             if (terms[term][m] > terms[term].max) {
+        //                 terms[term].max = terms[term][m];
+        //                 terms[term].maxMonth = m;
+        //                 if (terms[term].max > termMaxMax)
+        //                     termMaxMax = terms[term].max;
+        //             }
+        //         }
+        //     }
+        // }
     });
 
     console.log("DONE reading the input file = " + data.length);

@@ -174,7 +174,9 @@ d3.csv("data/diseaseData.csv", function (error, data_) {
         d.date = new Date(d["timestamp"]);
         var year = d.date.getFullYear();
         var m = 12 * (year - minYear) + d.date.getMonth();
-        m = 12*30*(year - minYear) +d.date.getDay();
+        m = 12*30*(year - minYear) +d.date.getDate();
+
+        debugger;
         // console.log(m)
         d.m = m;
 

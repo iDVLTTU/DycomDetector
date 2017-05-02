@@ -76,7 +76,7 @@ function drawTimeLegend() {
             listX.push(obj);
         }
     }
-
+            console.log(listX);
     svg.selectAll(".timeLegendLine").data(listX)
         .enter().append("line")
         .attr("class", "timeLegendLine")
@@ -107,6 +107,7 @@ function drawTimeLegend() {
         .attr("font-family", "sans-serif")
         .attr("font-size", "13px")
         .text(function (d, i) {
+
             if (i % 12 == 0)
                 return d.year;
             else

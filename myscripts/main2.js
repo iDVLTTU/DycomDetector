@@ -485,7 +485,6 @@ function computeMonthlyData(term) {
             monthly.push(mon);
         }
     }
-    console.log(monthly);
     return monthly;
 }
 

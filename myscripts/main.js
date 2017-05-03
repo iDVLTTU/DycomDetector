@@ -148,6 +148,7 @@ var links2 = [];
 var nodes2List = {};
 var links2List = {};
 
+
     // d3.tsv("data/americablog.tsv", function (error, data_) {
     // d3.tsv("data/crooks_and_liars.tsv", function (error, data_) {
     // d3.tsv("data/emptywheel.tsv", function (error, data_) {
@@ -202,6 +203,7 @@ console.log(m)
                             termMaxMax = terms[term].max;
                     }
                 }
+              
             }
         }
 

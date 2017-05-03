@@ -148,7 +148,6 @@ var links2 = [];
 var nodes2List = {};
 var links2List = {};
 
-
     // d3.tsv("data/americablog.tsv", function (error, data_) {
     // d3.tsv("data/crooks_and_liars.tsv", function (error, data_) {
     // d3.tsv("data/emptywheel.tsv", function (error, data_) {
@@ -172,7 +171,7 @@ d3.tsv("data/wikinews.tsv", function (error, data_) {
         var year = d.date.getFullYear();
         var m = 12 * (year - minYear) + d.date.getMonth();
         d.m = m;
-console.log(m)
+
         if (year >= minYear && year <= maxYear) {
             // Add source to sourceList
             if (!sourceList[d.source])
@@ -203,7 +202,6 @@ console.log(m)
                             termMaxMax = terms[term].max;
                     }
                 }
-              
             }
         }
 
@@ -305,6 +303,122 @@ console.log(m)
     console.log("main 3");
 
     computeLinks();
+
+    console.log("main 4");
+    force.linkStrength(function (l) {
+        if (l.value)
+            return (8 + l.value * 2);
+        else
+            return 1;
+    });
+
+    force.linkDistance(function (l) {
+        if (searchTerm != "") {
+            if (l.source.name == searchTerm || l.target.name == searchTerm) {
+                var order = isContainedInteger(listMonth, l.m)
+                return (12 * order);
+            }
+            else
+                return 0;
+        }
+        else {
+            if (l.value)
+                return 0;
+            else
+                return 12;
+        }
+    });
+
+    //Creates the graph data structure out of the json data
+    force.nodes(nodes)
+        .links(links)
+        .start();
+
+    force.on("tick", function () {
+        update();
+    });
+    force.on("end", function () {
+        detactTimeSeries();
+    });
+
+    /// The second force directed layout ***********
+    /*for (var i = 0; i < nodes.length; i++) {
+        var nod = nodes[i];
+        if (!nodes2List[nod.name] && nodes2List[nod.name] != 0) {
+            var newNod = {};
+            newNod.name = nod.name;
+            newNod.id = nodes2.length;
+            newNod.group = nod.group;
+            newNod.max = nod.max;
+
+            nodes2List[newNod.name] = newNod.id;
+            nodes2.push(newNod);
+        }
+    }
+
+    for (var i = 0; i < links.length; i++) {
+        var l = links[i];
+        var name1 = l.source.name;
+        var name2 = l.target.name;
+        var node1 = nodes2[nodes2List[name1]];
+        var node2 = nodes2[nodes2List[name2]];
+        if (!links2List[name1 + "_" + name2] && links2List[name1 + "_" + name2] != 0) {
+            var newl = {};
+            newl.source = node1;
+            newl.target = node2;
+            links2List[name1 + "_" + name2] = links2.length;
+            links2.push(newl);
+        }
+    }
+    for (var i = 0; i < links2.length; i++) {
+        var name1 = links2[i].source.name;
+        var name2 = links2[i].target.name;
+        var ccc = 0;
+        for (var m = 0; m < numMonth; m++) {
+            if (relationship[name1 + "__" + name2][m]) {
+                if (relationship[name1 + "__" + name2][m] > valueSlider) //relationship[name1+"__"+name2][m]>ccc &&
+                    ccc += relationship[name1 + "__" + name2][m];
+            }
+        }
+        links2[i].count = ccc;
+    }*/
+
+    // force2.nodes(nodes2)
+    //     .links(links2)
+    //     .start();
+    //
+    // var link2 = svg2.selectAll(".link2")
+    //   .data(links2)
+    // .enter().append("line")
+    //   .attr("class", "link2")
+    //   .style("stroke","#777")
+    //   .style("stroke-width", function(d) { return 0.2+linkScale(d.count); });
+    //
+    // var node2 = svg2.selectAll(".nodeText2")
+    //     .data(nodes2)
+    //     .enter().append("text")
+    //   .attr("class", ".nodeText2")
+    //         .text(function(d) { return d.name })
+    //         .attr("dy", ".35em")
+    //         .style("fill", function(d) { return getColor(d.group, d.max) ;})
+    //         .style("text-anchor","middle")
+    //         .style("text-shadow", "1px 1px 0 rgba(55, 55, 55, 0.6")
+    //         .style("font-weight", function(d) { return d.isSearchTerm ? "bold" : ""; })
+    //         .attr("dy", ".21em")
+    //         .attr("font-family", "sans-serif")
+    //         .attr("font-size", "12px");
+    //
+    // force2.on("tick", function() {
+    //     link2.attr("x1", function(d) { return d.source.x; })
+    //         .attr("y1", function(d) { return d.source.y; })
+    //         .attr("x2", function(d) { return d.target.x; })
+    //         .attr("y2", function(d) { return d.target.y; });
+    //
+    //
+    //     node2.attr("x", function(d) { return d.x; })
+    //         .attr("y", function(d) { return d.y; });
+    // });
+
 
     for (var i = 0; i < termArray.length / 10; i++) {
         optArray.push(termArray[i].term);
@@ -1146,5 +1260,4 @@ function detactTimeSeries() {
 
     updateTransition(1000);
 }
-
 

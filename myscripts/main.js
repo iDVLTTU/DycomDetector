@@ -1,7 +1,7 @@
 //Constants for the SVG
 var margin = {top: 0, right: 0, bottom: 5, left: 5};
 var width = document.body.clientWidth - margin.left - margin.right;
-var height = 200 - margin.top - margin.bottom;
+var height = 50 - margin.top - margin.bottom;
 
 var personTerms;
 var locTerms;
@@ -154,10 +154,10 @@ var links2List = {};
     // d3.tsv("data/esquire.tsv", function (error, data_) {
     // d3.tsv("data/factcheck.tsv", function (error, data_) {
     // d3.tsv("data/glenngreenwald.tsv", function (error, data_) {
-    d3.tsv("data/huffington.tsv", function (error, data_) {
+   // data_ d3.tsv("data/huffington.tsv", function (error, data_) {
     //d3.tsv("data/propublica.tsv", function (error, data_) {
 
-//d3.tsv("data/wikinews.tsv", function (error, data_) {
+d3.tsv("data/wikinews.tsv", function (error, data_) {
     if (error) throw error;
     data = data_;
 
@@ -296,15 +296,15 @@ var links2List = {};
     drawTimeBox(); // This box is for brushing
     drawLensingButton();
 
-    console.log("main 2");
+    //.log("main 2");
 
     computeNodes();
 
-    console.log("main 3");
+   // console.log("main 3");
 
     computeLinks();
 
-    console.log("main 4");
+   // console.log("main 4");
     force.linkStrength(function (l) {
         if (l.value)
             return (8 + l.value * 2);
@@ -793,21 +793,21 @@ function computeNodes() {
 
     //   drawStreamTerm(svg, pNodes, 100, 600) ;
 
-    svg.selectAll(".layer").remove();
-    svg.selectAll(".layer")
-        .data(pNodes)
-        .enter().append("path")
-        .attr("class", "layer")
-        .style("stroke", function (d) {
-            return d.isSearchTerm ? "#000" : "#000";
-        })
-        .style("stroke-width", 0.5)
-        .style("stroke-opacity", 0.5)
-        .style("fill-opacity", 0.3)
-        .style("fill", function (d) {
-            // return getColor(d.group, d.max);
-            return getColor3(d.group);
-        });
+    // svg.selectAll(".layer").remove();
+    // svg.selectAll(".layer")
+    //     .data(pNodes)
+    //     .enter().append("path")
+    //     .attr("class", "layer")
+    //     .style("stroke", function (d) {
+    //         return d.isSearchTerm ? "#000" : "#000";
+    //     })
+    //     .style("stroke-width", 0.5)
+    //     .style("stroke-opacity", 0.5)
+    //     .style("fill-opacity", 0.3)
+    //     .style("fill", function (d) {
+    //         // return getColor(d.group, d.max);
+    //         return getColor3(d.group);
+    //     });
 }
 
 function computeLinks() {
@@ -905,19 +905,19 @@ function computeLinks() {
         var term2 = nodes[l.target].name;
         var month = l.m;
         l.value = linkScale(relationship[term1 + "__" + term2][month]);
-    });
+    })
 
-    console.log("DONE links relationshipMaxMax2=" + relationshipMaxMax2);
+    //console.log("DONE links relationshipMaxMax2=" + relationshipMaxMax2);
 
     //Create all the line svgs but without locations yet
-    svg.selectAll(".linkArc").remove();
-    linkArcs = svg.append("g").selectAll(".linkArc")
-        .data(links)
-        .enter().append("path")
-        .attr("class", "linkArc")
-        .style("stroke-width", function (d) {
-            return d.value;
-        });
+    // svg.selectAll(".linkArc").remove();
+    // linkArcs = svg.append("g").selectAll(".linkArc")
+    //     .data(links)
+    //     .enter().append("path")
+    //     .attr("class", "linkArc")
+    //     .style("stroke-width", function (d) {
+    //         return d.value;
+    //     });
 
     svg.selectAll(".nodeG").remove();
     nodeG = svg.selectAll(".nodeG")
@@ -936,26 +936,26 @@ function computeLinks() {
      */
     // console.log("  nodes.length="+nodes.length) ;
 
-    svg.selectAll(".nodeText").remove();
-    nodeG.append("text")
-        .attr("class", ".nodeText")
-        .attr("dy", ".35em")
-        .style("fill", "#000000")
-        .style("text-anchor", "end")
-        .style("text-shadow", "1px 1px 0 rgba(255, 255, 255, 0.6")
-        .style("font-weight", function (d) {
-            return d.isSearchTerm ? "bold" : "";
-        })
-        .attr("dy", ".21em")
-        .attr("font-family", "sans-serif")
-        .attr("font-size", function (d) {
-            return d.isSearchTerm ? "12px" : "11px";
-        })
-        .text(function (d) {
-            return d.name
-        });
-    nodeG.on('mouseover', mouseovered)
-        .on("mouseout", mouseouted);
+    // svg.selectAll(".nodeText").remove();
+    // nodeG.append("text")
+    //     .attr("class", ".nodeText")
+    //     .attr("dy", ".35em")
+    //     .style("fill", "#000000")
+    //     .style("text-anchor", "end")
+    //     .style("text-shadow", "1px 1px 0 rgba(255, 255, 255, 0.6")
+    //     .style("font-weight", function (d) {
+    //         return d.isSearchTerm ? "bold" : "";
+    //     })
+    //     .attr("dy", ".21em")
+    //     .attr("font-family", "sans-serif")
+    //     .attr("font-size", function (d) {
+    //         return d.isSearchTerm ? "12px" : "11px";
+    //     })
+    //     .text(function (d) {
+    //         return d.name
+    //     });
+    // nodeG.on('mouseover', mouseovered)
+    //     .on("mouseout", mouseouted);
 
     // console.log("gggg**************************"+searchTerm);
     listMonth = [];
@@ -1176,12 +1176,12 @@ function update() {
 
     }
     else {*/
-        nodeG.attr("transform", function (d) {
-            return "translate(" + d.x + "," + d.y + ")"
-        })
-        linkArcs.style("stroke-width", function (d) {
-            return d.value;
-        });
+        // nodeG.attr("transform", function (d) {
+        //     return "translate(" + d.x + "," + d.y + ")"
+        // })
+        // linkArcs.style("stroke-width", function (d) {
+        //     return d.value;
+        // });
   //  }
 
     /* svg.selectAll(".layer")
@@ -1194,7 +1194,7 @@ function update() {
      //else
      return "";
      });*/
-    linkArcs.attr("d", linkArc);
+   // linkArcs.attr("d", linkArc);
 
     // Fast stopping the force layout, not a good result for TimeArcs
     if (force.alpha() < 0.1)
@@ -1226,7 +1226,7 @@ function updateTransition(durationTime) {
             }
             return area(d.monthly);
         });
-    linkArcs.transition().duration(250).attr("d", linkArc);
+    //linkArcs.transition().duration(250).attr("d", linkArc);
     updateTimeLegend();
     updateTimeBox(durationTime);
 }

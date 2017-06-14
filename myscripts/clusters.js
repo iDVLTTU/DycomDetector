@@ -26,7 +26,7 @@ var linkScale2 = d3.scale.linear()
 var allSVG = [];
 function updateSubLayout(nodes, links, m) {
 
-    console.log("updateSubLayout:"+m);
+    //console.log("updateSubLayout:"+m);
 
     var fill = d3.scale.category10();
     var groups = d3.nest()

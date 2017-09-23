@@ -234,14 +234,14 @@ var colorHighlight = "#fc8";
 var buttonColor = "#ddd";
 
 function drawLensingButton(){
-
     // Control panel on the left *********************
     var yControl = 80;
     var data =[{"id":1, "value":">=1"},{"id":2, "value":">=2"},{"id":3, "value":">=3"},{"id":4, "value":">=4"},{"id":5, "value":">=5"},{"id":"optimized", "value":"Best Q modularity"}];
-    svg.append('rect').attr("class", "rect1").attr('x',1).attr('y',yControl).attr('width',150).attr('height',110).style("stroke","black").attr("stroke-width", 0.5).style('fill',"#ddd").attr("rx", roundConner)
+    svg.append('rect').attr("class", "rect1").attr('x',0.1).attr('y',yControl).attr('width',150).attr('height',110).style("stroke","black").attr("stroke-width", 0.1).style('fill',"#eee").attr("rx", roundConner)
         .attr("ry", roundConner)
     svg.append('text')
         .attr('class','textcutoff')
+        .style("font-style","italic")
         .attr("font-family", "sans-serif")
         .attr("font-size", "12px")
         .attr('x',13)
@@ -249,6 +249,7 @@ function drawLensingButton(){
         .text('Select nodes by');
     svg.append('text')
         .attr('class','textcutoff')
+        .style("font-style","italic")
         .attr('x',13)
         .attr('y', yControl+71)
         .attr("font-family", "sans-serif")

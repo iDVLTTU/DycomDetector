@@ -5,13 +5,13 @@ var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oc
 // Add color legend
 
 var categories = ["person", "location", "organization", "miscellaneous"];
+var yTimeBox = 0;
+    
 
 function drawColorLegend() {
     var xx = 10;
-    var yy = 540;
+    var yy = 250;
     var rr = 6;
-
-
     svg.selectAll(".legends")
         .data(categories)
         .enter()
@@ -47,12 +47,11 @@ function drawColorLegend() {
         });
 
 
-    var y2 = 519;
     // number of input terms
     svg.append("text")
         .attr("class", "nodeLegend")
         .attr("x", xx - 6)
-        .attr("y", y2)
+        .attr("y", yy-17)
         .text(numberInputTerms + " terms of " + data.length + " blogs")
         .attr("dy", ".21em")
         .attr("font-family", "sans-serif")
@@ -185,7 +184,7 @@ function drawTimeBox() {
         .style("fill", "#aaa")
         .style("fill-opacity", 0.2)
         .attr("x", xStep)
-        .attr("y", height - 25)
+        .attr("y", yTimeBox)
         .attr("width", XGAP_ * numMonth)
         .attr("height", 30)
         .on("mouseout", function () {
@@ -203,9 +202,6 @@ function drawTimeBox() {
 }
 
 function updateTimeBox(durationTime) {
-    var maxY = 0;
-    svg.selectAll(".timeBox").transition().duration(durationTime)
-        .attr("y", maxY + 15);
     svg.selectAll(".timeLegendText").transition().duration(durationTime)
         .style("fill-opacity", function (d, i) {
             if (i % 12 == 0)
@@ -218,7 +214,7 @@ function updateTimeBox(durationTime) {
             }
         })
         .attr("y", function (d, i) {
-            return maxY + 30;
+            return (i % 12 == 0) ? yTimeBox + 12 : yTimeBox + 22;
         })
         .attr("x", function (d, i) {
             return d.x;
@@ -241,15 +237,28 @@ function drawLensingButton(){
 
     // Control panel on the left *********************
     var yControl = 80;
-    var data =[{"id":1, "value":1},{"id":2, "value":2},{"id":3, "value":3},{"id":4, "value":4},{"id":5, "value":5},{"id":"optimized", "value":"Best Q modularity"}];
-    svg.append('rect').attr("class", "rect1").attr('x',1).attr('y',yControl).attr('width',150).attr('height',60).style("stroke","black").attr("stroke-width", 0.5).style('fill',"#ddd").attr("rx", roundConner)
+    var data =[{"id":1, "value":">=1"},{"id":2, "value":">=2"},{"id":3, "value":">=3"},{"id":4, "value":">=4"},{"id":5, "value":">=5"},{"id":"optimized", "value":"Best Q modularity"}];
+    svg.append('rect').attr("class", "rect1").attr('x',1).attr('y',yControl).attr('width',150).attr('height',110).style("stroke","black").attr("stroke-width", 0.5).style('fill',"#ddd").attr("rx", roundConner)
         .attr("ry", roundConner)
-        svg.append('text').attr('class','textcutoff').attr('x',13).attr('y', yControl+22).text('Cut-off value');
+    svg.append('text')
+        .attr('class','textcutoff')
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "12px")
+        .attr('x',13)
+        .attr('y', yControl+22)
+        .text('Select nodes by');
+    svg.append('text')
+        .attr('class','textcutoff')
+        .attr('x',13)
+        .attr('y', yControl+71)
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "12px")
+        .text('Select edge weight');
 
     // Control panel on the left *********************
-    svg.append('rect').attr("class", "rect2").attr('x',1).attr('y',yControl+83).attr('width',150).attr('height',60).style("stroke","black").attr("stroke-width", 0.5).style('fill',"#ddd").attr("rx", roundConner)
-        .attr("ry", roundConner)
-    svg.append('text').attr('class','textcutoff').attr('x',13).attr('y', yControl+105).text('Select nodes by');
+    //svg.append('rect').attr("class", "rect2").attr('x',1).attr('y',yControl+83).attr('width',150).attr('height',60).style("stroke","black").attr("stroke-width", 0.5).style('fill',"#ddd").attr("rx", roundConner)
+    //    .attr("ry", roundConner)
+    
 
     var select = d3.select('body').append('select').attr('id','sdropdown').on('change',function () {
         selectValue = d3.select('#sdropdown').property('value');
@@ -273,6 +282,7 @@ function drawLensingButton(){
         return d.value;
     })
 
+    /*
     var yLensing = 300;
     svg.append('rect')
         .attr("class", "lensingRect")
@@ -312,11 +322,11 @@ function drawLensingButton(){
                 .style("fill", buttonColor);
         })
         .on('click', turnLensing);
-
-
-
+    */
 
 }
+
+/*
 function turnLensing() {
     isLensing = !isLensing;
     svg.selectAll('.lensingRect')
@@ -344,7 +354,7 @@ function turnLensing() {
     updateTransition(500);
     updateTimeLegend();
     //drawgraph2();
-}
+}*/
 
 function getColor(category, count) {
     var minSat = 80;

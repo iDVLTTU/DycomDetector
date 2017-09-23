@@ -46,15 +46,6 @@ function updateSubLayout(nodes, links, m) {
         partition.push(temp);
     });
 
-    /*var filteredlinks = [];
-     links.forEach(function (d) {
-     partition.forEach(function (e) {
-     if(e.indexOf(d.source.id)>=0&&e.indexOf(d.target.id)>=0){
-     filteredlinks.push(d);
-     }
-     })
-     });*/
-
     var groupPath = function (d) {
         var fakePoints = [];
         if (d.values.length == 2) {
@@ -115,7 +106,7 @@ function updateSubLayout(nodes, links, m) {
         .data(force.links())
         .enter().append("line")
         .attr("class", "link5")
-        .style("stroke", "#777")
+        .style("stroke", "#000")
         .style("stroke-width", function (d) {
             return linkScale2(d.count);
         });

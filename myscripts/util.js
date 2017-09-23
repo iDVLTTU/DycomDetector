@@ -204,10 +204,6 @@ function drawTimeBox() {
 
 function updateTimeBox(durationTime) {
     var maxY = 0;
-    for (var i = 0; i < nodes.length; i++) {
-        if (nodes[i].y > maxY)
-            maxY = nodes[i].y;
-    }
     svg.selectAll(".timeBox").transition().duration(durationTime)
         .attr("y", maxY + 15);
     svg.selectAll(".timeLegendText").transition().duration(durationTime)
@@ -244,16 +240,16 @@ var buttonColor = "#ddd";
 function drawLensingButton(){
 
     // Control panel on the left *********************
-    var yControl = 230;
+    var yControl = 80;
     var data =[{"id":1, "value":1},{"id":2, "value":2},{"id":3, "value":3},{"id":4, "value":4},{"id":5, "value":5},{"id":"optimized", "value":"Best Q modularity"}];
-    svg.append('rect').attr("class", "rect1").attr('x',1).attr('y',yControl).attr('width',150).attr('height',60).style("stroke","black").attr("stroke-width", 1).style('fill',"#ddd").attr("rx", roundConner)
+    svg.append('rect').attr("class", "rect1").attr('x',1).attr('y',yControl).attr('width',150).attr('height',60).style("stroke","black").attr("stroke-width", 0.5).style('fill',"#ddd").attr("rx", roundConner)
         .attr("ry", roundConner)
         svg.append('text').attr('class','textcutoff').attr('x',13).attr('y', yControl+22).text('Cut-off value');
 
     // Control panel on the left *********************
-    svg.append('rect').attr("class", "rect2").attr('x',1).attr('y',yControl+160).attr('width',150).attr('height',60).style("stroke","black").attr("stroke-width", 1).style('fill',"#ddd").attr("rx", roundConner)
+    svg.append('rect').attr("class", "rect2").attr('x',1).attr('y',yControl+83).attr('width',150).attr('height',60).style("stroke","black").attr("stroke-width", 0.5).style('fill',"#ddd").attr("rx", roundConner)
         .attr("ry", roundConner)
-    svg.append('text').attr('class','textcutoff').attr('x',13).attr('y', yControl+182).text('Select nodes by');
+    svg.append('text').attr('class','textcutoff').attr('x',13).attr('y', yControl+105).text('Select nodes by');
 
     var select = d3.select('body').append('select').attr('id','sdropdown').on('change',function () {
         selectValue = d3.select('#sdropdown').property('value');

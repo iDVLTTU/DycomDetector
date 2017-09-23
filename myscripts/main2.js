@@ -342,8 +342,8 @@ function drawgraph2() {
             .attr("r", function(d,i){
                 var rScale = d3.scale.linear()
                     .range([0.3, 0.6])
-                    .domain([min, max]);
-                return rScale(d.measurement);
+                    .domain([min, max]);    
+                return isNaN(rScale(d.measurement))? 1 : rScale(d.measurement);
             })
     }
 
@@ -351,10 +351,6 @@ function drawgraph2() {
 
     var yTextClouds = height + 200; // y starts drawing the stream graphs
     drawTextClouds(yTextClouds);    // in main3.js
-
-
-
-
 
 
     var yStart = height + 290; // y starts drawing the stream graphs

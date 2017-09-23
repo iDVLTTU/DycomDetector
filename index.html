@@ -55,7 +55,7 @@
 .slider .handle {
   fill: #666;
   stroke: #000;
-  stroke-opacity: .25;
+  stroke-opacity: .5;
   stroke-width: 1px;
   cursor: crosshair;
 }
@@ -72,14 +72,14 @@ h3 {
 
 #sdropdown{
     position: absolute;
-    top: 267px;
+    top: 117px;
     left: 18px;
     width: 125px;
 }
 
 #orderdropdown{
     position: absolute;
-    top: 427px;
+    top: 200px;
     left: 18px;
     width: 125px;
 }
@@ -88,14 +88,16 @@ h3 {
     position:absolute;
     border-radius: 5px;
     z-index: 0;
-    top: 100px;
+    top: 0px;
     left: 4px;
     width: 200px;
     height: 60px;
-    border: 0px solid rgba(0,0,0, 0.5);
-    background-color: rgba(220,220,220, 0);
+    border: 0px solid rgba(0,0,0, 1);
 }
 
+input.search {
+    width: 97px;  
+}
 
 </style>
 <body>
@@ -106,7 +108,7 @@ h3 {
       <label for="checkbox1">Area graph only</label>
       &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-->
     <br>
-    <input id="search">
+    <input id="search" class="search">
     <button type="button" onclick="searchNode()">Search</button>
     <progress value="0" max="100" id="progBar">
         &nbsp; &nbsp; &nbsp;<span id="downloadProgress">
@@ -124,8 +126,7 @@ h3 {
 <script src="javascripts/fisheye.js"></script>
 <script src="javascripts/select2.min.js"></script>
 <script src="myscripts/util.js"></script>
-<script src="myscripts/sliderRelationship.js"></script>
-<script src="myscripts/stopList.js"></script>
+<!--<script src="myscripts/sliderRelationship.js"></script>-->
 <script src="myscripts/main.js"></script>
 <script src="myscripts/main2.js"></script>
 <script src="myscripts/main3.js"></script>
@@ -136,8 +137,6 @@ h3 {
 
 <script type='text/javascript' src="http://code.jquery.com/ui/1.11.0/jquery-ui.min.js"> </script>
 <link href="styles/jquery-ui.css" rel="stylesheet" type="text/css" />
-<!--<script src="myscripts/saveFriesCards.js"></script>-->
-<!--<button onclick="saveTimeArcsData()">Save data for TimeArcs</button>-->
 
 <script src="myscripts/searchBox.js"></script>
 <!--Time axis goes from left (2005) to right (2014)<br>-->

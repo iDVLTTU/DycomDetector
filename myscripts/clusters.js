@@ -20,7 +20,7 @@ var forceSize = 150; // Max size of force layouts at the bottom
 
 var getColor3 = d3.scale.category10();
 var linkScale2 = d3.scale.linear()
-    .range([0.05, 0.3])
+    .range([0.03, 0.2])
     .domain([0, 10]);
 
 var allSVG = [];

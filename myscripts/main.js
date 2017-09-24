@@ -1,4 +1,12 @@
-//Constants for the SVG
+/* September 2017 
+ * Tommy Dang, Assistant professor, iDVL@TTU
+ * Long Nguyen, PhD student, iDVL@TTU
+ *
+ * THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED
+ * WARRANTY.  IN PARTICULAR, THE AUTHORS MAKE NO REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
+ * OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
+ */
+
 var margin = {top: 0, right: 0, bottom: 5, left: 0};
 var width = document.body.clientWidth - margin.left - margin.right;
 var height = 50 - margin.top - margin.bottom;
@@ -103,16 +111,23 @@ var links2List = {};
 // Replacing the silder value ******************
 var valueSlider =5;
     
+var query =  "http://127.0.0.1:1337/status?userID=pakistan";
+ new Promise(function(resolve) {
+  d3.json(query, function(d) { 
+   // debugger;
+    resolve(d) })
+});
 
-     //d3.tsv("data/americablog.tsv", function (error, data_) {
-    // d3.tsv("data/crooks_and_liars.tsv", function (error, data_) {
+
+    // d3.tsv("data/americablog.tsv", function (error, data_) {
+     d3.tsv("data/crooks_and_liars.tsv", function (error, data_) {
     // d3.tsv("data/emptywheel.tsv", function (error, data_) {
     // d3.tsv("data/esquire.tsv", function (error, data_) {
     // d3.tsv("data/factcheck.tsv", function (error, data_) {
     // d3.tsv("data/glenngreenwald.tsv", function (error, data_) {
-   // data_ d3.tsv("data/huffington.tsv", function (error, data_) {
+    //d3.tsv("data/huffington.tsv", function (error, data_) {
     //d3.tsv("data/propublica.tsv", function (error, data_) {
-d3.tsv("data/wikinews.tsv", function (error, data_) {
+//d3.tsv("data/wikinews.tsv", function (error, data_) {
 
     if (error) throw error;
     data = data_;

@@ -54,9 +54,6 @@ function computeMonthlyGraphs() {
             return i < 100;
         });
 
-        //  if (m==61)
-        //console.log("selectedSetNodeBy="+selectedSetNodeBy+" "+m+" arr="+arr2.length);
-
         var cut = 1;
         graphByMonths[m] = [];
         while (cut <= numCut) {
@@ -77,7 +74,6 @@ function computeMonthlyGraphs() {
 
                 termList[nod.name] = nod;// List of term to feed to TimeArcs in main.js
             }
-           // console.log(" m="+m+" nodes5="+nodes5.length);
             // *********** EDGES **************
             var links5 = [];
             var relationshipMax5 = 0;
@@ -151,14 +147,9 @@ function computeMonthlyGraphs() {
             updateSubLayout(graphByMonths[m][selectedCut].nodes, graphByMonths[m][selectedCut].links, m);
         }
     }
-
-
-    console.log("computeMonthlyGraphs 3");
 }
 
 function drawgraph2() {
-    console.log("Draw graph 2 month=" + lMonth);
-
     var startMonth = lMonth > numLens ? lMonth - numLens : lMonth;
     var endMonth = startMonth + numLens * 2 + 1;
     var breakCheck = false;
@@ -327,23 +318,26 @@ function drawgraph2() {
 
 
     var max = 1;
-    var min =  100000;
     for (var i=0;i<lNodes.length;i++){
         if (lNodes[i].measurement>max)
             max = lNodes[i].measurement;
-        if (lNodes[i].measurement<min)
-            min = lNodes[i].measurement;
     }
 
-
+    var rScale = d3.scale.linear()
+                    .range([0.2, 0.6])
+                    .domain([0, max]);    
     for (var i=0; i<allSVG.length;i++){
         var svg2 = allSVG[i];
         svg2.selectAll(".node5")
+            .transition().duration(500)
             .attr("r", function(d,i){
-                var rScale = d3.scale.linear()
-                    .range([0.3, 0.6])
-                    .domain([min, max]);    
-                return isNaN(rScale(d.measurement))? 1 : rScale(d.measurement);
+                if (startMonth<=d.m && d.m < endMonth){
+                    var r = isNaN(rScale(d.measurement))? 1 : rScale(d.measurement);
+                    console.log(d.measurement+" r="+r);
+                    return r;
+                }
+                else
+                    return 1; // min value of rScale
             })
     }
 
@@ -401,9 +395,10 @@ function drawgraph2() {
 
     // LINKs **********************************
     lLinks = [];
+    var maxRel = (relationshipMaxMax2>6) ? relationshipMaxMax2 : 6;
     var linkScale3 = d3.scale.linear()
-        .range([0.5, 6])
-        .domain([0, relationshipMaxMax2]);
+        .range([0.25, 3])
+        .domain([0, maxRel]);
     for (var m = startMonth; m < endMonth; m++) {
         var newCut = selectedCut;
         if (newCut<0){  // Best Q modularity selected
@@ -471,7 +466,6 @@ function computeMonthlyData(term) {
             mon.monthId = firstObj.monthId - 1;
             monthly.unshift(mon);
         }
-
         // Add another item
         var lastObj = monthly[monthly.length - 1];
         if (lastObj.monthId < numMonth - 1) {

@@ -12,9 +12,6 @@ var width = document.body.clientWidth - margin.left - margin.right;
 var height = 50 - margin.top - margin.bottom;
 
 
-
-//---End Insert------
-
 //Append a SVG to the body of the html page. Assign this SVG as an object to svg
 var svg = d3.select("body").append("svg")
     .attr("width", width)
@@ -26,13 +23,10 @@ var misTerms;
 var orgTerms;
 
 var data, data2;
-var minYear = 2005;
-var maxYear = 2015;
-var numMonth = 12 * (maxYear - minYear);
+var minYear;
+var maxYear;
+var numMonth;
 
-var sourceList = {};
-var numSource = {};
-var maxCount = {}; // contain the max frequency for 4 categories
 
 var nodes;
 var numNode, numNode2;
@@ -118,141 +112,73 @@ var query =  "http://127.0.0.1:1337/status?userID=pakistan";
     resolve(d) })
 });
 
+var listCategories = ["person","location","organization","miscellaneous"];
 
-    // d3.tsv("data/americablog.tsv", function (error, data_) {
-     d3.tsv("data/crooks_and_liars.tsv", function (error, data_) {
-    // d3.tsv("data/emptywheel.tsv", function (error, data_) {
-    // d3.tsv("data/esquire.tsv", function (error, data_) {
-    // d3.tsv("data/factcheck.tsv", function (error, data_) {
-    // d3.tsv("data/glenngreenwald.tsv", function (error, data_) {
-    //d3.tsv("data/huffington.tsv", function (error, data_) {
-    //d3.tsv("data/propublica.tsv", function (error, data_) {
+// d3.tsv("data/americablog.tsv", function (error, data_) {
+d3.tsv("data/crooks_and_liars.tsv", function (error, data_) {
+// d3.tsv("data/emptywheel.tsv", function (error, data_) {
+// d3.tsv("data/esquire.tsv", function (error, data_) {
+// d3.tsv("data/factcheck.tsv", function (error, data_) {
+// d3.tsv("data/glenngreenwald.tsv", function (error, data_) {
+//d3.tsv("data/huffington.tsv", function (error, data_) {
+//d3.tsv("data/propublica.tsv", function (error, data_) {
 //d3.tsv("data/wikinews.tsv", function (error, data_) {
-
     if (error) throw error;
     data = data_;
 
     terms = new Object();
     termMaxMax = 1;
+
+    minYear = 9999;
+    maxYear = 0;
     data.forEach(function (d) {
         d.source = d["source"];
         // Process date
         var curDate = Date.parse(d["time"]);
         d.date = new Date(d["time"]);
         var year = d.date.getFullYear();
-        var m = 12 * (year - minYear) + d.date.getMonth();
+        // Compute min and max years from the data
+        if (year<minYear)
+            minYear = year;
+        if (year>maxYear)
+            maxYear = year;
+        var m = 12 * year + d.date.getMonth();
         d.m = m;
-
-        if (year >= minYear && year <= maxYear) {
-            // Add source to sourceList
-            if (!sourceList[d.source])
-                sourceList[d.source] = 1;
-            else
-                sourceList[d.source]++;
-        }
-
-        if (d["person"] != "") {
-            var list = d["person"].split("|");
-            for (var i = 0; i < list.length; i++) {
-                var term = list[i];
-                d[term] = 1;
-                if (!terms[term]) {
-                    terms[term] = new Object();
-                    terms[term].max = 0;
-                    terms[term].maxMonth = -100;   // initialized negative
-                    terms[term].category = "person";
-                }
-                if (!terms[term][m])
-                    terms[term][m] = 1;
-                else {
-                    terms[term][m]++;
-                    if (terms[term][m] > terms[term].max) {
-                        terms[term].max = terms[term][m];
-                        terms[term].maxMonth = m;
-                        if (terms[term].max > termMaxMax)
-                            termMaxMax = terms[term].max;
-                    }
-                }
-            }
-        }
-
-        if (d["location"] != "" && d["location"] != 1) {
-            var list = d["location"].split("|");
-            for (var i = 0; i < list.length; i++) {
-                var term = list[i];
-                d[term] = 1;
-                if (!terms[term]) {
-                    terms[term] = new Object();
-                    terms[term].max = 0;
-                    terms[term].maxMonth = -100;   // initialized negative
-                    terms[term].category = "location";
-                }
-                if (!terms[term][m])
-                    terms[term][m] = 1;
-                else {
-                    terms[term][m]++;
-                    if (terms[term][m] > terms[term].max) {
-                        terms[term].max = terms[term][m];
-                        terms[term].maxMonth = m;
-                        if (terms[term].max > termMaxMax)
-                            termMaxMax = terms[term].max;
-
-                    }
-                }
-            }
-        }
-        if (d["organization"] != "" && d["organization"] != 1) {
-            var list = d["organization"].split("|");
-            for (var i = 0; i < list.length; i++) {
-                var term = list[i];
-                d[term] = 1;
-                if (!terms[term]) {
-                    terms[term] = new Object();
-                    terms[term].max = 0;
-                    terms[term].maxMonth = -100;   // initialized negative
-                    terms[term].category = "organization";
-                }
-                if (!terms[term][m])
-                    terms[term][m] = 1;
-                else {
-                    terms[term][m]++;
-                    if (terms[term][m] > terms[term].max) {
-                        terms[term].max = terms[term][m];
-                        terms[term].maxMonth = m;
-                        if (terms[term].max > termMaxMax)
-                            termMaxMax = terms[term].max;
-
-                    }
-                }
-            }
-        }
-        if (d["miscellaneous"] != "" && d["miscellaneous"] != 1) {
-            var list = d["miscellaneous"].split("|");
-            for (var i = 0; i < list.length; i++) {
-                var term = list[i];
-                d[term] = 1;
-                if (!terms[term]) {
-                    terms[term] = new Object();
-                    terms[term].max = 0;
-                    terms[term].maxMonth = -100;   // initialized negative
-                    terms[term].category = "miscellaneous";
-                }
-                if (!terms[term][m])
-                    terms[term][m] = 1;
-                else {
-                    terms[term][m]++;
-                    if (terms[term][m] > terms[term].max) {
-                        terms[term].max = terms[term][m];
-                        terms[term].maxMonth = m;
-                        if (terms[term].max > termMaxMax)
-                            termMaxMax = terms[term].max;
-                    }
-                }
-            }
-        }
+        
     });
-    console.log("DONE reading the input file = " + data.length);
-
+    // Update months
+    numMonth = 12*(maxYear - minYear);
+    data.forEach(function (d) {
+        d.m = d.m-12*minYear;
+        for (var cate=0; cate<listCategories.length;cate++){
+            var category = listCategories[cate];
+            if (d[category]!="" &&  d[category] != 1) {
+                var list = d[category].split("|");
+                for (var i = 0; i < list.length; i++) {
+                    var term = list[i];
+                    d[term] = 1;
+                    if (!terms[term]) {
+                        terms[term] = new Object();
+                        terms[term].max = 0;
+                        terms[term].maxMonth = -100;   // initialized negative
+                        terms[term].category = category;
+                    }
+                    if (!terms[term][d.m])
+                        terms[term][d.m] = 1;
+                    else {
+                        terms[term][d.m]++;
+                        if (terms[term][d.m] > terms[term].max) {
+                            terms[term].max = terms[term][d.m];
+                            terms[term].maxMonth = d.m;
+                            if (terms[term].max > termMaxMax)
+                                termMaxMax = terms[term].max;
+                        }
+                    }
+                }
+            }
+        }
+    });    
+    
     readTermsAndRelationships();
     console.log("DONE computing relationshipMaxMax=" + relationshipMaxMax);
 
@@ -396,8 +322,6 @@ function readTermsAndRelationships() {
         }
         return 0;
     });
-
-    console.log("termArray.length=" + termArray.length);
 
     numberInputTerms = termArray.length;
     console.log(termArray);
@@ -566,10 +490,6 @@ function computeNodes() {
             if (!nod.isConnectedMaxMonth)
                 nod.isConnectedMaxMonth = termArray3[i].maxMonth;
         }
-
-        if (!maxCount[nod.group] || nod.max > maxCount[nod.group])
-            maxCount[nod.group] = nod.max;
-
         if (termArray3[i].isConnected > 0)  // Only allow connected items
             nodes.push(nod);
     }

@@ -213,10 +213,7 @@ function drawgraph2() {
                 nod.betweenness=1;
             }
             nod.measurement = nod.fequency+nod.net+nod.weight+100*bet;
-
-            console.log(i+" "+nod.name+" betweenness "+nod.betweenness+" nod.measurement="+nod.measurement);
         }
-
     }
 
 
@@ -333,7 +330,6 @@ function drawgraph2() {
             .attr("r", function(d,i){
                 if (startMonth<=d.m && d.m < endMonth){
                     var r = isNaN(rScale(d.measurement))? 1 : rScale(d.measurement);
-                    console.log(d.measurement+" r="+r);
                     return r;
                 }
                 else

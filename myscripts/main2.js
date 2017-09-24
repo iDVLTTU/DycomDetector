@@ -373,8 +373,8 @@ function drawgraph2() {
     enter_.append("path")
         .attr("class", "layer3")
         .style("stroke", "#000")
-        .style("stroke-width", 0.5)
-        .style("stroke-opacity", 0.5)
+        .style("stroke-width", 0.1)
+        .style("stroke-opacity", 1)
         .style("fill-opacity", 0.3)
         .style("fill", function (d) {
             return getColor3(d.category);

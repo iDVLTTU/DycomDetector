@@ -129,7 +129,7 @@ function updateTimeLegend() {
             if (!isLensing)
                 return "1, 2";
             else
-                return i % 12 == 0 ? "3, 1" : "1, 2"
+                return i % 12 == 0 ? "3, 1" : "1, 3"
         })
         .style("stroke-opacity", function (d, i) {
             if (i % 12 == 0)

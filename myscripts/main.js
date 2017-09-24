@@ -106,12 +106,12 @@ var links2List = {};
 // Replacing the silder value ******************
 var valueSlider =5;
     
-var query =  "http://127.0.0.1:1337/status?userID=pakistan";
- new Promise(function(resolve) {
-  d3.json(query, function(d) { 
+//var query =  "http://127.0.0.1:1337/status?userID=pakistan";
+// new Promise(function(resolve) {
+//  d3.json(query, function(d) { 
    // debugger;
-    resolve(d) })
-});
+//    resolve(d) })
+//});
 
 var categories = ["person","location","organization","miscellaneous"];
 var getColor3 = d3.scale.category10();  // Colors of categories
@@ -127,8 +127,8 @@ for (var cate=0; cate<categories.length;cate++){ // This loop makes sure person 
 // d3.tsv("data/factcheck.tsv", function (error, data_) {
 // d3.tsv("data/glenngreenwald.tsv", function (error, data_) {
 //d3.tsv("data/huffington.tsv", function (error, data_) {
-d3.tsv("data/propublica.tsv", function (error, data_) {
-//d3.tsv("data/wikinews.tsv", function (error, data_) {
+//d3.tsv("data/propublica.tsv", function (error, data_) {
+d3.tsv("data/wikinews.tsv", function (error, data_) {
     if (error) throw error;
     data = data_;
 

@@ -4,7 +4,6 @@ var diameter = 1000,
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 // Add color legend
 
-var categories = ["person", "location", "organization", "miscellaneous"];
 var yTimeBox = 0;
     
 
@@ -50,7 +49,7 @@ function drawColorLegend() {
     // number of input terms
     svg.append("text")
         .attr("class", "nodeLegend")
-        .attr("x", xx - 6)
+        .attr("x", xx - 10)
         .attr("y", yy-17)
         .text(numberInputTerms + " terms of " + data.length + " blogs")
         .attr("dy", ".21em")
@@ -233,7 +232,7 @@ var roundConner = 4;
 var colorHighlight = "#fc8";
 var buttonColor = "#ddd";
 
-function drawLensingButton(){
+function drawControlPanel(){
     // Control panel on the left *********************
     var yControl = 80;
     var data =[{"id":1, "value":">=1"},{"id":2, "value":">=2"},{"id":3, "value":">=3"},{"id":4, "value":">=4"},{"id":5, "value":">=5"},{"id":"optimized", "value":"Best Q modularity"}];

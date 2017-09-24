@@ -18,7 +18,6 @@ var forceSize = 150; // Max size of force layouts at the bottom
  }
  }*/
 
-var getColor3 = d3.scale.category10();
 var linkScale2 = d3.scale.linear()
     .range([0.03, 0.2])
     .domain([0, 10]);
@@ -102,6 +101,18 @@ function updateSubLayout(nodes, links, m) {
         .start();
     //force.resume();
 
+
+    var group =  svg2.selectAll("path")
+        .data(groups)
+        .attr("d", groupPath)
+        .enter().append("path", "circle")
+        .style("fill", groupFill)
+        .style("stroke", groupFill)
+        .style("stroke-width", 1)
+        .style("stroke-linejoin", "round")
+        .style("opacity", .2);
+
+
     var link = svg2.selectAll(".link5")
         .data(force.links())
         .enter().append("line")
@@ -117,33 +128,25 @@ function updateSubLayout(nodes, links, m) {
         .attr("class", "node5")
         .attr("r", 0.5)
         .style("stroke", "#000")
-        .style("stroke-width", 0.05)
-        .style("stroke-opacity", 0.5)
-        // .style("fill-opacity",0.3)
+        .style("stroke-width", 0.02)
+        .style("stroke-opacity", 1)
         .style("fill", function (d) {
             return getColor3(d.category);
+        })
+        .on("mouseover", function(d){
+            showTip(d);
+        })
+        .on("mouseout", function(d){
+            hideTip(d);
         });
 
+       
+
     force.on("tick", function () {
-
-        node.attr("cx", function (d) {
-            return d.x;
-        })
-            .attr("cy", function (d) {
-                return d.y;
-            });
-        svg2.selectAll("path")
-            .data(groups)
-            .attr("d", groupPath)
-            .enter().append("path", "circle")
-            .style("fill", groupFill)
-            .style("stroke", groupFill)
-            .style("stroke-width", 1)
-            .style("stroke-linejoin", "round")
-            .style("opacity", .2)
-            .attr("d", groupPath);
-
+        node.attr("cx", function (d) { return d.x; })
+            .attr("cy", function (d) { return d.y; });    
     });
+
     force.on("end", function () {
             link.attr("x1", function (d) {
                 return d.source.x;
@@ -164,6 +167,7 @@ function updateSubLayout(nodes, links, m) {
                 .attr("cy", function (d) {
                     return d.y;
                 });
+            group.attr("d", groupPath);    
         }
     );
 }

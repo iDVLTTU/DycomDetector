@@ -16,6 +16,7 @@ var height = 50 - margin.top - margin.bottom;
 var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", 1400);
+svg.call(tip);  
 
 var personTerms;
 var locTerms;
@@ -38,7 +39,7 @@ var termArray, termArray2, termArray3;
 var relationship;
 var termMaxMax, termMaxMax2;
 var terms;
-var xStep = 179;
+var xStep = 170;
 var yScale;
 var linkScale;
 var searchTerm = "";
@@ -51,7 +52,7 @@ var lMonth = -lensingMul * 2;
 var oldLmonth = -1000; // use this variable to compare if we are lensing over a different month
 
 var coordinate = [0, 0];
-var XGAP_ = 17; // gap between months on xAxis
+var XGAP_; // gap between months on xAxis
 var numLens = 3;
 
 function xScale(m) {
@@ -112,16 +113,21 @@ var query =  "http://127.0.0.1:1337/status?userID=pakistan";
     resolve(d) })
 });
 
-var listCategories = ["person","location","organization","miscellaneous"];
+var categories = ["person","location","organization","miscellaneous"];
+var getColor3 = d3.scale.category10();  // Colors of categories
+for (var cate=0; cate<categories.length;cate++){ // This loop makes sure person is Blue ...
+    var category = categories[cate];
+    getColor3(category);
+}    
 
 // d3.tsv("data/americablog.tsv", function (error, data_) {
-d3.tsv("data/crooks_and_liars.tsv", function (error, data_) {
+// d3.tsv("data/crooks_and_liars.tsv", function (error, data_) {
 // d3.tsv("data/emptywheel.tsv", function (error, data_) {
 // d3.tsv("data/esquire.tsv", function (error, data_) {
 // d3.tsv("data/factcheck.tsv", function (error, data_) {
 // d3.tsv("data/glenngreenwald.tsv", function (error, data_) {
 //d3.tsv("data/huffington.tsv", function (error, data_) {
-//d3.tsv("data/propublica.tsv", function (error, data_) {
+d3.tsv("data/propublica.tsv", function (error, data_) {
 //d3.tsv("data/wikinews.tsv", function (error, data_) {
     if (error) throw error;
     data = data_;
@@ -148,10 +154,11 @@ d3.tsv("data/crooks_and_liars.tsv", function (error, data_) {
     });
     // Update months
     numMonth = 12*(maxYear - minYear);
+    XGAP_ = (width-xStep)/numMonth; // gap between months on xAxis
     data.forEach(function (d) {
         d.m = d.m-12*minYear;
-        for (var cate=0; cate<listCategories.length;cate++){
-            var category = listCategories[cate];
+        for (var cate=0; cate<categories.length;cate++){
+            var category = categories[cate];
             if (d[category]!="" &&  d[category] != 1) {
                 var list = d[category].split("|");
                 for (var i = 0; i < list.length; i++) {
@@ -182,14 +189,15 @@ d3.tsv("data/crooks_and_liars.tsv", function (error, data_) {
     readTermsAndRelationships();
     console.log("DONE computing relationshipMaxMax=" + relationshipMaxMax);
 
-    // 2017. this function is main2.js
-    computeMonthlyGraphs();
-
+    
     drawColorLegend();
     drawTimeLegend();
 
     drawTimeBox(); // This box is for brushing
-    drawLensingButton();
+    drawControlPanel();
+
+    // 2017. this function is main2.js
+    computeMonthlyGraphs();
 
     computeNodes();
     computeLinks();

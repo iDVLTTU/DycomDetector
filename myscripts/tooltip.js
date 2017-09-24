@@ -40,11 +40,23 @@ function showTip(d) {
         .transition().duration(timeDelay)  
         .style("fill-opacity", function(d2){ return (d.name == d2.name) ? 0.8 : 0.08; })
         .style("stroke-opacity", function(d2){ return (d.name == d2.name) ? 1 : 0; });  
+       
+       var nameList = "";
        svg.selectAll(".linkArc3") 
         .transition().duration(timeDelay)
           .style("stroke-opacity", function(d2){
-              return (d.name == d2.source.name || d.name == d2.target.name) ? 1 : 0.1;
-             });    
+            // Create list of name
+            if (d.name == d2.source.name || d.name == d2.target.name) {
+              if (nameList.indexOf(d2.source.name)<0)
+                nameList+= "__"+d2.source.name;
+              if (nameList.indexOf(d2.target.name)<0)
+                nameList+= "_"+d2.target.name+"_";
+            }
+            return (d.name == d2.source.name || d.name == d2.target.name) ? 1 : 0.1;
+           });   
+      svg.selectAll(".nodeText3")  
+        .transition().duration(timeDelay)      
+        .style("fill-opacity", function(d2){ return (nameList.indexOf("_"+d2.name+"_")>=0) ? 1 : 0.1; });  
   }
   tip.html(function(d) {
     var str ="";
@@ -98,9 +110,12 @@ function hideTip(d) {
         .transition().duration(100)
         .style("fill-opacity", 0.3)
         .style("stroke-opacity", 1);  
-   svg.selectAll(".linkArc3") 
+  svg.selectAll(".linkArc3") 
         .transition().duration(100)
-        .style("stroke-opacity", 0.5);              
+        .style("stroke-opacity", 0.5);     
+  svg.selectAll(".nodeText3")  
+        .transition().duration(timeDelay)      
+        .style("fill-opacity", 1);       
   tip.hide();
 }  
 

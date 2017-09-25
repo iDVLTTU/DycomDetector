@@ -20,7 +20,6 @@ function setCut(cutvalue){
         selectedCut = +selectedvalue - 1;
         selectHistogram();
     }
-   // cleanHistogram();
      drawgraph2();
 }
 

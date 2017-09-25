@@ -7,8 +7,10 @@
  */
 
 
-var graphByMonths = [];
+var topNumber = 200;
+var top200terms = {}; // top terms from input data
 var termList = {}; // List of term to feed to TimeArcs in main.js
+var graphByMonths = [];
 var lNodes, lLinks;  // Nodes in the lensing month
 var numCut = 5;
 var cutOffvalue=[];
@@ -20,7 +22,7 @@ function computeMonthlyGraphs() {
         var arr = [];
         for (var i = 0; i < termArray.length; i++) {
             var att = termArray[i].term;
-            if (terms[att][m] && att.length >= 2) {  // Term contains at least 2 characters
+            if (terms[att][m]) {  
                 var obj = new Object();
                 var previous = 0;
                 if (terms[att][m - 1])
@@ -98,14 +100,12 @@ function computeMonthlyGraphs() {
             }
 
 
+
             var tempnodes = nodes5.filter(function (d, i) {
                 return d.isConnected;
             });
             var templinks = links5;
-            if (tempnodes.length == 0 && templinks.length == 0) {
-               // break;
-            }
-
+           
             var graph = {};
             graph.nodes = tempnodes;
             graph.links = templinks;
@@ -349,7 +349,7 @@ function drawgraph2() {
 
     var yScale3 = d3.scale.linear()
         .range([0, 14])
-        .domain([0, termMaxMax2]);
+        .domain([0, termMax]);
     var area3 = d3.svg.area()
         .interpolate("basic")
         .x(function (d) {
@@ -391,9 +391,9 @@ function drawgraph2() {
 
     // LINKs **********************************
     lLinks = [];
-    var maxRel = (relationshipMaxMax2>6) ? relationshipMaxMax2 : 6;
+    var maxRel = (relationshipMax>6) ? relationshipMax : 6;
     var linkScale3 = d3.scale.linear()
-        .range([0.25, 3])
+        .range([0.25, 4])
         .domain([0, maxRel]);
     for (var m = startMonth; m < endMonth; m++) {
         var newCut = selectedCut;
@@ -415,7 +415,7 @@ function drawgraph2() {
         .style("stroke-width", function (d) {
             return linkScale3(d.count);
         })
-        .style("stroke-opacity", 0.5)
+        .style("stroke-opacity", 0.6)
         .attr("d", linkArc3);
 
     svg.selectAll(".nodeText3").remove();
@@ -426,9 +426,11 @@ function drawgraph2() {
     var enterText = updateText.enter();
     enterText.append("text")
         .attr("class", "nodeText3")
-        .style("fill", "#000000")
+        .style("fill", function (d) {
+            return getColor3(d.category);
+        })
         .style("text-anchor", "end")
-        .style("text-shadow", "1px 1px 0 rgba(255, 255, 255, 0.6")
+        .style("text-shadow", "1px 1px 0 rgba(255, 255, 255, 0.9")
         //.attr("x", xStep-2)   show text on the left side
         .attr("x", function (d) {
             return xStep + xScale(d.m) - 2;    // x position is at the arcs

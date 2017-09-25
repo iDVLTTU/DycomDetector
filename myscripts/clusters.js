@@ -117,6 +117,7 @@ function updateSubLayout(nodes, links, m) {
         .data(force.links())
         .enter().append("line")
         .attr("class", "link5")
+        .style("stroke-opacity", 0.6)
         .style("stroke", "#000")
         .style("stroke-width", function (d) {
             return linkScale2(d.count);

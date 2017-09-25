@@ -30,14 +30,13 @@ var numMonth;
 
 
 var nodes;
-var numNode, numNode2;
+var numNode;
 
 var link;
-var links;
 var linkArcs;
 var termArray, termArray2, termArray3;
 var relationship;
-var termMaxMax, termMaxMax2;
+var termMax=0;
 var terms;
 var xStep = 170;
 var yScale;
@@ -94,14 +93,9 @@ var area = d3.svg.area()
 
 var optArray = [];   // FOR search box
 
-var numberInputTerms = 0;
 var listMonth;
 
 
-var nodes2 = [];
-var links2 = [];
-var nodes2List = {};
-var links2List = {};
 
 // Replacing the silder value ******************
 var valueSlider =5;
@@ -133,8 +127,6 @@ d3.tsv("data/wikinews.tsv", function (error, data_) {
     data = data_;
 
     terms = new Object();
-    termMaxMax = 1;
-
     minYear = 9999;
     maxYear = 0;
     data.forEach(function (d) {
@@ -177,8 +169,6 @@ d3.tsv("data/wikinews.tsv", function (error, data_) {
                         if (terms[term][d.m] > terms[term].max) {
                             terms[term].max = terms[term][d.m];
                             terms[term].maxMonth = d.m;
-                            if (terms[term].max > termMaxMax)
-                                termMaxMax = terms[term].max;
                         }
                     }
                 }
@@ -187,7 +177,7 @@ d3.tsv("data/wikinews.tsv", function (error, data_) {
     });    
     
     readTermsAndRelationships();
-    console.log("DONE computing relationshipMaxMax=" + relationshipMaxMax);
+    console.log("DONE computing relationshipMax=" + relationshipMax);
 
     
     drawColorLegend();
@@ -196,14 +186,11 @@ d3.tsv("data/wikinews.tsv", function (error, data_) {
     drawTimeBox(); // This box is for brushing
     drawControlPanel();
 
+
     // 2017. this function is main2.js
     computeMonthlyGraphs();
 
-    computeNodes();
-    computeLinks();
-
-
-    updateTransition(1);
+    updateTransition();
 
     for (var i = 0; i < termArray.length / 10; i++) {
         optArray.push(termArray[i].term);
@@ -241,7 +228,7 @@ function readTermsAndRelationships() {
         if (!searchTerm || searchTerm == "") {
             return d;
         }
-        else if (d[searchTerm])
+        else if (d[searchTerm])  // data2 contain the row which contains searched term
             return d;
     });
 
@@ -275,10 +262,7 @@ function readTermsAndRelationships() {
     removeList["dismantle roe"] = 1;
     removeList["huffington post"] = 1;
 
-
     termArray = [];
-    var nodesMonth = [];
-
     for (var att in terms) {
         var e = {};
         e.term = att;
@@ -303,22 +287,15 @@ function readTermsAndRelationships() {
         e.maxMonth = maxMonth;
         e.category = terms[att].category;
 
-
-
         if (e.term == searchTerm) {
             e.max = 10000;
             e.isSearchTerm = 1;
         }
-
         else if (searchTerm && searchTerm != "" && selected[e.term] && selected[e.term].isSelected) {
             e.max = 5000 + selected[e.term].isSelected;
-            //   console.log("e.term = "+e.term+" e.max =" +e.max );
         }
 
-        // if (!e.max && e.max!=0)
-        //     console.log("What the e.term = "+e.term+" e.max =" +e.max );
-
-        if (e.max > 2)    // Only get terms with some increase
+        if (e.max > 2 && e.term.length>2)    // Only get terms with some increase ************** with TEXT
             termArray.push(e);
     }
     termArray.sort(function (a, b) {
@@ -331,8 +308,7 @@ function readTermsAndRelationships() {
         return 0;
     });
 
-    numberInputTerms = termArray.length;
-    console.log(termArray);
+    /*console.log(termArray);
     personTerms = 0;
     locTerms = 0;
     misTerms = 0;
@@ -351,56 +327,60 @@ function readTermsAndRelationships() {
             misTerms++;
 
     }
-
     console.log(personTerms + " terms of " + "Person");
     console.log(locTerms + " terms of " + "location");
     console.log(orgTerms + " terms of " + "organization");
-    console.log(misTerms + " terms of " + "miscellaneous");
+    console.log(misTerms + " terms of " + "miscellaneous");*/
 
 
-        // Compute relationship **********************************************************
-        numNode = Math.min(40, termArray.length);
-        numNode2 = Math.min(numNode*3, termArray.length);
-        var selectedTerms = {};
-        for (var i=0; i<numNode2;i++){
-           selectedTerms[termArray[i].term] = termArray[i].max;
+    // Compute relationship **********************************************************
+    numNode = Math.min(topNumber, termArray.length);
+    for (var i=0; i<numNode;i++){
+       top200terms[termArray[i].term] = {};
+       top200terms[termArray[i].term].termEntry = termArray[i];  // top200terms is defined in main2.js
+    }
+
+    // compute the term frequency
+    termMax = 0;
+    for (var i = 0; i < numNode; i++) {
+        for (var m = 0; m < numMonth; m++) {
+            var mon = new Object();
+            if (terms[termArray[i].term][m]) {
+                mon.value = terms[termArray[i].term][m];
+                if (mon.value > termMax)
+                    termMax = mon.value;
+            }
         }
-        
-
-        relationship ={};
-        relationshipMaxMax =0;
-        data2.forEach(function(d) { 
-            var year = d.date.getFullYear();
-            if (year>=minYear && year<=maxYear){
-                var m = d.m;
-                for (var term1 in d) {
-                    if (selectedTerms[term1]){   // if the term is in the selected 100 terms
-                        for (var term2 in d) {
-                            if (selectedTerms[term2]){   // if the term is in the selected 100 terms
-                                if (!relationship[term1+"__"+term2]){
-                                    relationship[term1+"__"+term2] = new Object();
-                                    relationship[term1+"__"+term2].max = 1;
-                                    relationship[term1+"__"+term2].maxMonth =m;
-                                }    
-                                if (!relationship[term1+"__"+term2][m])
-                                    relationship[term1+"__"+term2][m] = 1;
-                                else{
-                                    relationship[term1+"__"+term2][m]++;
-                                    if (relationship[term1+"__"+term2][m]>relationship[term1+"__"+term2].max){
-                                        relationship[term1+"__"+term2].max = relationship[term1+"__"+term2][m];
-                                        relationship[term1+"__"+term2].maxMonth =m; 
-                                        
-                                        if (relationship[term1+"__"+term2].max>relationshipMaxMax) // max over time
-                                            relationshipMaxMax = relationship[term1+"__"+term2].max;
-                                    }  
-                                }    
-
-                            }
-                        }
+    }
+    
+    relationship ={};
+    relationshipMax =0;
+    data2.forEach(function(d) { 
+        var m = d.m;
+        for (var term1 in d) {
+            if (top200terms[term1]){   // if the term is in the selected 100 terms
+                for (var term2 in d) {
+                    if (top200terms[term2]){   // if the term is in the selected 100 terms
+                        if (!relationship[term1+"__"+term2]){
+                            relationship[term1+"__"+term2] = new Object();
+                            relationship[term1+"__"+term2].max = 1;
+                            relationship[term1+"__"+term2].maxMonth =m;
+                        }    
+                        if (!relationship[term1+"__"+term2][m])
+                            relationship[term1+"__"+term2][m] = 1;
+                        else{
+                            relationship[term1+"__"+term2][m]++;
+                            if (relationship[term1+"__"+term2][m]>relationship[term1+"__"+term2].max){
+                                relationship[term1+"__"+term2].max = relationship[term1+"__"+term2][m];
+                                relationship[term1+"__"+term2].maxMonth =m;  
+                                if (relationship[term1+"__"+term2].max>relationshipMax) // max over time
+                                    relationshipMax = relationship[term1+"__"+term2].max;
+                            }  
+                        }    
                     }
                 }
             }
-
+        }
     });
 }
 
@@ -409,7 +389,6 @@ function computeConnectivity(a, num, cut) {
         a[i].isConnected = -100;
         a[i].isConnectedMaxMonth = a[i].maxMonth;
     }
-
     for (var i = 0; i < num; i++) {
         var term1 = a[i].term;
         for (var j = i + 1; j < num; j++) {
@@ -432,138 +411,6 @@ function computeConnectivity(a, num, cut) {
                 if (relationship[term2 + "__" + term1].max > a[j].isConnected) {
                     a[j].isConnected = relationship[term2 + "__" + term1].max;
                     a[j].isConnectedMaxMonth = relationship[term1 + "__" + term2].maxMonth;
-                }
-            }
-        }
-    }
-}
-
-function computeNodes() {
-    termArray2 = [];
-    for (var i = 0; i < termArray.length; i++) {
-        if (termList[termArray[i].term] != undefined)  // Filter the terms from force layouts in main2.js
-            termArray2.push(termArray[i])
-        if (termArray2.length >= 1000) break;        // Skip variables in the main screen since they are not important
-    }
-    var cut = valueSlider;
-    computeConnectivity(termArray2, termArray2.length, cut);
-
-
-    termArray3 = [];
-    for (var i = 0; i < termArray2.length; i++) {
-        if (termArray2[i].isSearchTerm || termArray2[i].isConnected > 0)
-            termArray3.push(termArray2[i]);
-    }
-
-    termArray3.sort(function (a, b) {
-        if (a.isConnected < b.isConnected) {
-            return 1;
-        }
-        else if (a.isConnected > b.isConnected) {
-            return -1;
-        }
-        else {
-            if (a.max < b.max) {
-                return 1;
-            }
-            if (a.max > b.max) {
-                return -1;
-            }
-            return 0;
-        }
-    });
-
-    computeConnectivity(termArray3, termArray3.length, cut);
-
-    nodes = [];
-    for (var i = 0; i < termArray3.length && i < numNode; i++) {
-        var nod = new Object();
-        nod.id = i;
-        nod.group = termArray3[i].category;
-        nod.name = termArray3[i].term;
-        nod.max = termArray3[i].max;
-        var maxMonthRelationship = termArray3[i].maxMonth;
-        nod.isConnectedMaxMonth = termArray3[i].isConnectedMaxMonth;
-        nod.maxMonth = termArray3[i].isConnectedMaxMonth;
-        nod.month = termArray3[i].isConnectedMaxMonth;
-        nod.x = xStep + xScale(nod.month);   // 2016 initialize x position
-        nod.y = height / 2;
-        if (nodeY_byName[nod.name] != undefined)
-            nod.y = nodeY_byName[nod.name];
-
-        if (termArray3[i].isSearchTerm) {
-            nod.isSearchTerm = 1;
-            if (!nod.month)
-                nod.month = termArray3[i].maxMonth;
-            if (!nod.isConnectedMaxMonth)
-                nod.isConnectedMaxMonth = termArray3[i].maxMonth;
-        }
-        if (termArray3[i].isConnected > 0)  // Only allow connected items
-            nodes.push(nod);
-    }
-    numNode = nodes.length;
-
-    console.log("numNode=" + numNode + " termArray3.length=" + termArray3.length);
-
-
-    // compute the monthly data
-    termMaxMax2 = 0;
-    for (var i = 0; i < numNode; i++) {
-        nodes[i].monthly = [];
-        for (var m = 0; m < numMonth; m++) {
-            var mon = new Object();
-            if (terms[nodes[i].name][m]) {
-                mon.value = terms[nodes[i].name][m];
-                if (mon.value > termMaxMax2)
-                    termMaxMax2 = mon.value;
-                mon.monthId = m;
-                mon.yNode = nodes[i].y;
-                nodes[i].monthly.push(mon);
-            }
-        }
-        // Add another item to first
-        if (nodes[i].monthly.length > 0) {
-            var firstObj = nodes[i].monthly[0];
-            if (firstObj.monthId > 0) {
-                var mon = new Object();
-                mon.value = 0;
-                mon.monthId = firstObj.monthId - 1;
-                mon.yNode = firstObj.yNode;
-                nodes[i].monthly.unshift(mon);
-            }
-
-            // Add another item
-            var lastObj = nodes[i].monthly[nodes[i].monthly.length - 1];
-            if (lastObj.monthId < numMonth - 1) {
-                var mon = new Object();
-                mon.value = 0;
-                mon.monthId = lastObj.monthId + 1;
-                mon.yNode = lastObj.yNode;
-                nodes[i].monthly.push(mon);
-            }
-        }
-    }
-
-    // Construct an array of only parent nodes
-    pNodes = new Array(numNode); //nodes;
-    for (var i = 0; i < numNode; i++) {
-        pNodes[i] = nodes[i];
-    }
-}
-
-function computeLinks() {
-    links = [];
-    relationshipMaxMax2 = 1;
-    for (var i = 0; i < numNode; i++) {
-        var term1 = nodes[i].name;
-        for (var j = i + 1; j < numNode; j++) {
-            var term2 = nodes[j].name;
-            if (relationship[term1 + "__" + term2] && relationship[term1 + "__" + term2].max >= valueSlider) {
-                for (var m = 1; m < numMonth; m++) {
-                    if (relationship[term1 + "__" + term2][m] && relationship[term1 + "__" + term2][m] >= valueSlider) {              
-                        if (relationship[term1 + "__" + term2][m] > relationshipMaxMax2)
-                            relationshipMaxMax2 = relationship[term1 + "__" + term2][m];
-                    }
                 }
             }
         }
@@ -607,28 +454,6 @@ function searchNode() {
     recompute();
 }
 
-// check if a node for a month m already exist.
-function isContainedChild(a, m) {
-    if (a) {
-        for (var i = 0; i < a.length; i++) {
-            var index = a[i];
-            if (nodes[index].month == m)
-                return i;
-        }
-    }
-    return -1;
-}
-
-// check if a node for a month m already exist.
-function isContainedInteger(a, m) {
-    if (a) {
-        for (var i = 0; i < a.length; i++) {
-            if (a[i] == m)
-                return i;
-        }
-    }
-    return -1;
-}
 
 function linkArc(d) {
     var dx = d.target.x - d.source.x,
@@ -642,7 +467,7 @@ function linkArc(d) {
 
 
 
-function updateTransition(durationTime) {
+function updateTransition() {
     updateTimeLegend();
-    updateTimeBox(durationTime);
+    updateTimeBox();
 }

@@ -51,7 +51,7 @@ function drawColorLegend() {
         .attr("class", "nodeLegend")
         .attr("x", xx - 10)
         .attr("y", yy-17)
-        .text(numberInputTerms + " terms of " + data.length + " blogs")
+        .text(termArray.length + " terms of " + data.length + " blogs")
         .attr("dy", ".21em")
         .attr("font-family", "sans-serif")
         .attr("font-size", "13px")
@@ -200,8 +200,8 @@ function drawTimeBox() {
         });
 }
 
-function updateTimeBox(durationTime) {
-    svg.selectAll(".timeLegendText").transition().duration(durationTime)
+function updateTimeBox() {
+    svg.selectAll(".timeLegendText")
         .style("fill-opacity", function (d, i) {
             if (i % 12 == 0)
                 return 1;
@@ -256,10 +256,6 @@ function drawControlPanel(){
         .text('Select edge weight');
 
     // Control panel on the left *********************
-    //svg.append('rect').attr("class", "rect2").attr('x',1).attr('y',yControl+83).attr('width',150).attr('height',60).style("stroke","black").attr("stroke-width", 0.5).style('fill',"#ddd").attr("rx", roundConner)
-    //    .attr("ry", roundConner)
-    
-
     var select = d3.select('body').append('select').attr('id','sdropdown').on('change',function () {
         selectValue = d3.select('#sdropdown').property('value');
         setCut(selectValue);

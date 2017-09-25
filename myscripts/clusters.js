@@ -152,6 +152,6 @@ function updateSubLayout(nodes, links, m) {
             .attr("y1", function (d) { return d.source.y;})
             .attr("x2", function (d) { return d.target.x; })
             .attr("y2", function (d) { return d.target.y; });
-            group.attr("d", groupPath);         
+            group.attr("d", groupPath);           
      });
 }

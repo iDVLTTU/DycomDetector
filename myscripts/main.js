@@ -11,46 +11,30 @@ var margin = {top: 0, right: 0, bottom: 5, left: 0};
 var width = document.body.clientWidth - margin.left - margin.right;
 var height = 50 - margin.top - margin.bottom;
 
-
 //Append a SVG to the body of the html page. Assign this SVG as an object to svg
 var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", 1400);
 svg.call(tip);  
 
-var personTerms;
-var locTerms;
-var misTerms;
-var orgTerms;
+var personTerms, locTerms, misTerms, orgTerms;
 
 var data, data2;
-var minYear;
-var maxYear;
-var numMonth;
-
+var minYear, maxYear, numMonth;
 
 var nodes;
 var numNode;
 
-var link;
-var linkArcs;
-var termArray, termArray2, termArray3;
-var relationship;
-var termMax=0;
+var termArray, relationship, termMax=0;
 var terms;
 var xStep = 170;
-var yScale;
-var linkScale;
 var searchTerm = "";
-
-var nodeY_byName = {};
 
 var isLensing = false;
 var lensingMul = 7;
 var lMonth = -lensingMul * 2;
 var oldLmonth = -1000; // use this variable to compare if we are lensing over a different month
 
-var coordinate = [0, 0];
 var XGAP_; // gap between months on xAxis
 var numLens = 3;
 
@@ -118,9 +102,9 @@ for (var cate=0; cate<categories.length;cate++){ // This loop makes sure person 
 // d3.tsv("data/crooks_and_liars.tsv", function (error, data_) {
 // d3.tsv("data/emptywheel.tsv", function (error, data_) {
 // d3.tsv("data/esquire.tsv", function (error, data_) {
- d3.tsv("data/factcheck.tsv", function (error, data_) {
+// d3.tsv("data/factcheck.tsv", function (error, data_) {
 // d3.tsv("data/glenngreenwald.tsv", function (error, data_) {
-//d3.tsv("data/huffington.tsv", function (error, data_) {
+d3.tsv("data/huffington.tsv", function (error, data_) {
 //d3.tsv("data/propublica.tsv", function (error, data_) {
 //d3.tsv("data/wikinews.tsv", function (error, data_) {
     if (error) throw error;
@@ -203,27 +187,9 @@ for (var cate=0; cate<categories.length;cate++){ // This loop makes sure person 
     });
 });
 
-function recompute() {
-    var bar = document.getElementById('progBar'),
-        fallback = document.getElementById('downloadProgress'),
-        loaded = 0;
-
-    var load = function () {
-        loaded += 1;
-        bar.value = loaded;
-
-        /* The below will be visible if the progress tag is not supported */
-        $(fallback).empty().append("HTML5 progress tag not supported: ");
-        $('#progUpdate').empty().append(loaded + "% loaded");
-
-        if (loaded == 100) {
-            clearInterval(beginLoad);
-            $('#progUpdate').empty().append("Complete");
-        }
-    };
-}
 
 function readTermsAndRelationships() {
+    console.log("readTermsAndRelationships");
     data2 = data.filter(function (d, i) {
         if (!searchTerm || searchTerm == "") {
             return d;
@@ -388,12 +354,37 @@ $('#btnUpload').click(function () {
 
 function searchNode() {
     searchTerm = document.getElementById('search').value;
-    valueSlider = 2;
-    handle.attr("cx", xScaleSlider(valueSlider));
-
     recompute();
 }
 
+function recompute() {
+    var bar = document.getElementById('progBar'),
+        fallback = document.getElementById('downloadProgress'),
+        loaded = 0;
+        
+    var load = function () {
+        loaded += 5;
+        bar.value = loaded;
+        /* The below will be visible if the progress tag is not supported */
+        $(fallback).empty().append("HTML5 progress tag not supported: ");
+        $('#progUpdate').empty().append(loaded + "% loaded");
+
+        if (loaded == 100) {
+            clearInterval(beginLoad);
+            $('#progUpdate').empty().append("Complete");
+        }
+    };
+
+
+    var beginLoad = setInterval(function () {
+        load();
+    }, 1);
+
+    
+    readTermsAndRelationships();
+    computeMonthlyGraphs();
+    updateTransition();
+}
 
 function updateTransition() {
     updateTimeLegend();

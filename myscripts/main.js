@@ -118,11 +118,11 @@ for (var cate=0; cate<categories.length;cate++){ // This loop makes sure person 
 // d3.tsv("data/crooks_and_liars.tsv", function (error, data_) {
 // d3.tsv("data/emptywheel.tsv", function (error, data_) {
 // d3.tsv("data/esquire.tsv", function (error, data_) {
-// d3.tsv("data/factcheck.tsv", function (error, data_) {
+ d3.tsv("data/factcheck.tsv", function (error, data_) {
 // d3.tsv("data/glenngreenwald.tsv", function (error, data_) {
 //d3.tsv("data/huffington.tsv", function (error, data_) {
 //d3.tsv("data/propublica.tsv", function (error, data_) {
-d3.tsv("data/wikinews.tsv", function (error, data_) {
+//d3.tsv("data/wikinews.tsv", function (error, data_) {
     if (error) throw error;
     data = data_;
 
@@ -308,36 +308,10 @@ function readTermsAndRelationships() {
         return 0;
     });
 
-    /*console.log(termArray);
-    personTerms = 0;
-    locTerms = 0;
-    misTerms = 0;
-    orgTerms = 0;
-    for(i = 0;i <numberInputTerms; i++){
-        if(termArray[i].category == "organization"){
-            orgTerms++;
-        }
-        else if(termArray[i].category == "person"){
-            personTerms++;
-        }
-        else if(termArray[i].category == "location"){
-            locTerms++;
-        }
-        else
-            misTerms++;
-
-    }
-    console.log(personTerms + " terms of " + "Person");
-    console.log(locTerms + " terms of " + "location");
-    console.log(orgTerms + " terms of " + "organization");
-    console.log(misTerms + " terms of " + "miscellaneous");*/
-
-
     // Compute relationship **********************************************************
     numNode = Math.min(topNumber, termArray.length);
     for (var i=0; i<numNode;i++){
-       top200terms[termArray[i].term] = {};
-       top200terms[termArray[i].term].termEntry = termArray[i];  // top200terms is defined in main2.js
+       top200terms[termArray[i].term] = termArray[i];  // top200terms is defined in main2.js
     }
 
     // compute the term frequency
@@ -384,39 +358,6 @@ function readTermsAndRelationships() {
     });
 }
 
-function computeConnectivity(a, num, cut) {
-    for (var i = 0; i < num; i++) {
-        a[i].isConnected = -100;
-        a[i].isConnectedMaxMonth = a[i].maxMonth;
-    }
-    for (var i = 0; i < num; i++) {
-        var term1 = a[i].term;
-        for (var j = i + 1; j < num; j++) {
-            var term2 = a[j].term;
-            if (relationship[term1 + "__" + term2] && relationship[term1 + "__" + term2].max >= cut) {
-                if (relationship[term1 + "__" + term2].max > a[i].isConnected) {
-                    a[i].isConnected = relationship[term1 + "__" + term2].max;
-                    a[i].isConnectedMaxMonth = relationship[term1 + "__" + term2].maxMonth;
-                }
-                if (relationship[term1 + "__" + term2].max > a[j].isConnected) {
-                    a[j].isConnected = relationship[term1 + "__" + term2].max;
-                    a[j].isConnectedMaxMonth = relationship[term1 + "__" + term2].maxMonth;
-                }
-            }
-            else if (relationship[term2 + "__" + term1] && relationship[term2 + "__" + term1].max >= cut) {
-                if (relationship[term2 + "__" + term1].max > a[i].isConnected) {
-                    a[i].isConnected = relationship[term2 + "__" + term1].max;
-                    a[i].isConnectedMaxMonth = relationship[term1 + "__" + term2].maxMonth;
-                }
-                if (relationship[term2 + "__" + term1].max > a[j].isConnected) {
-                    a[j].isConnected = relationship[term2 + "__" + term1].max;
-                    a[j].isConnectedMaxMonth = relationship[term1 + "__" + term2].maxMonth;
-                }
-            }
-        }
-    }
-}
-
 
 $('#btnUpload').click(function () {
     var bar = document.getElementById('progBar'),
@@ -445,7 +386,6 @@ $('#btnUpload').click(function () {
 });
 
 
-
 function searchNode() {
     searchTerm = document.getElementById('search').value;
     valueSlider = 2;
@@ -453,18 +393,6 @@ function searchNode() {
 
     recompute();
 }
-
-
-function linkArc(d) {
-    var dx = d.target.x - d.source.x,
-        dy = d.target.y - d.source.y,
-        dr = Math.sqrt(dx * dx + dy * dy) / 2;
-    if (d.source.y < d.target.y)
-        return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr * 1.2 + " 0 0,1 " + d.target.x + "," + d.target.y;
-    else
-        return "M" + d.target.x + "," + d.target.y + "A" + dr + "," + dr * 1.2 + " 0 0,1 " + d.source.x + "," + d.source.y;
-}
-
 
 
 function updateTransition() {

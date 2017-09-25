@@ -15,13 +15,23 @@ var lNodes, lLinks;  // Nodes in the lensing month
 var numCut = 5;
 var cutOffvalue=[];
 
+var maxRel =  10;   // for scaling, if count > 6 the link will looks similar to 6
+var linkScale3 = function (count) {
+    var scale = d3.scale.linear()
+                    .range([0.1, 2.5])
+                    .domain([0, maxRel]);
+    var count2 = (count>maxRel) ? maxRel : count;  // for scaling, if count > maxRel the link will looks similar to 6                       
+    return  scale(count2);   
+}        
+        
+
 function computeMonthlyGraphs() {
     console.log("computeMonthlyGraphs");
     allSVG = []; // all SVG in clusters.js
     for (var m = 1; m < numMonth; m++) {
         var arr = [];
-        for (var i = 0; i < termArray.length; i++) {
-            var att = termArray[i].term;
+        for (var att in top200terms) {
+           // var att = termArray[i].term;
             if (terms[att][m]) {  
                 var obj = new Object();
                 var previous = 0;
@@ -31,7 +41,7 @@ function computeMonthlyGraphs() {
                 obj.term = att;
                 obj.net = net;
                 obj.count = terms[att][m];
-                obj.category = termArray[i].category;
+                obj.category = top200terms[att].category;
                 obj.m = m;
                 arr.push(obj);
             }
@@ -53,7 +63,7 @@ function computeMonthlyGraphs() {
             return 0;
         });
         var arr2 = arr.filter(function (d, i) {
-            return i < 100;
+            return i < 40;
         });
 
         var cut = 1;
@@ -321,15 +331,15 @@ function drawgraph2() {
     }
 
     var rScale = d3.scale.linear()
-                    .range([0.2, 0.6])
-                    .domain([0, max]);    
+                    .range([0.1, 0.5])
+                    .domain([0, Math.sqrt(max)]);    
     for (var i=0; i<allSVG.length;i++){
         var svg2 = allSVG[i];
         svg2.selectAll(".node5")
             .transition().duration(500)
             .attr("r", function(d,i){
                 if (startMonth<=d.m && d.m < endMonth){
-                    var r = isNaN(rScale(d.measurement))? 1 : rScale(d.measurement);
+                    var r = isNaN(rScale(d.measurement))? 0.1 : rScale(Math.sqrt(d.measurement));
                     return r;
                 }
                 else
@@ -391,10 +401,6 @@ function drawgraph2() {
 
     // LINKs **********************************
     lLinks = [];
-    var maxRel = (relationshipMax>6) ? relationshipMax : 6;
-    var linkScale3 = d3.scale.linear()
-        .range([0.25, 4])
-        .domain([0, maxRel]);
     for (var m = startMonth; m < endMonth; m++) {
         var newCut = selectedCut;
         if (newCut<0){  // Best Q modularity selected

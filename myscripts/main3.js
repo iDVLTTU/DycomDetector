@@ -263,7 +263,6 @@ function drawTextClouds(yTextClouds) {
     var enterText = updateText.enter();
     enterText.append("text")
         .attr("class", "textCloud3")
-
         .style("text-anchor", "middle")
      //   .style("text-shadow", "1px 1px 0 rgba(0, 0, 0, 0.6")
         .attr("font-family", "sans-serif")

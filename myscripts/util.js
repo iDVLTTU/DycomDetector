@@ -65,7 +65,7 @@ function removeColorLegend() {
 
 function drawTimeLegend() {
     var listX = [];
-    if (fileName == "data2/VISpapers1990-2016.tsv"){
+    if (fileName == "data2/VISpapers1990-2016.tsv" || fileName.indexOf("imdb")>=0 || fileName.indexOf("PopCha")>=0 || fileName.indexOf("Cards")>=0){
         for (var i = minYear; i <= maxYear; i++) {
             var xx = xStep + xScale(i - minYear);
             var obj = {};
@@ -116,7 +116,7 @@ function drawTimeLegend() {
         .attr("font-family", "sans-serif")
         .attr("font-size", "13px")
         .text(function (d, i) {
-            if (fileName == "data2/VISpapers1990-2016.tsv"){
+            if (fileName == "data2/VISpapers1990-2016.tsv" || fileName.indexOf("imdb")>=0 || fileName.indexOf("PopCha")>=0 || fileName.indexOf("Cards")>=0){
                 return d.year;
             }    
             else{
@@ -131,7 +131,7 @@ function drawTimeLegend() {
 function updateTimeLegend() {
     var listX = [];
 
-    if (fileName == "data2/VISpapers1990-2016.tsv"){
+    if (fileName == "data2/VISpapers1990-2016.tsv" || fileName.indexOf("imdb")>=0 || fileName.indexOf("PopCha")>=0 || fileName.indexOf("Cards")>=0){
         for (var i = minYear; i <= maxYear; i++) {
             var xx = xStep + xScale(i - minYear);
             var obj = {};
@@ -154,7 +154,7 @@ function updateTimeLegend() {
 
     svg.selectAll(".timeLegendLine").data(listX).transition().duration(500)
         .style("stroke-dasharray", function (d, i) {
-            if (fileName == "data2/VISpapers1990-2016.tsv"){
+            if (fileName == "data2/VISpapers1990-2016.tsv" || fileName.indexOf("imdb")>=0 || fileName.indexOf("PopCha")>=0 || fileName.indexOf("Cards")>=0){
                 return i % 5 == 0 ? "3, 1" : "1, 3"
             }
             else{ 
@@ -165,7 +165,7 @@ function updateTimeLegend() {
             }    
         })
         .style("stroke-opacity", function (d, i) {
-            if (fileName == "data2/VISpapers1990-2016.tsv"){
+            if (fileName == "data2/VISpapers1990-2016.tsv" || fileName.indexOf("imdb")>=0 || fileName.indexOf("PopCha")>=0 || fileName.indexOf("Cards")>=0){
                 return 1;
             }
             else{    
@@ -187,7 +187,7 @@ function updateTimeLegend() {
         });
     svg.selectAll(".timeLegendText").data(listX).transition().duration(500)
         .style("fill-opacity", function (d, i) {
-            if (fileName == "data2/VISpapers1990-2016.tsv"){
+            if (fileName == "data2/VISpapers1990-2016.tsv" || fileName.indexOf("imdb")>=0 || fileName.indexOf("PopCha")>=0 || fileName.indexOf("Cards")>=0){
                 if (i % 5 == 0)
                     return 1;
                 else {
@@ -212,13 +212,15 @@ function updateTimeLegend() {
             return d.x;
         });
 
-    // Update force layouts
+    // SCALE force layouts ************************************
     for (var i = minYear; i <= maxYear; i++) {
         for (var j = 0; j < 12; j++) {
             var m = (i - minYear) * 12 + j;
             var view = "0 0 " + forceSize + " " + forceSize;
+
+            var scale = 0.2;
             if (lMonth - numLens <= m && m <= lMonth + numLens)
-                view = (forceSize * 0.44) + " " + (forceSize * 0.44) + " " + (forceSize * 0.13) + " " + (forceSize * 0.13);
+                view = (forceSize * (1-scale)/2) + " " + (forceSize * (1-scale)/2) + " " + (forceSize * scale) + " " + (forceSize * scale);
             svg.selectAll(".force" + m).transition().duration(500)
                 .attr("x", xStep - forceSize / 2 + xScale(m))
                 .attr("viewBox", view);
@@ -266,7 +268,7 @@ function updateTimeBox() {
             }
         })*/
         .attr("y", function (d, i) {
-            if (fileName == "data2/VISpapers1990-2016.tsv"){
+            if (fileName == "data2/VISpapers1990-2016.tsv"  || fileName.indexOf("imdb")>=0 || fileName.indexOf("PopCha")>=0 || fileName.indexOf("Cards")>=0){
                 return yTimeBox + 20;
             }
             else{

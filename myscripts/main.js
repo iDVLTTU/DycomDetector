@@ -107,20 +107,33 @@ var getColor3 = d3.scale.category10();  // Colors of categories
 //var fileName =  "data/propublica.tsv";
 //var fileName =  "data/wikinews.tsv";
 
-var fileName = "data2/VISpapers1990-2016.tsv";
-if (fileName == "data2/VISpapers1990-2016.tsv"){
+//var fileName = "data2/VISpapers1990-2016.tsv";
+//var fileName = "data2/imdb1.tsv";
+//var fileName = "data2/PopCha2.tsv";
+//var fileName = "data2/CardsPC.tsv";
+var fileName = "data2/CardsFries.tsv";
+
+
+
+if (fileName.indexOf("CardsFries")>=0){
+    categories = ["increases_activity", "decreases_activity"];
+}
+else if (fileName.indexOf("CardsPC")>=0){
+    categories = ["adds_modification", "removes_modification", "increases","decreases", "binds", "translocation"];
+}
+else if (fileName.indexOf("PopCha")>=0){
+    categories = ["Comedy","Drama","Action", "Fantasy", "Horror"];
+}
+else if (fileName.indexOf("imdb")>=0){
+    categories = ["Comedy","Drama","Action"];
+}
+else if (fileName == "data2/VISpapers1990-2016.tsv"){
     categories = ["Vis","VAST","InfoVis","SciVis"];
-    for (var cate=0; cate<categories.length;cate++){ // This loop makes sure person is Blue ...
-        var category = categories[cate];
-        getColor3(category);
-    }  
 }
-else{
-    for (var cate=0; cate<categories.length;cate++){ // This loop makes sure person is Blue ...
-        var category = categories[cate];
-        getColor3(category);
-    }  
-}
+for (var cate=0; cate<categories.length;cate++){ // This loop makes sure person is Blue ...
+    var category = categories[cate];
+    getColor3(category);
+}  
     
 d3.tsv(fileName, function (error, data_) {
     if (error) throw error;
@@ -130,16 +143,23 @@ d3.tsv(fileName, function (error, data_) {
     minYear = 9999;
     maxYear = 0;
 
-    if (fileName == "data2/VISpapers1990-2016.tsv"){
+    if (fileName == "data2/VISpapers1990-2016.tsv" || fileName.indexOf("imdb")>=0 || fileName.indexOf("PopCha")>=0 || fileName.indexOf("Cards")>=0){
         data.forEach(function (d) { // Update month
             // Process date
-            var year = d["Year"];
+            var year =+d["Year"];
             if (year<minYear)
                 minYear = year;
             if (year>maxYear)
                 maxYear = year;
-            d.m = +year;
+            d.m = year;
         });    
+
+        if (fileName.indexOf("imdb")>=0){
+            minYear = 1975;   // IMDB first movie was in 1919
+        }  
+        else if (fileName.indexOf("PopCha")>=0){
+            minYear = 1975;   // PopCha first movie was in 1937
+        }    
         // Update months
         numMonth = maxYear - minYear +1;
         XGAP_ = (width-xStep)/numMonth; // gap between months on xAxis
@@ -241,8 +261,8 @@ d3.tsv(fileName, function (error, data_) {
 
      drawControlPanel();
 
-    var maxNum = Math.mon
-    for (var i = 0; i < termArray.length / 10; i++) {
+    var maxNum = Math.min(termArray.length, 10000);
+    for (var i = 0; i < termArray.length; i++) {
         optArray.push(termArray[i].term);
     }
     optArray = optArray.sort();
@@ -328,7 +348,7 @@ function readTermsAndRelationships() {
             e.max = 5000 + selected[e.term].isSelected;
         }
 
-        if (fileName == "data2/VISpapers1990-2016.tsv"){
+        if (fileName == "data2/VISpapers1990-2016.tsv"  || fileName.indexOf("imdb")>=0 || fileName.indexOf("PopCha")>=0 || fileName.indexOf("Cards")>=0){
             termArray.push(e);
         }
         else{    
@@ -348,8 +368,11 @@ function readTermsAndRelationships() {
 
     // Compute relationship **********************************************************
     numNode = Math.min(topNumber, termArray.length);
-    if (fileName == "data2/VISpapers1990-2016.tsv"){
+    if (fileName == "data2/VISpapers1990-2016.tsv" || fileName.indexOf("PopCha")>=0 || fileName.indexOf("Cards")>=0){
         numNode = termArray.length;   
+    }  
+    else if (fileName.indexOf("imdb")>=0){  
+        numNode = Math.min(5000, termArray.length);
     }    
     top200terms ={};
     for (var i=0; i<numNode;i++){

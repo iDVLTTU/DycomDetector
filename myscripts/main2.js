@@ -66,7 +66,7 @@ function computeMonthlyGraphs() {
             return 0;
         });
         var arr2 = arr.filter(function (d, i) {
-            return i < 40;
+            return d;//i < 140;
         });
 
         var cut = 1;
@@ -168,6 +168,8 @@ function computeMonthlyGraphs() {
 
 function drawgraph2() {
     var startMonth = lMonth > numLens ? lMonth - numLens : 0;
+    if (lMonth<0) 
+        startMonth=-100;   // Do not draw arc diagram if not lensed
     var endMonth = startMonth + numLens * 2 + 1;
     var breakCheck = false;
     lNodes = [];
@@ -350,7 +352,6 @@ function drawgraph2() {
                     return r;
                 }
                 else{
-                    console.log("d.m="+d.m +" startMonth="+startMonth+" endMonth="+endMonth);
                     return 0.2; // min value of rScale
                 }
                     
@@ -470,9 +471,14 @@ function computeMonthlyData(term) {
             mon.monthId = m;
             monthly.push(mon);
         }
+        else if (terms[term][m-1] || terms[term][m+1]) {
+            mon.value = 0;
+            mon.monthId = m;
+            monthly.push(mon);
+        }
     }
     // Add another item to first
-    if (monthly.length > 0) {
+    /*if (monthly.length > 0) {
         var firstObj = monthly[0];
         if (firstObj.monthId > 0) {
             var mon = new Object();
@@ -488,7 +494,11 @@ function computeMonthlyData(term) {
             mon.monthId = lastObj.monthId + 1;
             monthly.push(mon);
         }
-    }
+    }*/
+    // Add 0 to the missing time points
+
+
+
     return monthly;
 }
 

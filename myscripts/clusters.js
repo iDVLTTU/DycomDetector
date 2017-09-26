@@ -4,21 +4,6 @@
 
 var forceSize = 165; // Max size of force layouts at the bottom
 
-/*function getColor3(study_type) {
- if (study_type == "person")
- return "#0f0";
- else if (study_type == "location")
- return "#f00";
- else if (study_type == "organization")
- return "#00f";
- else if (study_type == "miscellaneous")
- return "#ff0";
- else {
- return "black";
- }
- }*/
-
-
 var allSVG = [];
 function updateSubLayout(nodes, links, m) {
 
@@ -92,7 +77,7 @@ function updateSubLayout(nodes, links, m) {
         .gravity(0.5)
         .distance(2)
         .charge(-2)
-        .size([forceSize, forceSize+2]);
+        .size([forceSize, forceSize]);
     force.nodes(nodes)
         .links(links)
         .start();
@@ -137,8 +122,6 @@ function updateSubLayout(nodes, links, m) {
         .on("mouseout", function(d){
             hideTip(d);
         });
-
-       
 
     force.on("tick", function () {
         node.attr("cx", function (d) { return d.x; })

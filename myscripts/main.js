@@ -79,20 +79,6 @@ var optArray = [];   // FOR search box
 
 var listMonth;
 
-
-
-    
-//var query =  "http://127.0.0.1:1337/status?userID=pakistan";
-// new Promise(function(resolve) {
-//  d3.json(query, function(d) { 
-   // debugger;
-//    resolve(d) })
-//});
-
- 
-
-
-
 var categories = ["person","location","organization","miscellaneous"];
 var getColor3 = d3.scale.category10();  // Colors of categories
  
@@ -102,16 +88,16 @@ var getColor3 = d3.scale.category10();  // Colors of categories
 // d3.tsv("data/emptywheel.tsv", function (error, data_) {
 // d3.tsv("data/esquire.tsv", function (error, data_) {
 // d3.tsv("data/factcheck.tsv", function (error, data_) {
-// d3.tsv("data/glenngreenwald.tsv", function (error, data_) {
+//var fileName = "data/glenngreenwald.tsv";
 //var fileName = "data/huffington.tsv";
 //var fileName =  "data/propublica.tsv";
 //var fileName =  "data/wikinews.tsv";
 
-//var fileName = "data2/VISpapers1990-2016.tsv";
+var fileName = "data2/VISpapers1990-2016.tsv";
 //var fileName = "data2/imdb1.tsv";
 //var fileName = "data2/PopCha2.tsv";
 //var fileName = "data2/CardsPC.tsv";
-var fileName = "data2/CardsFries.tsv";
+//var fileName = "data2/CardsFries.tsv";
 
 
 
@@ -341,11 +327,11 @@ function readTermsAndRelationships() {
         e.category = terms[att].category;
 
         if (e.term == searchTerm) {
-            e.max = 10000;
+            e.max = 1000;
             e.isSearchTerm = 1;
         }
         else if (searchTerm && searchTerm != "" && selected[e.term] && selected[e.term].isSelected) {
-            e.max = 5000 + selected[e.term].isSelected;
+            e.max = 500 + selected[e.term].isSelected;
         }
 
         if (fileName == "data2/VISpapers1990-2016.tsv"  || fileName.indexOf("imdb")>=0 || fileName.indexOf("PopCha")>=0 || fileName.indexOf("Cards")>=0){
@@ -377,6 +363,14 @@ function readTermsAndRelationships() {
     top200terms ={};
     for (var i=0; i<numNode;i++){
        top200terms[termArray[i].term] = termArray[i];  // top200terms is defined in main2.js
+       
+       /*  // Sentiment request to server
+       var query =  "http://127.0.0.1:1337/status?userID="+termArray[i].term;
+         new Promise(function(resolve) {
+          d3.json(query, function(d) { 
+           // debugger;
+            resolve(d) })
+        });*/
     }
     console.log("numNode="+numNode);
     

@@ -20,7 +20,8 @@ var tip = d3.tip()
   .attr('class', 'd3-tip')
   .style('border', '1px solid #555');
 
-function showTip(d) { 
+
+function showTip(d,tipItem) { 
   // Update network
   for (var i=0; i<allSVG.length;i++){
       var svg2 = allSVG[i];
@@ -58,36 +59,86 @@ function showTip(d) {
         //.transition().duration(timeDelay)      
         .style("fill-opacity", function(d2){ return (nameList.indexOf("_"+d2.name+"_")>=0) ? 1 : 0.1; });  
   }
+
+  // Add time series of frequeny{}
+  var monthly = computeMonthlyData(d.name); // count number of items in the time series to position the tooltip
   tip.html(function(d) {
     var str ="";
     if (d.ref==undefined) { //  In the main View
       str+="<b> Node info: </b>"
       str+="<table border='0.5px'  style='width:100%'>"
       for (key in d) {
-        if (key== "m"){
-           //%%%%%%%%%
-           str+=  "<tr><td>Month</td> <td>  <span style='color:black'>" +months[d[key]%12]+" "+ Math.round(minYear+d[key]/12)+ "</span> </td></tr>";
+        /*if (key== "m"){
+          if (fileName == "data2/VISpapers1990-2016.tsv" || fileName.indexOf("imdb")>=0 || fileName.indexOf("PopCha")>=0 || fileName.indexOf("Cards")>=0){
+            str+=  "<tr><td>Year</td> <td align='right'>  <span style='color:black'>" +(d[key]+minYear)+ "</span> </td></tr>";
+          }
+          else 
+            str+=  "<tr><td>Month</td> <td align='right'>  <span style='color:black'>" +months[d[key]%12]+" "+ Math.round(minYear+d[key]/12)+ "</span> </td></tr>";
+        }
+        else */
+        if (key== "net"){     
+          str+=  "<tr><td>frequency net</td> <td align='right'>  <span style='color:black'>" +Math.round(d[key])+ "</span> </td></tr>";
+        }
+        else if (key== "measurement"){     
+          str+=  "<tr><td>Measurement</td> <td align='right'>  <span style='color:black'>" +Math.round(d[key])+ "</span> </td></tr>";
+        }
+        else if (key== "weight"){     
+          str+=  "<tr><td>Degree</td> <td align='right'>  <span style='color:black'>" +d[key]+ "</span> </td></tr>";
         }
         else if (key== "name"){
-            str+=  "<tr><td>"+key+"</td> <td>  <span style='color:"+ getColor3(d.category)+"'>" + d[key] + "</span> </td></tr>"; 
+            str+=  "<tr><td>"+key+"</td> <td>  <span style='color:"+ getColor3(d.category)+";text-shadow: 0px 0px 0px #000;'>" + d[key] + "</span> </td></tr>"; 
         }
         else if (key== "x" || key== "y" || key== "px" || key== "py" || key== "category"|| key== "index" || 
-          key== "isConnected" || key=="indexForTextClouds" || key=="monthly")
+          key== "isConnected" || key=="indexForTextClouds" || key=="monthly"|| key=="frequency" || key=="m")
             ;// Do nothing
         else{
           var value = d[key];
           if (value==undefined)
             value = "?";
-          str+=  "<tr><td>"+key+"</td> <td>  <span style='color:black'>" + value + "</span> </td></tr>";
+          str+=  "<tr><td>"+key+"</td> <td align='right'>  <span style='color:black'>" + value + "</span> </td></tr>";
         }     
       } 
       str+="</table>"
+
+      // Add time series of frequeny{}
+      if (monthly){
+        str+="<table border='0.5px'  style='background-color:rgba(0, 0, 0, 0);width:100%'>"
+
+        // table header 
+        if (fileName == "data2/VISpapers1990-2016.tsv" || fileName.indexOf("imdb")>=0 || fileName.indexOf("PopCha")>=0 || fileName.indexOf("Cards")>=0){
+            str+=  "<tr><td align='right' style='background-color:rgba(0, 0, 0, 0);'><b>Year</b></td> <td align='right' style='background-color:rgba(0, 0, 0, 0);'>  <span style='color:black'> <b>frequency<b> </span> </td></tr>";
+        }
+        else 
+          str+=  "<tr><td align='right' style='background-color:rgba(0, 0, 0, 0);'><b>Month</b></td> <td align='right' style='background-color:rgba(0, 0, 0, 0);'>  <span style='color:black'> <b>frequency<b> </span> </td></tr>";
+
+        for (var key in monthly) {
+          var value = monthly[key].value;
+          if (value>0){
+            // table header 
+            var time ;
+            if (fileName == "data2/VISpapers1990-2016.tsv" || fileName.indexOf("imdb")>=0 || fileName.indexOf("PopCha")>=0 || fileName.indexOf("Cards")>=0){
+                time =  (+monthly[key].monthId+minYear);
+              }
+            else {
+               time =  months[monthly[key].monthId%12] +" "+(minYear+Math.round(monthly[key].monthId/12)); 
+            }
+            if (d.m==monthly[key].monthId)
+              str+=  "<tr><td  align='right'><b>"+time+"</b></td> <td align='right'>  <span style='color:black'><b>" + value + "</b></span> </td></tr>";
+            else
+              str+=  "<tr><td  align='right'>"+time+"</td> <td align='right'>  <span style='color:black'>" + value + "</span> </td></tr>";
+          }   
+        } 
+        str+="</table>"
+      }
       return str;
     }
-    debugger;
       
    });   
-  tip.offset([100,200])
+  tip.direction('se');
+  //tip.direction('n') 
+
+  tip.offset([-d3.event.pageY+210,-d3.event.pageX]) // d3.event.pageX is the mouse position in the main windown
+      
   tip.show(d);   
 }    
 

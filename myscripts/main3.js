@@ -186,9 +186,9 @@ function drawTextClouds(yTextClouds) {
         // compute the frequency of node at month m
         for (var i=0; i<nodes.length; i++){
             var nod = nodes[i];
-            nod.fequency = 0;
+            nod.frequency = 0;
             if (terms[nod.name][nod.m])
-                nod.fequency = terms[nod.name][nod.m];
+                nod.frequency = terms[nod.name][nod.m];
         }
 
         // Now compute the node size based on a selected measure
@@ -196,13 +196,13 @@ function drawTextClouds(yTextClouds) {
             var nod = nodes[i];
             nod.measurement = 0;
             if (selectedSetNodeBy==1) {
-                nod.measurement = 100*nod.fequency+nod.net+nod.weight;
+                nod.measurement = 100*nod.frequency+nod.net+nod.weight;
             }
             else if (selectedSetNodeBy==2) {
-                nod.measurement = nod.fequency+100*nod.net+nod.weight;
+                nod.measurement = nod.frequency+100*nod.net+nod.weight;
             }
             else if (selectedSetNodeBy==3) {
-                nod.measurement = nod.fequency+nod.net+100*nod.weight;
+                nod.measurement = nod.frequency+nod.net+100*nod.weight;
             }
             else if (selectedSetNodeBy==4) {
                 var bet= nod.betweenness;
@@ -213,7 +213,7 @@ function drawTextClouds(yTextClouds) {
                     bet=1;
                     nod.betweenness =1;
                 }
-                nod.measurement = nod.fequency+nod.net+nod.weight+100*bet;
+                nod.measurement = nod.frequency+nod.net+nod.weight+100*bet;
             }
         }
 
@@ -235,7 +235,6 @@ function drawTextClouds(yTextClouds) {
                 else {
                     -1
                 }
-
             }
         });
         for (var i = 0; i < numTerms && i < nodes.length; i++) {

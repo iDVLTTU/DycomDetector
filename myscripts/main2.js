@@ -204,9 +204,9 @@ function drawgraph2() {
     // compute the frequency of node at month m
     for (var i=0; i<lNodes.length; i++){
         var nod = lNodes[i];
-        nod.fequency = 0;
+        nod.frequency = 0;
         if (terms[nod.name][nod.m])
-            nod.fequency = terms[nod.name][nod.m];
+            nod.frequency = terms[nod.name][nod.m];
     }
 
     // Now compute the node size based on a selected measure
@@ -214,13 +214,13 @@ function drawgraph2() {
         var nod = lNodes[i];
         nod.measurement = 0;
         if (selectedSetNodeBy==1) {
-            nod.measurement = 100*nod.fequency+nod.net+nod.weight;
+            nod.measurement = 100*nod.frequency+nod.net+nod.weight;
         }
         else if (selectedSetNodeBy==2) {
-            nod.measurement = nod.fequency+100*nod.net+nod.weight;
+            nod.measurement = nod.frequency+100*nod.net+nod.weight;
         }
         else if (selectedSetNodeBy==3) {
-            nod.measurement = nod.fequency+nod.net+100*nod.weight;
+            nod.measurement = nod.frequency+nod.net+100*nod.weight;
         }
         else if (selectedSetNodeBy==4) {
             var bet= nod.betweenness;
@@ -231,7 +231,7 @@ function drawgraph2() {
                 bet=1;
                 nod.betweenness=1;
             }
-            nod.measurement = nod.fequency+nod.net+nod.weight+100*bet;
+            nod.measurement = nod.frequency+nod.net+nod.weight+100*bet;
         }
     }
 
@@ -447,7 +447,7 @@ function drawgraph2() {
             return getColor3(d.category);
         })
         .style("text-anchor", "end")
-        .style("text-shadow", "1px 1px 0 rgba(255, 255, 255, 0.9")
+        .style("text-shadow", "1px 1px 0 rgba(255, 255, 255, 0.99")
         //.attr("x", xStep-2)   show text on the left side
         .attr("x", function (d) {
             return xStep + xScale(d.m) - 2;    // x position is at the arcs

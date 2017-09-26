@@ -47,11 +47,33 @@ function drawColorLegend() {
 
 
     // number of input terms
+    var text1 = "terms";
+    var text2 = "articles";
+    if (fileName.indexOf("CardsFries")>=0){
+        text1 = "proteins";
+        text2 = "index cards";
+    }
+    else if (fileName.indexOf("CardsPC")>=0){
+        text1 = "proteins";
+        text2 = "publicationw";
+    }
+    else if (fileName.indexOf("PopCha")>=0){
+        text1 = "actors";
+        text2 = "movies";
+    }
+    else if (fileName.indexOf("imdb")>=0){
+        text1 = "actors";
+        text2 = "movies";
+    }
+    else if (fileName == "data2/VISpapers1990-2016.tsv"){
+        text1 = "authors";
+        text2 = "papers";
+    }
     svg.append("text")
         .attr("class", "nodeLegend")
         .attr("x", xx - 10)
         .attr("y", yy-17)
-        .text(termArray.length + " terms of " + data.length + " articles")
+        .text(termArray.length + " "+text1+" of " + data.length + " "+text2)
         .attr("dy", ".21em")
         .attr("font-family", "sans-serif")
         .attr("font-size", "13px")

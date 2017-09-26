@@ -117,7 +117,7 @@ function updateSubLayout(nodes, links, m) {
             return getColor3(d.category);
         })
         .on("mouseover", function(d){
-            showTip(d);
+            showTip(d, this);
         })
         .on("mouseout", function(d){
             hideTip(d);

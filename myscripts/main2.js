@@ -16,6 +16,9 @@ var numCut = 5;
 var cutOffvalue=[];
 
 var maxRel =  10;   // for scaling, if count > 6 the link will looks similar to 6
+if (fileName == "data2/VISpapers1990-2014.tsv"){
+    maxRel=4;
+}    
 var linkScale3 = function (count) {
     var scale = d3.scale.linear()
                     .range([0.1, 2.5])
@@ -28,7 +31,7 @@ var linkScale3 = function (count) {
 function computeMonthlyGraphs() {
     console.log("computeMonthlyGraphs");
     allSVG = []; // all SVG in clusters.js
-    for (var m = 1; m < numMonth; m++) {
+    for (var m = 0; m < numMonth; m++) {
         var arr = [];
         for (var att in top200terms) {
            // var att = termArray[i].term;
@@ -157,10 +160,14 @@ function computeMonthlyGraphs() {
             updateSubLayout(graphByMonths[m][selectedCut].nodes, graphByMonths[m][selectedCut].links, m);
         }
     }
+    // Update the layout
+    updateTimeLegend();
+    oldLmonth =-100;  // This to make sure the histogram and text list is updated
+    updateTimeBox();
 }
 
 function drawgraph2() {
-    var startMonth = lMonth > numLens ? lMonth - numLens : lMonth;
+    var startMonth = lMonth > numLens ? lMonth - numLens : 0;
     var endMonth = startMonth + numLens * 2 + 1;
     var breakCheck = false;
     lNodes = [];
@@ -331,7 +338,7 @@ function drawgraph2() {
     }
 
     var rScale = d3.scale.linear()
-                    .range([0.1, 0.5])
+                    .range([0.1, 0.8])
                     .domain([0, Math.sqrt(max)]);    
     for (var i=0; i<allSVG.length;i++){
         var svg2 = allSVG[i];
@@ -342,8 +349,11 @@ function drawgraph2() {
                     var r = isNaN(rScale(d.measurement))? 0.1 : rScale(Math.sqrt(d.measurement));
                     return r;
                 }
-                else
-                    return 1; // min value of rScale
+                else{
+                    console.log("d.m="+d.m +" startMonth="+startMonth+" endMonth="+endMonth);
+                    return 0.2; // min value of rScale
+                }
+                    
             })
     }
 

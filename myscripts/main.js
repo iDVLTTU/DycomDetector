@@ -7,7 +7,7 @@
  * OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
  */
 
-var margin = {top: 0, right: 0, bottom: 5, left: 0};
+var margin = {top: 0, right: 0, bottom: 0, left: 0};
 var width = document.body.clientWidth - margin.left - margin.right;
 var height = 50 - margin.top - margin.bottom;
 
@@ -27,7 +27,7 @@ var numNode;
 
 var termArray, relationship, termMax=0;
 var terms;
-var xStep = 170;
+var xStep = 180;
 var searchTerm = "";
 
 var isLensing = false;
@@ -81,8 +81,6 @@ var listMonth;
 
 
 
-// Replacing the silder value ******************
-var valueSlider =5;
     
 //var query =  "http://127.0.0.1:1337/status?userID=pakistan";
 // new Promise(function(resolve) {
@@ -91,12 +89,13 @@ var valueSlider =5;
 //    resolve(d) })
 //});
 
+ 
+
+
+
 var categories = ["person","location","organization","miscellaneous"];
 var getColor3 = d3.scale.category10();  // Colors of categories
-for (var cate=0; cate<categories.length;cate++){ // This loop makes sure person is Blue ...
-    var category = categories[cate];
-    getColor3(category);
-}    
+ 
 
 // d3.tsv("data/americablog.tsv", function (error, data_) {
 // d3.tsv("data/crooks_and_liars.tsv", function (error, data_) {
@@ -104,61 +103,127 @@ for (var cate=0; cate<categories.length;cate++){ // This loop makes sure person 
 // d3.tsv("data/esquire.tsv", function (error, data_) {
 // d3.tsv("data/factcheck.tsv", function (error, data_) {
 // d3.tsv("data/glenngreenwald.tsv", function (error, data_) {
-d3.tsv("data/huffington.tsv", function (error, data_) {
-//d3.tsv("data/propublica.tsv", function (error, data_) {
-//d3.tsv("data/wikinews.tsv", function (error, data_) {
+//var fileName = "data/huffington.tsv";
+//var fileName =  "data/propublica.tsv";
+//var fileName =  "data/wikinews.tsv";
+
+var fileName = "data2/VISpapers1990-2016.tsv";
+if (fileName == "data2/VISpapers1990-2016.tsv"){
+    categories = ["Vis","VAST","InfoVis","SciVis"];
+    for (var cate=0; cate<categories.length;cate++){ // This loop makes sure person is Blue ...
+        var category = categories[cate];
+        getColor3(category);
+    }  
+}
+else{
+    for (var cate=0; cate<categories.length;cate++){ // This loop makes sure person is Blue ...
+        var category = categories[cate];
+        getColor3(category);
+    }  
+}
+    
+d3.tsv(fileName, function (error, data_) {
     if (error) throw error;
     data = data_;
 
     terms = new Object();
     minYear = 9999;
     maxYear = 0;
-    data.forEach(function (d) {
-        d.source = d["source"];
-        // Process date
-        var curDate = Date.parse(d["time"]);
-        d.date = new Date(d["time"]);
-        var year = d.date.getFullYear();
-        // Compute min and max years from the data
-        if (year<minYear)
-            minYear = year;
-        if (year>maxYear)
-            maxYear = year;
-        var m = 12 * year + d.date.getMonth();
-        d.m = m;
-        
-    });
-    // Update months
-    numMonth = 12*(maxYear - minYear);
-    XGAP_ = (width-xStep)/numMonth; // gap between months on xAxis
-    data.forEach(function (d) {
-        d.m = d.m-12*minYear;
-        for (var cate=0; cate<categories.length;cate++){
-            var category = categories[cate];
-            if (d[category]!="" &&  d[category] != 1) {
-                var list = d[category].split("|");
-                for (var i = 0; i < list.length; i++) {
-                    var term = list[i];
-                    d[term] = 1;
-                    if (!terms[term]) {
-                        terms[term] = new Object();
-                        terms[term].max = 0;
-                        terms[term].maxMonth = -100;   // initialized negative
-                        terms[term].category = category;
+
+    if (fileName == "data2/VISpapers1990-2016.tsv"){
+        data.forEach(function (d) { // Update month
+            // Process date
+            var year = d["Year"];
+            if (year<minYear)
+                minYear = year;
+            if (year>maxYear)
+                maxYear = year;
+            d.m = +year;
+        });    
+        // Update months
+        numMonth = maxYear - minYear +1;
+        XGAP_ = (width-xStep)/numMonth; // gap between months on xAxis
+
+        data.forEach(function (d) {    
+            d.m = d.m-minYear;
+            var list = d["Author Names"].split(";");
+            for (var i = 0; i < list.length; i++) {
+                var term = list[i];
+                d[term] = 1;
+                if (!terms[term]) {
+                    terms[term] = new Object();
+                    terms[term].max = 0;
+                    terms[term].maxMonth = -100;   // initialized negative
+                    terms[term].category = d.Conference;
+                }
+                if (!terms[term][d.m]){
+                    terms[term][d.m] = 1;
+                    terms[term].max = terms[term][d.m];
+                    terms[term].maxMonth = d.m;
+                }         
+                else {
+                    terms[term][d.m]++;
+                    if (terms[term][d.m] > terms[term].max) {
+                        terms[term].max = terms[term][d.m];
+                        terms[term].maxMonth = d.m;
                     }
-                    if (!terms[term][d.m])
-                        terms[term][d.m] = 1;
-                    else {
-                        terms[term][d.m]++;
-                        if (terms[term][d.m] > terms[term].max) {
-                            terms[term].max = terms[term][d.m];
-                            terms[term].maxMonth = d.m;
+                }
+            }     
+        });
+        
+    }
+    else{
+        data.forEach(function (d) {
+            d.source = d["source"];
+            // Process date
+            var curDate = Date.parse(d["time"]);
+            d.date = new Date(d["time"]);
+            var year = d.date.getFullYear();
+            // Compute min and max years from the data
+            if (year<minYear)
+                minYear = year;
+            if (year>maxYear)
+                maxYear = year;
+            var m = 12 * year + d.date.getMonth();
+            d.m = m;
+            
+        });
+
+        // Update months
+        numMonth = 12*(maxYear - minYear);
+        XGAP_ = (width-xStep)/numMonth; // gap between months on xAxis
+        
+        data.forEach(function (d) { // Update month
+            d.m = d.m-12*minYear;
+            for (var cate=0; cate<categories.length;cate++){
+                var category = categories[cate];
+                if (d[category]!="" &&  d[category] != 1) {
+                    var list = d[category].split("|");
+                    for (var i = 0; i < list.length; i++) {
+                        var term = list[i];
+                        d[term] = 1;
+                        if (!terms[term]) {
+                            terms[term] = new Object();
+                            terms[term].max = 0;
+                            terms[term].maxMonth = -100;   // initialized negative
+                            terms[term].category = category;
+                        }
+                        if (!terms[term][d.m])
+                            terms[term][d.m] = 1;
+                        else {
+                            terms[term][d.m]++;
+                            if (terms[term][d.m] > terms[term].max) {
+                                terms[term].max = terms[term][d.m];
+                                terms[term].maxMonth = d.m;
+                            }
                         }
                     }
                 }
             }
-        }
-    });    
+        });
+    }
+    
+      
     
     readTermsAndRelationships();
     console.log("DONE computing relationshipMax=" + relationshipMax);
@@ -168,14 +233,15 @@ d3.tsv("data/huffington.tsv", function (error, data_) {
     drawTimeLegend();
 
     drawTimeBox(); // This box is for brushing
-    drawControlPanel();
+   
 
 
     // 2017. this function is main2.js
     computeMonthlyGraphs();
 
-    updateTransition();
+     drawControlPanel();
 
+    var maxNum = Math.mon
     for (var i = 0; i < termArray.length / 10; i++) {
         optArray.push(termArray[i].term);
     }
@@ -248,6 +314,7 @@ function readTermsAndRelationships() {
                     maxMonth = m;
                 }
             }
+          //  console.log(att+" net="+net);
         }
         e.max = maxNet;
         e.maxMonth = maxMonth;
@@ -261,8 +328,13 @@ function readTermsAndRelationships() {
             e.max = 5000 + selected[e.term].isSelected;
         }
 
-        if (e.max > 2 && e.term.length>2)    // Only get terms with some increase ************** with TEXT
+        if (fileName == "data2/VISpapers1990-2016.tsv"){
             termArray.push(e);
+        }
+        else{    
+            if (e.max > 2 && e.term.length>2)    // Only get terms with some increase ************** with TEXT
+                termArray.push(e);
+        }
     }
     termArray.sort(function (a, b) {
         if (a.max < b.max) {
@@ -276,9 +348,15 @@ function readTermsAndRelationships() {
 
     // Compute relationship **********************************************************
     numNode = Math.min(topNumber, termArray.length);
+    if (fileName == "data2/VISpapers1990-2016.tsv"){
+        numNode = termArray.length;   
+    }    
+    top200terms ={};
     for (var i=0; i<numNode;i++){
        top200terms[termArray[i].term] = termArray[i];  // top200terms is defined in main2.js
     }
+    console.log("numNode="+numNode);
+    
 
     // compute the term frequency
     termMax = 0;
@@ -322,6 +400,8 @@ function readTermsAndRelationships() {
             }
         }
     });
+
+   
 }
 
 
@@ -383,10 +463,4 @@ function recompute() {
     
     readTermsAndRelationships();
     computeMonthlyGraphs();
-    updateTransition();
-}
-
-function updateTransition() {
-    updateTimeLegend();
-    updateTimeBox();
 }

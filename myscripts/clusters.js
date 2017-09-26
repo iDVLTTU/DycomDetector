@@ -2,7 +2,7 @@
  * Created by vinhtngu on 3/10/17.
  */
 
-var forceSize = 150; // Max size of force layouts at the bottom
+var forceSize = 165; // Max size of force layouts at the bottom
 
 /*function getColor3(study_type) {
  if (study_type == "person")
@@ -85,14 +85,14 @@ function updateSubLayout(nodes, links, m) {
         .attr("width", forceSize)
         .attr("height", forceSize)
         .attr("x", xStep - forceSize / 2 + m * XGAP_)
-        .attr("y", height);
+        .attr("y", 30);
     allSVG.push(svg2);
 
     var force = d3.layout.force()
         .gravity(0.5)
         .distance(2)
         .charge(-2)
-        .size([forceSize, forceSize]);
+        .size([forceSize, forceSize+2]);
     force.nodes(nodes)
         .links(links)
         .start();

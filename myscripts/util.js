@@ -51,7 +51,7 @@ function drawColorLegend() {
         .attr("class", "nodeLegend")
         .attr("x", xx - 10)
         .attr("y", yy-17)
-        .text(termArray.length + " terms of " + data.length + " blogs")
+        .text(termArray.length + " terms of " + data.length + " articles")
         .attr("dy", ".21em")
         .attr("font-family", "sans-serif")
         .attr("font-size", "13px")
@@ -65,13 +65,24 @@ function removeColorLegend() {
 
 function drawTimeLegend() {
     var listX = [];
-    for (var i = minYear; i < maxYear; i++) {
-        for (var j = 0; j < 12; j++) {
-            var xx = xStep + xScale((i - minYear) * 12 + j);
+    if (fileName == "data2/VISpapers1990-2016.tsv"){
+        for (var i = minYear; i <= maxYear; i++) {
+            var xx = xStep + xScale(i - minYear);
             var obj = {};
             obj.x = xx;
             obj.year = i;
-            listX.push(obj);
+            listX.push(obj);   
+        }
+    }
+    else{    
+        for (var i = minYear; i <= maxYear; i++) {
+            for (var j = 0; j < 12; j++) {
+                var xx = xStep + xScale((i - minYear) * 12 + j);
+                var obj = {};
+                obj.x = xx;
+                obj.year = i;
+                listX.push(obj);
+            }
         }
     }
 
@@ -105,40 +116,67 @@ function drawTimeLegend() {
         .attr("font-family", "sans-serif")
         .attr("font-size", "13px")
         .text(function (d, i) {
-            if (i % 12 == 0)
+            if (fileName == "data2/VISpapers1990-2016.tsv"){
                 return d.year;
-            else
-                return months[i % 12];
+            }    
+            else{
+                if (i % 12 == 0)
+                    return d.year;
+                else
+                    return months[i % 12];
+            }    
         });
 }
 
 function updateTimeLegend() {
     var listX = [];
-    for (var i = minYear; i < maxYear; i++) {
-        for (var j = 0; j < 12; j++) {
-            var xx = xStep + xScale((i - minYear) * 12 + j);
+
+    if (fileName == "data2/VISpapers1990-2016.tsv"){
+        for (var i = minYear; i <= maxYear; i++) {
+            var xx = xStep + xScale(i - minYear);
             var obj = {};
             obj.x = xx;
             obj.year = i;
-            listX.push(obj);
+            listX.push(obj);   
+        }
+    }
+    else{    
+        for (var i = minYear; i <= maxYear; i++) {
+            for (var j = 0; j < 12; j++) {
+                var xx = xStep + xScale((i - minYear) * 12 + j);
+                var obj = {};
+                obj.x = xx;
+                obj.year = i;
+                listX.push(obj);
+            }
         }
     }
 
     svg.selectAll(".timeLegendLine").data(listX).transition().duration(500)
         .style("stroke-dasharray", function (d, i) {
-            if (!isLensing)
-                return "1, 2";
-            else
-                return i % 12 == 0 ? "3, 1" : "1, 3"
+            if (fileName == "data2/VISpapers1990-2016.tsv"){
+                return i % 5 == 0 ? "3, 1" : "1, 3"
+            }
+            else{ 
+                if (!isLensing)
+                    return "1, 2";
+                else
+                    return i % 12 == 0 ? "3, 1" : "1, 3"
+            }    
         })
         .style("stroke-opacity", function (d, i) {
-            if (i % 12 == 0)
+            if (fileName == "data2/VISpapers1990-2016.tsv"){
                 return 1;
-            else {
-                if (isLensing && lMonth - numLens <= i && i <= lMonth + numLens)
+            }
+            else{    
+                if (i % 12 == 0)
                     return 1;
-                else
-                    return 0;
+                else {
+                    if (isLensing && lMonth - numLens <= i && i <= lMonth + numLens)
+                        return 1;
+                    else
+                        return 0;
+                }
             }
         })
         .attr("x1", function (d) {
@@ -149,21 +187,33 @@ function updateTimeLegend() {
         });
     svg.selectAll(".timeLegendText").data(listX).transition().duration(500)
         .style("fill-opacity", function (d, i) {
-            if (i % 12 == 0)
-                return 1;
-            else {
-                if (isLensing && lMonth - numLens <= i && i <= lMonth + numLens)
+            if (fileName == "data2/VISpapers1990-2016.tsv"){
+                if (i % 5 == 0)
                     return 1;
-                else
-                    return 0;
-            }
+                else {
+                    if (isLensing && lMonth - numLens <= i && i <= lMonth + numLens)
+                        return 1;
+                    else
+                        return 0;
+                }
+            }    
+            else{
+                if (i % 12 == 0)
+                    return 1;
+                else {
+                    if (isLensing && lMonth - numLens <= i && i <= lMonth + numLens)
+                        return 1;
+                    else
+                        return 0;
+                }
+            }    
         })
         .attr("x", function (d, i) {
             return d.x;
         });
 
     // Update force layouts
-    for (var i = minYear; i < maxYear; i++) {
+    for (var i = minYear; i <= maxYear; i++) {
         for (var j = 0; j < 12; j++) {
             var m = (i - minYear) * 12 + j;
             var view = "0 0 " + forceSize + " " + forceSize;
@@ -195,14 +245,17 @@ function drawTimeBox() {
             isLensing = true;
             coordinate = d3.mouse(this);
             lMonth = Math.floor((coordinate[0] - xStep) / XGAP_);
-            updateTransition(500);
+            
+            // Update layout
+            updateTimeLegend();
+            updateTimeBox();
 
         });
 }
 
 function updateTimeBox() {
     svg.selectAll(".timeLegendText")
-        .style("fill-opacity", function (d, i) {
+        /*.style("fill-opacity", function (d, i) {
             if (i % 12 == 0)
                 return 1;
             else {
@@ -211,9 +264,15 @@ function updateTimeBox() {
                 else
                     return 0;
             }
-        })
+        })*/
         .attr("y", function (d, i) {
-            return (i % 12 == 0) ? yTimeBox + 12 : yTimeBox + 22;
+            if (fileName == "data2/VISpapers1990-2016.tsv"){
+                return yTimeBox + 20;
+            }
+            else{
+                return (i % 12 == 0) ? yTimeBox + 12 : yTimeBox + 22;
+            }    
+            
         })
         .attr("x", function (d, i) {
             return d.x;
@@ -277,146 +336,4 @@ function drawControlPanel(){
     }).text(function (d) {
         return d.value;
     })
-
-    /*
-    var yLensing = 300;
-    svg.append('rect')
-        .attr("class", "lensingRect")
-        .attr("x", 13)
-        .attr("y", yLensing)
-        .attr("rx", roundConner)
-        .attr("ry", roundConner)
-        .attr("width", buttonLensingWidth)
-        .attr("height", buttonheight)
-        .style("stroke", "#000")
-        .style("stroke-width", 0.4)
-        .style("fill", buttonColor)
-        .on('mouseover', function(d2){
-            svg.selectAll(".lensingRect")
-                .style("fill", colorHighlight);
-        })
-        .on('mouseout', function(d2){
-            svg.selectAll(".lensingRect")
-                .style("fill", buttonColor);
-        })
-        .on('click', turnLensing);
-    svg.append('text')
-        .attr("class", "lensingText")
-        .attr("font-family", "sans-serif")
-        .attr("font-size", "13px")
-        .attr("x", 8+buttonLensingWidth/2)
-        .attr("y", yLensing+13)
-        .text("Lensing")
-        .style("text-anchor", "middle")
-        .style("fill", "#000")
-        .on('mouseover', function(d2){
-            svg.selectAll(".lensingRect")
-                .style("fill", colorHighlight);
-        })
-        .on('mouseout', function(d2){
-            svg.selectAll(".lensingRect")
-                .style("fill", buttonColor);
-        })
-        .on('click', turnLensing);
-    */
-
 }
-
-/*
-function turnLensing() {
-    isLensing = !isLensing;
-    svg.selectAll('.lensingRect')
-        .style("stroke-width", function () {
-            return isLensing ? 1 : 1;
-        });
-    svg.selectAll('.lensingText')
-        .style("font-weight", function () {
-            return isLensing ? "bold" : "";
-        });
-    svg.append('rect')
-        .attr("class", "lensingRect")
-        .style("fill-opacity", 0)
-        .attr("x", xStep)
-        .attr("y", 0)
-        .attr("width", width)
-        .attr("height", height)
-        .on('mousemove', function () {
-            coordinate = d3.mouse(this);
-            lMonth = Math.floor((coordinate[0] - xStep) / XGAP_);
-            console.log(lMonth);
-            updateTransition(500);
-            updateTimeLegend();
-        });
-    updateTransition(500);
-    updateTimeLegend();
-    //drawgraph2();
-}*/
-
-function getColor(category, count) {
-    var minSat = 80;
-    var maxSat = 180;
-    var percent = count / maxCount[category];
-    var sat = minSat + Math.round(percent * (maxSat - minSat));
-
-    if (category == "person")
-        return "rgb(" + sat + ", " + 255 + ", " + sat + ")"; // leaf node
-    else if (category == "location")
-        return "rgb(" + 255 + ", " + sat + ", " + sat + ")"; // leaf node
-    else if (category == "organization")
-        return "rgb(" + sat + ", " + sat + ", " + 255 + ")"; // leaf node
-    else if (category == "miscellaneous")
-        return "rgb(" + (215) + ", " + (215) + ", " + (sat) + ")"; // leaf node
-    else
-        return "#000000";
-
-}
-
-function colorFaded(d) {
-    var minSat = 80;
-    var maxSat = 230;
-    var step = (maxSat - minSat) / maxDepth;
-    var sat = Math.round(maxSat - d.depth * step);
-
-    //console.log("maxDepth = "+maxDepth+"  sat="+sat+" d.depth = "+d.depth+" step="+step);
-    return d._children ? "rgb(" + sat + ", " + sat + ", " + sat + ")"  // collapsed package
-        : d.children ? "rgb(" + sat + ", " + sat + ", " + sat + ")" // expanded package
-            : "#aaaacc"; // leaf node
-}
-
-
-function getBranchingAngle1(radius3, numChild) {
-    if (numChild <= 2) {
-        return Math.pow(radius3, 2);
-    }
-    else
-        return Math.pow(radius3, 1);
-}
-
-function getRadius(d) {
-    // console.log("scaleCircle = "+scaleCircle +" scaleRadius="+scaleRadius);
-    return d._children ? scaleCircle * Math.pow(d.childCount1, scaleRadius)// collapsed package
-        : d.children ? scaleCircle * Math.pow(d.childCount1, scaleRadius) // expanded package
-            : scaleCircle;
-    // : 1; // leaf node
-}
-
-
-function childCount1(level, n) {
-    count = 0;
-    if (n.children && n.children.length > 0) {
-        count += n.children.length;
-        n.children.forEach(function (d) {
-            count += childCount1(level + 1, d);
-        });
-        n.childCount1 = count;
-    }
-    else {
-        n.childCount1 = 0;
-    }
-    return count;
-};
-
-
-d3.select(self.frameElement).style("height", diameter + "px");
-
-
